@@ -16,6 +16,7 @@ type
     procedure ClearBtnClick(Sender: TObject);
     procedure SaveBtnClick(Sender: TObject);
     procedure CloseBtnClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -43,6 +44,17 @@ procedure TForm3.CloseBtnClick(Sender: TObject);
 begin
 
   Self.Close;
+
+end;
+
+procedure TForm3.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+
+  if Key = VK_ESCAPE then
+  begin
+    CloseBtn.OnClick(self);
+  end;
 
 end;
 

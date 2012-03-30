@@ -134,6 +134,7 @@ type
     DragDrop: TJvDragDrop;
     CurrentProgressBar: TGauge;
     TotalProgressBar: TGauge;
+    InfoBtn: TButton;
     procedure AddFiles1Click(Sender: TObject);
     procedure AddFolder1Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
@@ -166,6 +167,7 @@ type
     procedure NeroEncodingListChange(Sender: TObject);
     procedure DragDropDrop(Sender: TObject; Pos: TPoint; Value: TStrings);
     procedure AudioPagesChange(Sender: TObject);
+    procedure InfoBtnClick(Sender: TObject);
   private
     { Private declarations }
     CommandLines: TStringList;
@@ -191,10 +193,14 @@ type
     function Mp4BoxPercentage(const Mp4BoxOutput: string): Integer; // !!!
     function MkvExtractPercentage(const MkvExtractOutput: string): Integer;
     function NeroPercentage(const NeroOutput: string): Integer;
-    function FAACPercentage(const FAACOutput: string):Integer;
+    function FAACPercentage(const FAACOutput: string): Integer;
+
+    // get full info for selected file
+    procedure GetFullInfo(const FileName: string);
 
     // hh:mm:ss to int
     function TimeToInt(const TimeStr: string): Integer;
+
     // check if string is numeric
     function IsStringNumeric(Str: string): Boolean;
 
@@ -243,7 +249,7 @@ var
 
 implementation
 
-uses UnitLog, windows7taskbar;
+uses UnitLog, windows7taskbar, UnitInfo;
 
 {$R *.dfm}
 
@@ -257,7 +263,8 @@ begin
     'Licenced under the terms of GPL 2 or above.' + #13#10 + #13#10 + 'Uses:' +
     #13#10 + 'x264.exe' + #13#10 + 'FFMpeg.exe' + #13#10 + 'Mp4Box.exe' + #13#10
     + 'mkvmerge.exe' + #13#10 + 'MediaInfo.dll 0.7.54' + #13#10 + 'JVCL 3.4' +
-    #13#10 + #13#10 + 'Feel free to send bug reports, suggestions etc.';
+    #13#10 + 'FAAC 1.28' + #13#10 + 'NeroAACEnc (if present)' + #13#10 + #13#10
+    + 'Feel free to send bug reports, suggestions etc.';
 
   Application.MessageBox(PwideChar(Msg), 'About', MB_ICONINFORMATION);
 
@@ -650,8 +657,8 @@ begin
         else if LowerCase(ExtractFileExt(FileName)) = '.mp4' then
         begin
           // mp4 source
-          SubtitleStr := SubtitleStr + ' -srt ' + SubtitleID + ' "' +
-            FileName + '"';
+          SubtitleStr := SubtitleStr + ' -srt ' +
+            FloatToStr(StrToInt(SubtitleID) + 1) + ' "' + FileName + '"';
 
           CommandLines.Add(SubtitleStr + ' ' + CustomMP4Edit.Text);
           Infos.Add('Extracting subtitle: ' + ExtractFileName(FileName) + ' (' +
@@ -927,7 +934,8 @@ begin
 
     if StrPos2 > StrPos1 then
     begin
-      FConsoleOutput := Trim(Copy(FConsoleOutput, StrPos1 + 1, StrPos2 - StrPos1 - 1));
+      FConsoleOutput := Trim(Copy(FConsoleOutput, StrPos1 + 1,
+        StrPos2 - StrPos1 - 1));
     end;
 
     if IsStringNumeric(FConsoleOutput) then
@@ -1067,7 +1075,7 @@ begin
   end;
 
   if not FileExists(ExtractFileDir(Application.ExeName) +
-    '\tools\audio\faac.exe') then
+    '\tools\faac.exe') then
   begin
     Application.MessageBox('Can''t find faac.exe. Please re-install.', 'Error',
       MB_ICONERROR);
@@ -1075,11 +1083,11 @@ begin
   end
   else
   begin
-    FAACPath := ExtractFileDir(Application.ExeName) + '\tools\audio\faac.exe';
+    FAACPath := ExtractFileDir(Application.ExeName) + '\tools\faac.exe';
   end;
 
   if not FileExists(ExtractFileDir(Application.ExeName) +
-    '\tools\audio\neroAacEnc.exe') then
+    '\tools\neroAacEnc.exe') then
   begin
     Application.MessageBox('Can''t find neroaacenc.exe.', 'Error',
       MB_ICONERROR);
@@ -1088,7 +1096,7 @@ begin
   else
   begin
     NeroAACPath := ExtractFileDir(Application.ExeName) +
-      '\tools\audio\neroAacEnc.exe';
+      '\tools\neroAacEnc.exe';
   end;
 
   if not MediaInfoDLL_Load(ExtractFileDir(Application.ExeName) +
@@ -1290,6 +1298,38 @@ begin
 
 end;
 
+procedure TForm1.GetFullInfo(const FileName: string);
+var
+  MediaInfoHandle: Cardinal;
+begin
+
+
+  if (FileExists(FileName)) then
+  begin
+
+    // New handle for mediainfo
+    MediaInfoHandle := MediaInfo_New();
+
+    if MediaInfoHandle <> 0 then
+    begin
+
+      try
+        // Open a file in complete mode
+        MediaInfo_Open(MediaInfoHandle, PwideChar(FileName));
+        MediaInfo_Option(0, 'Complete', '1');
+
+        Form2.InfoList.Items.Text := string(MediaInfo_Inform(MediaInfoHandle, 0));
+
+      finally
+        MediaInfo_Close(MediaInfoHandle);
+      end;
+
+    end;
+
+  end;
+
+end;
+
 function TForm1.GetSubtitleCount(Index: integer): Integer;
 var
   MediaInfoHandle: Cardinal;
@@ -1434,6 +1474,21 @@ begin
 
     end;
 
+  end;
+
+end;
+
+procedure TForm1.InfoBtnClick(Sender: TObject);
+var
+  index: Integer;
+begin
+
+  index := FileList.ItemIndex;
+
+  if index > -1 then
+  begin
+    GetFullInfo(FileList.Items.Strings[index]);
+    Form2.Show;
   end;
 
 end;
@@ -1760,8 +1815,9 @@ begin
     TotalProgressBar.Progress := LastPercent +
       (CurrentProgressBar.Progress div CommandLines.Count);
 
-    Form1.Caption := FloatToStr(TotalProgressBar.Progress) + '% [TX264]';
-
+    Form1.Caption := FloatToStr(CurrentProgressBar.Progress) + '% / ' +
+      FloatToStr(TotalProgressBar.Progress) + '% [TX264]/' +
+      FloatToStr(DurationIndex);
 
     SetProgressValue(Form1.Handle, TotalProgressBar.Progress, 100);
 
@@ -1883,7 +1939,9 @@ begin
       // neroaac
       if (AudioPages.ActivePageIndex = 1) and (not FileExists(NeroAACPath)) then
       begin
-        Application.MessageBox('Cannot find neroaacenc.exe! Please select an other audio encoder!', 'Error', MB_ICONERROR);
+        Application.MessageBox
+          ('Cannot find neroaacenc.exe! Please select an other audio encoder!',
+          'Error', MB_ICONERROR);
       end
       else
       begin
@@ -1928,10 +1986,16 @@ end;
 procedure TForm1.StopBtnClick(Sender: TObject);
 begin
 
-  if Process.ProcessInfo.hProcess > 0 then
+  if ID_YES = Application.MessageBox('Stop encoding?', 'Stop',
+    MB_ICONQUESTION) then
   begin
-    TerminateProcess(Process.ProcessInfo.hProcess, 0);
-    StoppedByUser := True;
+
+    if Process.ProcessInfo.hProcess > 0 then
+    begin
+      TerminateProcess(Process.ProcessInfo.hProcess, 0);
+      StoppedByUser := True;
+    end;
+
   end;
 
 end;
@@ -2163,11 +2227,21 @@ begin
 
   Inc(FileIndex);
 
-  // if (ProcessTypeList[FileIndex] = '2') or
-  // (ProcessTypeList[FileIndex] = '7') then
-  // begin
-  // Inc(DurationIndex); // to next item in the list
-  // end;
+  if FileIndex < ProcessTypeList.Count then
+  begin
+
+    if (ProcessTypeList[FileIndex] = '2') or
+      (ProcessTypeList[FileIndex] = '7') then
+    begin
+      Inc(DurationIndex); // to next item in the list
+
+      if DurationIndex >= Durations.Count then
+      begin
+        DurationIndex := Durations.Count - 1;
+      end;
+
+    end;
+  end;
 
   LastPercent := Round((100 * FileIndex) div CommandLines.Count);
 
@@ -2237,6 +2311,11 @@ begin
       begin
         // neroaacenc
         Process.ApplicationName := NeroAACPath;
+      end
+      else if ProcessTypeList[FileIndex] = '9' then
+      begin
+        // mp4box
+        Process.ApplicationName := Mp4BoxPath;
       end;
 
       if not FileExists(Process.ApplicationName) then

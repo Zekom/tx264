@@ -11,8 +11,10 @@ object Form3: TForm3
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
   Position = poMainFormCenter
+  OnKeyDown = FormKeyDown
   DesignSize = (
     825
     575)
@@ -22,7 +24,7 @@ object Form3: TForm3
     Left = 8
     Top = 8
     Width = 809
-    Height = 523
+    Height = 528
     Anchors = [akLeft, akTop, akRight, akBottom]
     ItemHeight = 13
     Background.FillMode = bfmTile
@@ -31,29 +33,29 @@ object Form3: TForm3
   end
   object SaveBtn: TButton
     Left = 8
-    Top = 537
-    Width = 100
-    Height = 30
+    Top = 542
+    Width = 50
+    Height = 25
     Anchors = [akLeft, akBottom]
     Caption = 'Save'
     TabOrder = 1
     OnClick = SaveBtnClick
   end
   object ClearBtn: TButton
-    Left = 114
-    Top = 537
-    Width = 100
-    Height = 30
+    Left = 64
+    Top = 542
+    Width = 50
+    Height = 25
     Anchors = [akLeft, akBottom]
     Caption = 'Clear'
     TabOrder = 2
     OnClick = ClearBtnClick
   end
   object CloseBtn: TButton
-    Left = 717
-    Top = 537
-    Width = 100
-    Height = 30
+    Left = 767
+    Top = 542
+    Width = 50
+    Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Close'
     TabOrder = 3

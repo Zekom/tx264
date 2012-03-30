@@ -24,27 +24,27 @@ object Form1: TForm1
   TextHeight = 13
   object Label10: TLabel
     Left = 8
-    Top = 481
+    Top = 487
     Width = 69
     Height = 13
     Anchors = [akLeft, akBottom]
     Caption = 'Output folder:'
   end
   object StartBtn: TButton
-    Left = 462
-    Top = 629
-    Width = 120
-    Height = 30
+    Left = 507
+    Top = 634
+    Width = 75
+    Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Start'
     TabOrder = 0
     OnClick = StartBtnClick
   end
   object StopBtn: TButton
-    Left = 336
-    Top = 629
-    Width = 120
-    Height = 30
+    Left = 426
+    Top = 634
+    Width = 75
+    Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Stop'
     Enabled = False
@@ -52,10 +52,10 @@ object Form1: TForm1
     OnClick = StopBtnClick
   end
   object LogsBtn: TButton
-    Left = 89
-    Top = 629
-    Width = 75
-    Height = 30
+    Left = 63
+    Top = 634
+    Width = 50
+    Height = 25
     Anchors = [akLeft, akBottom]
     Caption = 'Logs'
     TabOrder = 2
@@ -65,17 +65,17 @@ object Form1: TForm1
     Left = 8
     Top = 8
     Width = 574
-    Height = 256
+    Height = 261
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'Files and Paths'
     TabOrder = 3
     DesignSize = (
       574
-      256)
+      261)
     object DownBtn: TButton
-      Left = 246
+      Left = 344
       Top = 16
-      Width = 100
+      Width = 50
       Height = 25
       Anchors = [akTop, akRight]
       Caption = 'Down'
@@ -86,7 +86,7 @@ object Form1: TForm1
       Left = 12
       Top = 47
       Width = 546
-      Height = 192
+      Height = 205
       Anchors = [akLeft, akTop, akRight, akBottom]
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
@@ -103,9 +103,9 @@ object Form1: TForm1
       TabOrder = 1
     end
     object RemoveAllBtn: TButton
-      Left = 458
+      Left = 452
       Top = 16
-      Width = 100
+      Width = 50
       Height = 25
       Anchors = [akTop, akRight]
       Caption = 'Clear'
@@ -113,9 +113,9 @@ object Form1: TForm1
       OnClick = RemoveAllBtnClick
     end
     object RemoveBtn: TButton
-      Left = 352
+      Left = 400
       Top = 16
-      Width = 100
+      Width = 50
       Height = 25
       Anchors = [akTop, akRight]
       Caption = 'Remove'
@@ -123,9 +123,9 @@ object Form1: TForm1
       OnClick = RemoveBtnClick
     end
     object UpBtn: TButton
-      Left = 140
+      Left = 288
       Top = 16
-      Width = 100
+      Width = 50
       Height = 25
       Anchors = [akTop, akRight]
       Caption = 'Up'
@@ -135,16 +135,26 @@ object Form1: TForm1
     object AddBtn: TButton
       Left = 12
       Top = 16
-      Width = 100
+      Width = 50
       Height = 25
       Caption = 'Add'
       TabOrder = 5
       OnClick = AddBtnClick
     end
+    object InfoBtn: TButton
+      Left = 508
+      Top = 16
+      Width = 50
+      Height = 25
+      Anchors = [akTop, akRight]
+      Caption = 'Info'
+      TabOrder = 6
+      OnClick = InfoBtnClick
+    end
   end
   object GroupBox3: TGroupBox
     Left = 8
-    Top = 505
+    Top = 510
     Width = 574
     Height = 118
     Anchors = [akLeft, akRight, akBottom]
@@ -210,9 +220,9 @@ object Form1: TForm1
   end
   object AboutBtn: TButton
     Left = 8
-    Top = 629
-    Width = 75
-    Height = 30
+    Top = 634
+    Width = 50
+    Height = 25
     Anchors = [akLeft, akBottom]
     Caption = 'About'
     TabOrder = 5
@@ -220,7 +230,7 @@ object Form1: TForm1
   end
   object PageControl: TPageControl
     Left = 8
-    Top = 270
+    Top = 275
     Width = 574
     Height = 202
     ActivePage = TabSheet1
@@ -485,11 +495,11 @@ object Form1: TForm1
           Height = 21
           Style = csDropDownList
           Anchors = [akRight, akBottom]
-          ItemIndex = 1
+          ItemIndex = 0
           TabOrder = 5
-          Text = 'MP4'
+          Text = 'MKV'
           Items.Strings = (
-            'Matroska'
+            'MKV'
             'MP4')
         end
         object SubtitleBtn: TCheckBox
@@ -729,14 +739,14 @@ object Form1: TForm1
         TabOrder = 0
         object Label18: TLabel
           Left = 3
-          Top = 158
+          Top = 154
           Width = 58
           Height = 13
           Caption = 'Samplerate:'
         end
         object Label19: TLabel
           Left = 364
-          Top = 158
+          Top = 154
           Width = 48
           Height = 13
           Caption = 'Channels:'
@@ -1123,8 +1133,8 @@ object Form1: TForm1
   end
   object DirectoryEdit: TJvDirectoryEdit
     Left = 83
-    Top = 478
-    Width = 418
+    Top = 483
+    Width = 443
     Height = 21
     DialogKind = dkWin32
     ButtonFlat = True
@@ -1134,9 +1144,9 @@ object Form1: TForm1
     Text = 'C:\'
   end
   object OutputBtn: TButton
-    Left = 507
-    Top = 478
-    Width = 75
+    Left = 532
+    Top = 483
+    Width = 50
     Height = 21
     Anchors = [akRight, akBottom]
     Caption = 'Open'
