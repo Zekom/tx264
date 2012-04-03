@@ -10,7 +10,8 @@ uses
   JvComponentBase,
   JvCreateProcess, JvThread, ComCtrls, JvExComCtrls, ShellAPI,
   StrUtils,
-  MediaInfoDll, JvComputerInfoEx, IniFiles, JvDragDrop, Gauges;
+  MediaInfoDll, JvComputerInfoEx, IniFiles, JvDragDrop, Gauges,
+  JvUrlListGrabber, JvUrlGrabbers;
 
 type
   TForm1 = class(TForm)
@@ -135,6 +136,8 @@ type
     CurrentProgressBar: TGauge;
     TotalProgressBar: TGauge;
     InfoBtn: TButton;
+    UpdateThread: TJvThread;
+    UpdateChecker: TJvHttpUrlGrabber;
     procedure AddFiles1Click(Sender: TObject);
     procedure AddFolder1Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
@@ -168,6 +171,11 @@ type
     procedure DragDropDrop(Sender: TObject; Pos: TPoint; Value: TStrings);
     procedure AudioPagesChange(Sender: TObject);
     procedure InfoBtnClick(Sender: TObject);
+    procedure FileListDrawItem(Control: TWinControl; Index: Integer;
+      Rect: TRect; State: TOwnerDrawState);
+    procedure UpdateThreadExecute(Sender: TObject; Params: Pointer);
+    procedure UpdateCheckerDoneFile(Sender: TObject; FileName: string;
+      FileSize: Integer; Url: string);
   private
     { Private declarations }
     CommandLines: TStringList;
@@ -241,32 +249,23 @@ type
   end;
 
 const
-  Build = '201';
-  BuildInt = 201;
+  Build = '356';
+  BuildInt = 356;
 
 var
   Form1: TForm1;
 
 implementation
 
-uses UnitLog, windows7taskbar, UnitInfo;
+uses UnitLog, windows7taskbar, UnitInfo, UnitAbout;
 
 {$R *.dfm}
 
 procedure TForm1.AboutBtnClick(Sender: TObject);
-var
-  Msg: string;
 begin
 
-  Msg := 'TX264 - GUI for x264.exe ' + #13#10 + 'Build: ' + Build + #13#10 +
-    '2012 ozok ozok26@gmail.com' + #13#10 +
-    'Licenced under the terms of GPL 2 or above.' + #13#10 + #13#10 + 'Uses:' +
-    #13#10 + 'x264.exe' + #13#10 + 'FFMpeg.exe' + #13#10 + 'Mp4Box.exe' + #13#10
-    + 'mkvmerge.exe' + #13#10 + 'MediaInfo.dll 0.7.54' + #13#10 + 'JVCL 3.4' +
-    #13#10 + 'FAAC 1.28' + #13#10 + 'NeroAACEnc (if present)' + #13#10 + #13#10
-    + 'Feel free to send bug reports, suggestions etc.';
-
-  Application.MessageBox(PwideChar(Msg), 'About', MB_ICONINFORMATION);
+  Form1.Enabled := False;
+  AboutForm.show;
 
 end;
 
@@ -442,10 +441,12 @@ begin
   if EncodeModeList.ItemIndex = 2 then
   begin
     // two pass bitrate
-    CommandLines.Add(' --pass 1 ' + TmpStr + ' --output NUL "' +
+    CommandLines.Add(' --pass 1 ' + TmpStr + ' --stats "' +
+      ChangeFileExt(OutFileName, '.stats') + '" --output NUL "' +
       FileName + '"');
-    CommandLines.Add(' --pass 2 ' + TmpStr + ' --output "' + OutFileName + '" "'
-      + FileName + '"');
+    CommandLines.Add(' --pass 2 ' + TmpStr + ' --stats "' +
+      ChangeFileExt(OutFileName, '.stats') + '" --output "' + OutFileName +
+      '" "' + FileName + '"');
 
     Infos.Add('Encoding video(1/2): ' + ExtractFileName(FileName) + ' (' +
       FloatToStr(Index + 1) + '/' + FloatToStr(FileList.Items.Count) + ')');
@@ -918,7 +919,6 @@ end;
 
 function TForm1.FAACPercentage(const FAACOutput: string): Integer;
 var
-  TmpPos: Integer;
   StrPos1, StrPos2: Integer;
   FConsoleOutput: string;
 begin
@@ -982,6 +982,37 @@ begin
 
 end;
 
+procedure TForm1.FileListDrawItem(Control: TWinControl; Index: Integer;
+  Rect: TRect; State: TOwnerDrawState);
+begin
+
+  with Control as TJvListBox, Canvas do
+  begin
+
+    // item selected
+    if odSelected in State then
+    begin
+
+      Brush.Color := $00D4CCC5;
+      Pen.Color := clBlack;
+      FillRect(Rect);
+      TextOut(Rect.Left + 2, Rect.Top, Items[Index])
+
+    end
+    else
+    begin
+      // item not selected
+      Brush.Color := clWhite;
+      Pen.Color := clBlack;
+      FillRect(Rect);
+      TextOut(Rect.Left + 2, Rect.Top, Items[Index])
+
+    end;
+
+  end;
+
+end;
+
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 
@@ -1008,8 +1039,6 @@ begin
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
-var
-  i: Integer;
 begin
 
   if not FileExists(ExtractFileDir(Application.ExeName) +
@@ -1303,7 +1332,6 @@ var
   MediaInfoHandle: Cardinal;
 begin
 
-
   if (FileExists(FileName)) then
   begin
 
@@ -1318,7 +1346,8 @@ begin
         MediaInfo_Open(MediaInfoHandle, PwideChar(FileName));
         MediaInfo_Option(0, 'Complete', '1');
 
-        Form2.InfoList.Items.Text := string(MediaInfo_Inform(MediaInfoHandle, 0));
+        Form2.InfoList.Items.Text :=
+          string(MediaInfo_Inform(MediaInfoHandle, 0));
 
       finally
         MediaInfo_Close(MediaInfoHandle);
@@ -1634,13 +1663,11 @@ end;
 
 function TForm1.MkvExtractPercentage(const MkvExtractOutput: string): Integer;
 var
-  StrPos: Integer;
   TmpInt: Integer;
   FConsoleOutput: string;
 begin
 
   Result := 0;
-  StrPos := -1;
 
   FConsoleOutput := Trim(MkvExtractOutput);
 
@@ -1665,14 +1692,13 @@ end;
 
 function TForm1.Mp4BoxPercentage(const Mp4BoxOutput: string): Integer;
 var
-  StrPos: Integer;
   TmpStr: string;
   TmpInt: Integer;
   FConsoleOutput: string;
+  StrPos: Integer;
 begin
 
   Result := 0;
-  StrPos := -1;
 
   FConsoleOutput := Trim(Mp4BoxOutput);
 
@@ -1725,7 +1751,6 @@ end;
 
 function TForm1.NeroPercentage(const NeroOutput: string): Integer;
 var
-  TmpPos: Integer;
   FConsoleOutput: string;
 begin
 
@@ -1816,8 +1841,7 @@ begin
       (CurrentProgressBar.Progress div CommandLines.Count);
 
     Form1.Caption := FloatToStr(CurrentProgressBar.Progress) + '% / ' +
-      FloatToStr(TotalProgressBar.Progress) + '% [TX264]/' +
-      FloatToStr(DurationIndex);
+      FloatToStr(TotalProgressBar.Progress) + '% [TX264]';
 
     SetProgressValue(Form1.Handle, TotalProgressBar.Progress, 100);
 
@@ -2066,6 +2090,63 @@ begin
 
 end;
 
+procedure TForm1.UpdateCheckerDoneFile(Sender: TObject; FileName: string;
+  FileSize: Integer; Url: string);
+var
+  VersionFile: TStringList;
+  LatestVersion: Integer;
+begin
+
+  VersionFile := TStringList.Create;
+  try
+
+    VersionFile.LoadFromFile(FileName);
+
+    if VersionFile.Count = 1 then
+    begin
+
+      if Form1.IsStringNumeric(VersionFile.Strings[0]) then
+      begin
+        LatestVersion := StrToInt(VersionFile.Strings[0]);
+
+        if LatestVersion > BuildInt then
+        begin
+
+          if ID_YES = Application.MessageBox
+            ('There is a new version. Would you like to go homepage and download it?',
+            'New Version', MB_ICONQUESTION or MB_YESNO) then
+          begin
+            ShellExecute(0, 'open',
+              'https://sourceforge.net/projects/tencoder/', nil, nil,
+              SW_SHOWNORMAL);
+          end;
+
+        end;
+
+      end;
+
+    end;
+
+  finally
+    FreeAndNil(VersionFile);
+  end;
+
+end;
+
+procedure TForm1.UpdateThreadExecute(Sender: TObject; Params: Pointer);
+begin
+
+  with UpdateChecker do
+  begin
+    Url := '';
+    FileName := SystemInfo.Folders.Temp + '\TX264\version.txt';
+    Start;
+  end;
+
+  UpdateThread.CancelExecute;
+
+end;
+
 procedure TForm1.VideoSizeListChange(Sender: TObject);
 begin
 
@@ -2171,14 +2252,13 @@ end;
 
 function TForm1.x264Percentage(const x264Output: string): Integer;
 var
-  StrPos: Integer;
   TmpStr: string;
   TmpInt: Integer;
   FConsoleOutput: string;
+  StrPos: Integer;
 begin
 
   Result := 0;
-  StrPos := -1;
 
   FConsoleOutput := Trim(x264Output);
 

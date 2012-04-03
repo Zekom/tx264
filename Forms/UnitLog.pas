@@ -53,7 +53,7 @@ begin
 
   if Key = VK_ESCAPE then
   begin
-    CloseBtn.OnClick(self);
+    CloseBtn.OnClick(Self);
   end;
 
 end;

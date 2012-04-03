@@ -2,10 +2,10 @@ object Form3: TForm3
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu, biMaximize]
-  Caption = 'Log'
+  Caption = 'Console outputs'
   ClientHeight = 575
   ClientWidth = 825
-  Color = clSilver
+  Color = 13946053
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11

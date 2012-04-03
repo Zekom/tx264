@@ -4,7 +4,7 @@ object Form1: TForm1
   Caption = 'TX264'
   ClientHeight = 667
   ClientWidth = 590
-  Color = clSilver
+  Color = 13946053
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -54,10 +54,10 @@ object Form1: TForm1
   object LogsBtn: TButton
     Left = 63
     Top = 634
-    Width = 50
+    Width = 100
     Height = 25
     Anchors = [akLeft, akBottom]
-    Caption = 'Logs'
+    Caption = 'Console outputs'
     TabOrder = 2
     OnClick = LogsBtnClick
   end
@@ -94,13 +94,14 @@ object Form1: TForm1
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemHeight = 13
       Background.FillMode = bfmTile
       Background.Visible = False
       ParentFlat = False
       MultiSelect = True
       ParentFont = False
+      Style = lbOwnerDrawFixed
       TabOrder = 1
+      OnDrawItem = FileListDrawItem
     end
     object RemoveAllBtn: TButton
       Left = 452
@@ -246,7 +247,7 @@ object Form1: TForm1
         Height = 174
         Align = alClient
         BevelOuter = bvNone
-        Color = clSilver
+        Color = 13946053
         ParentBackground = False
         TabOrder = 0
         DesignSize = (
@@ -327,7 +328,7 @@ object Form1: TForm1
             Items.Strings = (
               'Constant Rate Factor (Single Pass)'
               'Constant Quantiser (Single Pass)'
-              'Average Bitrate (Two4 pass)'
+              'Average Bitrate (Two pass)'
               'Constant Bitrate (Single Pass)')
           end
           object QuantEdit: TJvSpinEdit
@@ -524,7 +525,7 @@ object Form1: TForm1
         Height = 174
         Align = alClient
         BevelOuter = bvNone
-        Color = clSilver
+        Color = 13946053
         ParentBackground = False
         TabOrder = 0
         object Label11: TLabel
@@ -734,7 +735,7 @@ object Form1: TForm1
         Height = 174
         Align = alClient
         BevelOuter = bvNone
-        Color = clSilver
+        Color = 13946053
         ParentBackground = False
         TabOrder = 0
         object Label18: TLabel
@@ -768,7 +769,7 @@ object Form1: TForm1
               Height = 113
               Align = alClient
               BevelOuter = bvNone
-              Color = clSilver
+              Color = 13946053
               ParentBackground = False
               TabOrder = 0
               object Label16: TLabel
@@ -842,7 +843,7 @@ object Form1: TForm1
               Height = 113
               Align = alClient
               BevelOuter = bvNone
-              Color = clSilver
+              Color = 13946053
               ParentBackground = False
               TabOrder = 0
               object Label29: TLabel
@@ -975,7 +976,7 @@ object Form1: TForm1
         Height = 174
         Align = alClient
         BevelOuter = bvNone
-        Color = clSilver
+        Color = 13946053
         ParentBackground = False
         TabOrder = 0
         DesignSize = (
@@ -1075,7 +1076,7 @@ object Form1: TForm1
         Height = 174
         Align = alClient
         BevelOuter = bvNone
-        Color = clSilver
+        Color = 13946053
         ParentBackground = False
         TabOrder = 0
         object GroupBox1: TGroupBox
@@ -1215,5 +1216,24 @@ object Form1: TForm1
     OnDrop = DragDropDrop
     Left = 368
     Top = 184
+  end
+  object UpdateThread: TJvThread
+    Exclusive = True
+    MaxCount = 0
+    RunOnCreate = True
+    FreeOnTerminate = True
+    OnExecute = UpdateThreadExecute
+    Left = 152
+    Top = 184
+  end
+  object UpdateChecker: TJvHttpUrlGrabber
+    FileName = 'output.txt'
+    Agent = 'JEDI-VCL'
+    Port = 0
+    ProxyAddresses = 'proxyserver'
+    ProxyIgnoreList = '<local>'
+    OnDoneFile = UpdateCheckerDoneFile
+    Left = 256
+    Top = 208
   end
 end
