@@ -85,7 +85,7 @@ object Form1: TForm1
     object FileList: TJvListBox
       Left = 12
       Top = 47
-      Width = 546
+      Width = 550
       Height = 205
       Anchors = [akLeft, akTop, akRight, akBottom]
       Color = clWhite
@@ -143,7 +143,7 @@ object Form1: TForm1
       OnClick = AddBtnClick
     end
     object InfoBtn: TButton
-      Left = 508
+      Left = 512
       Top = 16
       Width = 50
       Height = 25
@@ -164,31 +164,25 @@ object Form1: TForm1
     DesignSize = (
       574
       118)
-    object CurrentProgressBar: TGauge
-      Left = 12
-      Top = 38
-      Width = 548
-      Height = 17
-      Anchors = [akLeft, akRight, akBottom]
-      BackColor = clInactiveBorder
-      BorderStyle = bsNone
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      Progress = 0
+    object TotalProgressLabel: TLabel
+      Left = 519
+      Top = 23
+      Width = 37
+      Height = 13
+      Alignment = taCenter
+      Anchors = [akRight, akBottom]
+      AutoSize = False
+      Caption = '0%'
     end
-    object TotalProgressBar: TGauge
-      Left = 12
-      Top = 15
-      Width = 548
-      Height = 17
-      Anchors = [akLeft, akRight, akBottom]
-      BackColor = clInactiveBorder
-      BorderStyle = bsNone
-      Progress = 0
+    object CurrentProgressLabel: TLabel
+      Left = 519
+      Top = 42
+      Width = 37
+      Height = 13
+      Alignment = taCenter
+      Anchors = [akRight, akBottom]
+      AutoSize = False
+      Caption = '0%'
     end
     object ConsoleOutputEdit: TEdit
       Left = 12
@@ -217,6 +211,22 @@ object Form1: TForm1
       Anchors = [akLeft, akRight, akBottom]
       Enabled = False
       TabOrder = 1
+    end
+    object TotalProgressBar: TProgressBar
+      Left = 12
+      Top = 23
+      Width = 501
+      Height = 13
+      Anchors = [akLeft, akRight, akBottom]
+      TabOrder = 2
+    end
+    object CurrentProgressBar: TProgressBar
+      Left = 12
+      Top = 42
+      Width = 501
+      Height = 13
+      Anchors = [akLeft, akRight, akBottom]
+      TabOrder = 3
     end
   end
   object AboutBtn: TButton
@@ -530,21 +540,21 @@ object Form1: TForm1
         TabOrder = 0
         object Label11: TLabel
           Left = 391
-          Top = 89
+          Top = 93
           Width = 38
           Height = 13
           Caption = 'Bottom:'
         end
         object Label12: TLabel
           Left = 338
-          Top = 67
+          Top = 66
           Width = 23
           Height = 13
           Caption = 'Left:'
         end
         object Label28: TLabel
           Left = 54
-          Top = 47
+          Top = 39
           Width = 60
           Height = 13
           Caption = 'Pre-defined:'
@@ -558,28 +568,28 @@ object Form1: TForm1
         end
         object Label6: TLabel
           Left = 176
-          Top = 62
+          Top = 66
           Width = 35
           Height = 13
           Caption = 'Height:'
         end
         object Label7: TLabel
           Left = 40
-          Top = 89
+          Top = 93
           Width = 74
           Height = 13
           Caption = 'Resize method:'
         end
         object Label8: TLabel
           Left = 407
-          Top = 43
+          Top = 39
           Width = 22
           Height = 13
           Caption = 'Top:'
         end
         object Label9: TLabel
           Left = 469
-          Top = 70
+          Top = 66
           Width = 29
           Height = 13
           Caption = 'Right:'
@@ -1129,6 +1139,16 @@ object Form1: TForm1
             TabOrder = 3
           end
         end
+        object CheckUpdateBtn: TCheckBox
+          Left = 11
+          Top = 95
+          Width = 140
+          Height = 17
+          Caption = 'Check updates on start'
+          Checked = True
+          State = cbChecked
+          TabOrder = 1
+        end
       end
     end
   end
@@ -1233,7 +1253,7 @@ object Form1: TForm1
     ProxyAddresses = 'proxyserver'
     ProxyIgnoreList = '<local>'
     OnDoneFile = UpdateCheckerDoneFile
-    Left = 256
-    Top = 208
+    Left = 248
+    Top = 176
   end
 end

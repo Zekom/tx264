@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, acPNG, ExtCtrls, StdCtrls;
+  Dialogs, ExtCtrls, StdCtrls, ShellAPI;
 
 type
   TAboutForm = class(TForm)
@@ -19,6 +19,8 @@ type
     HomepageBtn: TButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure CloseBtnClick(Sender: TObject);
+    procedure HomepageBtnClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -27,6 +29,9 @@ type
 
 var
   AboutForm: TAboutForm;
+
+const
+  Build = '388';
 
 implementation
 
@@ -45,6 +50,20 @@ procedure TAboutForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 
   Form1.Enabled := True;
+
+end;
+
+procedure TAboutForm.FormShow(Sender: TObject);
+begin
+
+  Label1.Caption := 'TX264 0.1 Alpha Build: ' + Build;
+
+end;
+
+procedure TAboutForm.HomepageBtnClick(Sender: TObject);
+begin
+
+  ShellExecute(Application.Handle, 'open', 'https://sourceforge.net/projects/tx264/', nil,nil, SW_SHOWNORMAL);
 
 end;
 

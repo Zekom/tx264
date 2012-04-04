@@ -133,11 +133,14 @@ type
     Label32: TLabel;
     Panel8: TPanel;
     DragDrop: TJvDragDrop;
-    CurrentProgressBar: TGauge;
-    TotalProgressBar: TGauge;
     InfoBtn: TButton;
     UpdateThread: TJvThread;
     UpdateChecker: TJvHttpUrlGrabber;
+    CheckUpdateBtn: TCheckBox;
+    TotalProgressBar: TProgressBar;
+    CurrentProgressBar: TProgressBar;
+    TotalProgressLabel: TLabel;
+    CurrentProgressLabel: TLabel;
     procedure AddFiles1Click(Sender: TObject);
     procedure AddFolder1Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
@@ -249,8 +252,7 @@ type
   end;
 
 const
-  Build = '356';
-  BuildInt = 356;
+  BuildInt = 388;
 
 var
   Form1: TForm1;
@@ -767,7 +769,7 @@ begin
     begin
 
       if Application.MessageBox
-        ('Cannot find neroaacenc.exe! If you want to download it please click Yes. After downloading, put neroaacenc.exe into tools/aduio folder.',
+        ('Cannot find neroaacenc.exe! If you want to download it please click Yes. After downloading, put neroaacenc.exe into tools folder.',
         'NeroAACEnc', MB_ICONWARNING or MB_YESNO) = IDYES then
       begin
         ShellExecute(Form1.Handle, 'open',
@@ -994,7 +996,7 @@ begin
     begin
 
       Brush.Color := $00D4CCC5;
-      Pen.Color := clBlack;
+      Font.Color := clBlack;
       FillRect(Rect);
       TextOut(Rect.Left + 2, Rect.Top, Items[Index])
 
@@ -1003,7 +1005,7 @@ begin
     begin
       // item not selected
       Brush.Color := clWhite;
-      Pen.Color := clBlack;
+      Font.Color := clBlack;
       FillRect(Rect);
       TextOut(Rect.Left + 2, Rect.Top, Items[Index])
 
@@ -1028,6 +1030,17 @@ begin
   end;
 
   while not LogThread.Terminated do
+  begin
+    Application.ProcessMessages;
+    Sleep(10);
+  end;
+
+  if not UpdateThread.Terminated then
+  begin
+    UpdateThread.Terminate;
+  end;
+
+  while not UpdateThread.Terminated do
   begin
     Application.ProcessMessages;
     Sleep(10);
@@ -1192,6 +1205,11 @@ begin
 
   LoadOptions();
   DeleteTempFiles();
+
+  if CheckUpdateBtn.Checked then
+  begin
+    UpdateThread.Execute(nil);
+  end;
 
 end;
 
@@ -1566,7 +1584,7 @@ begin
       PageControl.ActivePageIndex := ReadInteger('Settings', 'PageIndex', 0);
       EncodeModeList.ItemIndex := ReadInteger('Settings', 'EncodeMode', 3);
       ProfileList.ItemIndex := ReadInteger('Settings', 'Profile', 0);
-      PresetsList.ItemIndex := ReadInteger('Settings', 'Preset', 5);
+      PresetsList.ItemIndex := ReadInteger('Settings', 'Preset', 6);
       TuneList.ItemIndex := ReadInteger('Settings', 'Tune', 0);
       BitrateEdit.Text := ReadString('Settings', 'Bitrate', '512');
       QuantEdit.Text := ReadString('Settings', 'Quant', '21');
@@ -1614,7 +1632,8 @@ begin
         FloatToStr(Round(SystemInfo.CPU.LogicalCore * 1.5)));
       SliceThreadsBtn.Checked := ReadBool('Settings', 'Slice', False);
       SliceThreadsEdit.Text := ReadString('Settings', 'SliceThreadStr',
-        FloatToStr(SystemInfo.CPU.LogicalCore))
+        FloatToStr(SystemInfo.CPU.LogicalCore));
+      CheckUpdateBtn.Checked := ReadBool('Settings', 'Update', True);
     end;
 
   finally
@@ -1803,12 +1822,12 @@ begin
     if ProcessTypeList[FileIndex] = '1' then
     begin
       // video encoding
-      CurrentProgressBar.Progress := x264Percentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Position := x264Percentage(ConsoleOutputEdit.Text);
     end
     else if ProcessTypeList[FileIndex] = '2' then
     begin
       // audio encoding
-      CurrentProgressBar.Progress := FFMpegPercentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Position := FFMpegPercentage(ConsoleOutputEdit.Text);
     end
     else if ProcessTypeList[FileIndex] = '3' then
     begin
@@ -1823,27 +1842,29 @@ begin
     else if ProcessTypeList[FileIndex] = '5' then
     begin
       // mkvextract
-      CurrentProgressBar.Progress :=
+      CurrentProgressBar.Position :=
         MkvExtractPercentage(ConsoleOutputEdit.Text);
     end
     else if ProcessTypeList[FileIndex] = '6' then
     begin
       // faac
-      CurrentProgressBar.Progress := FAACPercentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Position := FAACPercentage(ConsoleOutputEdit.Text);
     end
     else if ProcessTypeList[FileIndex] = '7' then
     begin
       // neroaacenc
-      CurrentProgressBar.Progress := NeroPercentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Position := NeroPercentage(ConsoleOutputEdit.Text);
     end;
 
-    TotalProgressBar.Progress := LastPercent +
-      (CurrentProgressBar.Progress div CommandLines.Count);
+    TotalProgressBar.Position := LastPercent +
+      (CurrentProgressBar.Position div CommandLines.Count);
 
-    Form1.Caption := FloatToStr(CurrentProgressBar.Progress) + '% / ' +
-      FloatToStr(TotalProgressBar.Progress) + '% [TX264]';
+    Form1.Caption := FloatToStr(CurrentProgressBar.Position) + '% / ' +
+      FloatToStr(TotalProgressBar.Position) + '% [TX264]';
+    TotalProgressLabel.Caption := FloatToStr(TotalProgressBar.Position) + '%';
+    CurrentProgressLabel.Caption := FloatToStr(CurrentProgressBar.Position) + '%';
 
-    SetProgressValue(Form1.Handle, TotalProgressBar.Progress, 100);
+    SetProgressValue(Form1.Handle, TotalProgressBar.Position, 100);
 
   end;
 
@@ -1869,6 +1890,7 @@ begin
   WidthEdit.Enabled := ResizeBtn.Checked;
   HeightEdit.Enabled := ResizeBtn.Checked;
   ResizeMethodList.Enabled := ResizeBtn.Checked;
+  VideoSizeList.Enabled := ResizeBtn.Checked;
 
 end;
 
@@ -1934,6 +1956,7 @@ begin
       WriteString('Settings', 'ThreadStr', ThreadsEdit.Text);
       WriteBool('Settings', 'Slice', SliceThreadsBtn.Checked);
       WriteString('Settings', 'SliceThreadStr', SliceThreadsEdit.Text);
+      WriteBool('Settings', 'Update', CheckUpdateBtn.Checked);
     end;
 
   finally
@@ -2011,7 +2034,7 @@ procedure TForm1.StopBtnClick(Sender: TObject);
 begin
 
   if ID_YES = Application.MessageBox('Stop encoding?', 'Stop',
-    MB_ICONQUESTION) then
+    MB_ICONQUESTION or MB_YESNO) then
   begin
 
     if Process.ProcessInfo.hProcess > 0 then
@@ -2117,7 +2140,7 @@ begin
             'New Version', MB_ICONQUESTION or MB_YESNO) then
           begin
             ShellExecute(0, 'open',
-              'https://sourceforge.net/projects/tencoder/', nil, nil,
+              'https://sourceforge.net/projects/tx264/', nil, nil,
               SW_SHOWNORMAL);
           end;
 
@@ -2138,7 +2161,7 @@ begin
 
   with UpdateChecker do
   begin
-    Url := '';
+    Url := 'http://dl.dropbox.com/u/9617171/tx264.txt';
     FileName := SystemInfo.Folders.Temp + '\TX264\version.txt';
     Start;
   end;
@@ -2343,11 +2366,13 @@ begin
     InfoEdit.Text := '';
     Form1.Caption := 'TX264';
 
-    TotalProgressBar.Progress := 0;
+    TotalProgressBar.Position := 0;
     SetProgressValue(Form1.Handle, 0, 100);
     SetProgressState(Form1.Handle, tbpsNone);
     PositionTimer.Enabled := False;
-    CurrentProgressBar.Progress := 0;
+    CurrentProgressBar.Position := 0;
+    TotalProgressLabel.Caption := '0%';
+    CurrentProgressLabel.Caption := '0%';
 
     DeleteTempFiles();
   end
@@ -2430,11 +2455,13 @@ begin
       InfoEdit.Text := '';
       Form1.Caption := 'TX264';
 
-      TotalProgressBar.Progress := 0;
+      TotalProgressBar.Position := 0;
       SetProgressValue(Form1.Handle, 0, 100);
       SetProgressState(Form1.Handle, tbpsNone);
       PositionTimer.Enabled := False;
-      CurrentProgressBar.Progress := 0;
+      CurrentProgressBar.Position := 0;
+      TotalProgressLabel.Caption := '0%';
+      CurrentProgressLabel.Caption := '0%';
 
       DeleteTempFiles();
     end;
