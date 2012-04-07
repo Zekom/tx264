@@ -10,8 +10,8 @@ uses
   JvComponentBase,
   JvCreateProcess, JvThread, ComCtrls, JvExComCtrls, ShellAPI,
   StrUtils,
-  MediaInfoDll, JvComputerInfoEx, IniFiles, JvDragDrop, Gauges,
-  JvUrlListGrabber, JvUrlGrabbers;
+  MediaInfoDll, JvComputerInfoEx, IniFiles, JvDragDrop,
+  JvUrlListGrabber, JvUrlGrabbers, CommCtrl;
 
 type
   TForm1 = class(TForm)
@@ -141,6 +141,28 @@ type
     CurrentProgressBar: TProgressBar;
     TotalProgressLabel: TLabel;
     CurrentProgressLabel: TLabel;
+    TabSheet6: TTabSheet;
+    Panel7: TPanel;
+    QaacEncodeMethodList: TComboBox;
+    QaacQualityList: TComboBox;
+    QaacBitrateEdit: TJvSpinEdit;
+    QaacvQualityEdit: TJvSpinEdit;
+    Label33: TLabel;
+    Label34: TLabel;
+    Label35: TLabel;
+    Label36: TLabel;
+    QaacHEBtn: TCheckBox;
+    TabSheet8: TTabSheet;
+    Panel9: TPanel;
+    TabSheet9: TTabSheet;
+    Panel10: TPanel;
+    OggencodeList: TComboBox;
+    OggQualityEdit: TJvSpinEdit;
+    OggBitrateEdit: TJvSpinEdit;
+    OggManagedBitrateBtn: TCheckBox;
+    Label37: TLabel;
+    Label38: TLabel;
+    Label39: TLabel;
     procedure AddFiles1Click(Sender: TObject);
     procedure AddFolder1Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
@@ -179,16 +201,19 @@ type
     procedure UpdateThreadExecute(Sender: TObject; Params: Pointer);
     procedure UpdateCheckerDoneFile(Sender: TObject; FileName: string;
       FileSize: Integer; Url: string);
+    procedure QaacHEBtnClick(Sender: TObject);
+    procedure QaacEncodeMethodListChange(Sender: TObject);
+    procedure OggencodeListChange(Sender: TObject);
   private
     { Private declarations }
     CommandLines: TStringList;
     ProcessTypeList: TStringList;
-    // 1=x264, 2=ffmpeg, 3=mkv, 4=mp4box, 5=mkvextract, 6=faac, 7=neroaac, 8=lame, 9=mp4box_extract
+    // 1=x264, 2=ffmpeg, 3=mkv, 4=mp4box, 5=mkvextract, 6=faac, 7=neroaac, 8=qaac, 9=mp4box_extract, 10=oggenc
     Durations: TStringList;
     Infos: TStringList;
-    log: TStringList;
 
-    x264Path, FFMpegPath, Mp4BoxPath, MkvMergePath, MkvExtractPath: string;
+    x264Path, FFMpegPath, Mp4BoxPath, MkvMergePath, MkvExtractPath, QaacPath,
+      AftenPath, OggEncPath: string;
     NeroAACPath, FAACPath: string;
     TempFolder: string;
     AppFolder: string;
@@ -517,18 +542,17 @@ begin
   // audio encoding
   AudioStr := '';
 
-  // path
+  // dest audio file path
   case AudioPages.ActivePageIndex of
-    0 .. 1:
-      begin
-        OutAudioFile := ChangeFileExt(FileName, '.aac');
-      end;
-    2:
-      begin
-        OutAudioFile := ChangeFileExt(FileName, '.mp3');
-      end;
+    0 .. 2:
+      OutAudioFile := ChangeFileExt(FileName, '.aac');
+    3:
+      OutAudioFile := ChangeFileExt(FileName, '.ac3');
+    4:
+      OutAudioFile := ChangeFileExt(FileName, '.ogg');
   end;
   OutAudioFile := TempFolder + '\' + ExtractFileName(OutAudioFile);
+
   Tmp := '';
   // remove spaces
   for i := 1 to Length(OutAudioFile) do
@@ -595,13 +619,12 @@ begin
 
         // profile
         case NeroProfileList.ItemIndex of
-          0:
-            begin
-            end
-        else
-          begin
-            AudioStr := AudioStr + ' -' + NeroProfileList.Text;
-          end;
+          1:
+            AudioStr := AudioStr + ' -lc';
+          2:
+            AudioStr := AudioStr + ' -he';
+          3:
+            AudioStr := AudioStr + ' -hev2';
         end;
 
         // last cmd
@@ -617,6 +640,119 @@ begin
 
         ProcessTypeList.Add('7');
 
+      end;
+    2: // qaac
+      begin
+        // encoding mode
+        case QaacEncodeMethodList.ItemIndex of
+          0: // abr
+            begin
+              AudioStr := AudioStr + ' --abr ' + QaacBitrateEdit.Text;
+            end;
+          1: // tvbr
+            begin
+              AudioStr := AudioStr + ' --tvbr ' + QaacvQualityEdit.Text;
+            end;
+          2: // cvbr
+            begin
+              AudioStr := AudioStr + ' --cvbr ' + QaacBitrateEdit.Text;
+            end;
+          3: // cbr
+            begin
+              AudioStr := AudioStr + ' --cbr ' + QaacBitrateEdit.Text;
+            end;
+        end;
+
+        // profile
+        if QaacHEBtn.Checked then
+        begin
+          AudioStr := AudioStr + ' --he';
+        end;
+
+        // last cmd
+        AudioStr := AudioStr + ' --threading --rate keep "' + TempAudioFile +
+          '" -o "' + OutAudioFile + '"';
+
+        CommandLines.Add(AudioStr);
+        // Durations.Add(GetDuration(index));
+
+        Infos.Add('Encoding audio(qaac): ' + ExtractFileName(FileName) + ' (' +
+          FloatToStr(Index + 1) + '/' + FloatToStr(FileList.Items.Count) + ')');
+
+        ProcessTypeList.Add('8');
+      end;
+    3: // aften
+      begin
+        // encoding mode
+        case QaacEncodeMethodList.ItemIndex of
+          0: // abr
+            begin
+              AudioStr := AudioStr + ' --abr ' + QaacBitrateEdit.Text;
+            end;
+          1: // tvbr
+            begin
+              AudioStr := AudioStr + ' --tvbr ' + QaacvQualityEdit.Text;
+            end;
+          2: // cvbr
+            begin
+              AudioStr := AudioStr + ' --cvbr ' + QaacBitrateEdit.Text;
+            end;
+          3: // cbr
+            begin
+              AudioStr := AudioStr + ' --cbr ' + QaacBitrateEdit.Text;
+            end;
+        end;
+
+        // profile
+        if QaacHEBtn.Checked then
+        begin
+          AudioStr := AudioStr + ' --he';
+        end;
+
+        // last cmd
+        AudioStr := AudioStr + ' --threading --rate keep "' + TempAudioFile +
+          '" -o "' + OutAudioFile + '"';
+
+        CommandLines.Add(AudioStr);
+        // Durations.Add(GetDuration(index));
+
+        Infos.Add('Encoding audio(qaac): ' + ExtractFileName(FileName) + ' (' +
+          FloatToStr(Index + 1) + '/' + FloatToStr(FileList.Items.Count) + ')');
+
+        ProcessTypeList.Add('8');
+      end;
+    4: // oggenc
+      begin
+        // encoding mode
+        case QaacEncodeMethodList.ItemIndex of
+          0: // quality
+            begin
+              AudioStr := AudioStr + ' -q ' + OggQualityEdit.Text;
+            end;
+          1: // bitrate
+            begin
+              AudioStr := AudioStr + ' -b ' + OggBitrateEdit.Text;
+
+              // managed bitrate mode
+              if OggManagedBitrateBtn.Checked then
+              begin
+                AudioStr := AudioStr + ' --managed ';
+              end;
+
+            end;
+        end;
+
+        // last cmd
+        AudioStr := AudioStr + '  "' + TempAudioFile + '" -o "' +
+          OutAudioFile + '"';
+
+        CommandLines.Add(AudioStr);
+
+        Infos.Add('Encoding audio(oggenc2): ' + ExtractFileName(FileName) + ' ('
+          + FloatToStr(Index + 1) + '/' +
+          FloatToStr(FileList.Items.Count) + ')');
+
+        ProcessTypeList.Add('10');
       end;
   end;
 
@@ -809,6 +945,8 @@ var
   Search: TSearchRec;
 begin
 
+  Form3.OutputList.Items.Add('[' + DateTimeToStr(Now) + ']' +
+    ' Started deleting temp files...');
   SetCurrentDir(TempFolder);
 
   if (FindFirst('*.*', faAnyFile, Search) = 0) then
@@ -820,6 +958,8 @@ begin
     until (FindNext(Search) <> 0);
     FindClose(Search);
   end;
+  Form3.OutputList.Items.Add('[' + DateTimeToStr(Now) + ']' +
+    ' Finished deleting temp files.');
 
 end;
 
@@ -995,7 +1135,7 @@ begin
     if odSelected in State then
     begin
 
-      Brush.Color := $00D4CCC5;
+      Brush.Color := Self.Color;
       Font.Color := clBlack;
       FillRect(Rect);
       TextOut(Rect.Left + 2, Rect.Top, Items[Index])
@@ -1004,8 +1144,8 @@ begin
     else
     begin
       // item not selected
-      Brush.Color := clWhite;
-      Font.Color := clBlack;
+      Brush.Color := (Control as TJvListBox).Color;
+      Font.Color := (Control as TJvListBox).Font.Color;
       FillRect(Rect);
       TextOut(Rect.Left + 2, Rect.Top, Items[Index])
 
@@ -1047,15 +1187,14 @@ begin
   end;
 
   SaveOptions();
-  log.SaveToFile('C:\consoleoutput.txt');
 
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
 
-  if not FileExists(ExtractFileDir(Application.ExeName) +
-    '\tools\x264.exe') then
+  if not FileExists(ExtractFileDir(Application.ExeName) + '\tools\x264.exe')
+  then
   begin
     Application.MessageBox('Can''t find x264.exe. Please re-install.', 'Error',
       MB_ICONERROR);
@@ -1066,8 +1205,8 @@ begin
     x264Path := ExtractFileDir(Application.ExeName) + '\tools\x264.exe';
   end;
 
-  if not FileExists(ExtractFileDir(Application.ExeName) +
-    '\tools\ffmpeg.exe') then
+  if not FileExists(ExtractFileDir(Application.ExeName) + '\tools\ffmpeg.exe')
+  then
   begin
     Application.MessageBox('Can''t find ffmpeg.exe. Please re-install.',
       'Error', MB_ICONERROR);
@@ -1078,8 +1217,8 @@ begin
     FFMpegPath := ExtractFileDir(Application.ExeName) + '\tools\ffmpeg.exe';
   end;
 
-  if not FileExists(ExtractFileDir(Application.ExeName) +
-    '\tools\mkvmerge.exe') then
+  if not FileExists(ExtractFileDir(Application.ExeName) + '\tools\mkvmerge.exe')
+  then
   begin
     Application.MessageBox('Can''t find mkvmerge.exe. Please re-install.',
       'Error', MB_ICONERROR);
@@ -1116,8 +1255,8 @@ begin
       '\tools\Mp4Box\mp4box.exe';
   end;
 
-  if not FileExists(ExtractFileDir(Application.ExeName) +
-    '\tools\faac.exe') then
+  if not FileExists(ExtractFileDir(Application.ExeName) + '\tools\faac.exe')
+  then
   begin
     Application.MessageBox('Can''t find faac.exe. Please re-install.', 'Error',
       MB_ICONERROR);
@@ -1139,6 +1278,42 @@ begin
   begin
     NeroAACPath := ExtractFileDir(Application.ExeName) +
       '\tools\neroAacEnc.exe';
+  end;
+
+  if not FileExists(ExtractFileDir(Application.ExeName) + '\tools\qaac\qaac.exe')
+  then
+  begin
+    Application.MessageBox('Can''t find qaac.exe. Please re-install.', 'Error',
+      MB_ICONERROR);
+    Application.Terminate;
+  end
+  else
+  begin
+    QaacPath := ExtractFileDir(Application.ExeName) + '\tools\qaac\qaac.exe';
+  end;
+
+  if not FileExists(ExtractFileDir(Application.ExeName) +
+    '\tools\aften\aften.exe') then
+  begin
+    Application.MessageBox('Can''t find aften.exe. Please re-install.', 'Error',
+      MB_ICONERROR);
+    Application.Terminate;
+  end
+  else
+  begin
+    AftenPath := ExtractFileDir(Application.ExeName) + '\tools\aften\aften.exe';
+  end;
+
+  if not FileExists(ExtractFileDir(Application.ExeName) + '\tools\oggenc2.exe')
+  then
+  begin
+    Application.MessageBox('Can''t find oggenc2.exe. Please re-install.',
+      'Error', MB_ICONERROR);
+    Application.Terminate;
+  end
+  else
+  begin
+    OggEncPath := ExtractFileDir(Application.ExeName) + '\tools\oggenc2.exe';
   end;
 
   if not MediaInfoDLL_Load(ExtractFileDir(Application.ExeName) +
@@ -1169,7 +1344,6 @@ begin
   ProcessTypeList := TStringList.Create;
   Durations := TStringList.Create;
   Infos := TStringList.Create;
-  log := TStringList.Create;
 
   // windows 7 taskbar
   if CheckWin32Version(6, 1) then
@@ -1196,7 +1370,6 @@ begin
   FreeAndNil(Durations);
   FreeAndNil(ProcessTypeList);
   FreeAndNil(Infos);
-  FreeAndNil(log);
 
 end;
 
@@ -1535,7 +1708,7 @@ begin
   if index > -1 then
   begin
     GetFullInfo(FileList.Items.Strings[index]);
-    Form2.Show;
+    Form2.show;
   end;
 
 end;
@@ -1621,6 +1794,18 @@ begin
       NeroBitrateEdit.Text := ReadString('Settings', 'NeroBitrate', '80');
       NeroProfileList.ItemIndex := ReadInteger('Settings', 'NeroProfile', 0);
 
+      QaacEncodeMethodList.ItemIndex := ReadInteger('Settings',
+        'QaacEncode', 0);
+      QaacvQualityEdit.Text := ReadString('Settings', 'QaacQuality', '64');
+      QaacBitrateEdit.Text := ReadString('Settings', 'QaacBitrate', '80');
+      QaacQualityList.ItemIndex := ReadInteger('Settings', 'QaacProfile', 2);
+      QaacHEBtn.Checked := ReadBool('Settings', 'QaacHE', False);
+
+      OggencodeList.ItemIndex := ReadInteger('Settings', 'OggEncode', 0);
+      OggQualityEdit.Text := ReadString('Settings', 'OggQuality', '6');
+      OggBitrateEdit.Text := ReadString('Settings', 'OggBitrate', '80');
+      OggManagedBitrateBtn.Checked := ReadBool('Settings', 'OggManaged', False);
+
       CustomVideoOptionsEdit.Text := ReadString('Settings', 'CustomVideo', '');
       CustomAudioOptionsEdit.Text := ReadString('Settings', 'CustomAudio', '');
       CustomMKVEdit.Text := ReadString('Settings', 'CustomMKV', '');
@@ -1639,14 +1824,16 @@ begin
   finally
     SettingsFile.Free;
 
-    BitrateTolBtn.OnClick(self);
-    EncodeModeList.OnChange(self);
-    ResizeBtn.OnClick(self);
-    CropBtn.OnClick(self);
-    FAACEncodeList.OnChange(self);
-    NeroEncodingList.OnChange(self);
-    ThreadsBtn.OnClick(self);
-    SliceThreadsBtn.OnClick(self);
+    BitrateTolBtn.OnClick(Self);
+    EncodeModeList.OnChange(Self);
+    ResizeBtn.OnClick(Self);
+    CropBtn.OnClick(Self);
+    FAACEncodeList.OnChange(Self);
+    NeroEncodingList.OnChange(Self);
+    QaacEncodeMethodList.OnChange(Self);
+    OggencodeList.OnChange(Self);
+    ThreadsBtn.OnClick(Self);
+    SliceThreadsBtn.OnClick(Self);
   end;
 
 end;
@@ -1654,7 +1841,7 @@ end;
 procedure TForm1.LogsBtnClick(Sender: TObject);
 begin
 
-  Form3.Show;
+  Form3.show;
 
 end;
 
@@ -1697,7 +1884,7 @@ begin
     begin
       FConsoleOutput := Trim(ReplaceStr(FConsoleOutput, '%', ''));
       FConsoleOutput := Trim(Copy(FConsoleOutput, 10, MaxInt));
-      log.Add('percent:' + FConsoleOutput);
+
       if TryStrToInt(FConsoleOutput, TmpInt) then
       begin
         Result := TmpInt;
@@ -1794,6 +1981,24 @@ begin
 
 end;
 
+procedure TForm1.OggencodeListChange(Sender: TObject);
+begin
+
+  if OggencodeList.ItemIndex = 0 then
+  begin
+    OggQualityEdit.Enabled := True;
+    OggBitrateEdit.Enabled := False;
+    OggManagedBitrateBtn.Enabled := False;
+  end
+  else
+  begin
+    OggQualityEdit.Enabled := False;
+    OggBitrateEdit.Enabled := True;
+    OggManagedBitrateBtn.Enabled := True;
+  end;
+
+end;
+
 procedure TForm1.OutputBtnClick(Sender: TObject);
 begin
 
@@ -1823,37 +2028,59 @@ begin
     begin
       // video encoding
       CurrentProgressBar.Position := x264Percentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Style := pbstNormal;
     end
     else if ProcessTypeList[FileIndex] = '2' then
     begin
       // audio encoding
       CurrentProgressBar.Position := FFMpegPercentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Style := pbstNormal;
     end
     else if ProcessTypeList[FileIndex] = '3' then
     begin
       // mkvmerge
+      CurrentProgressBar.Style := pbstMarquee
     end
     else if ProcessTypeList[FileIndex] = '4' then
     begin
       // mp4box
-      // CurrentProgressBar.Style := pbstNormal;
-      // CurrentProgressBar.Position := Mp4BoxPercentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Style := pbstMarquee;
     end
     else if ProcessTypeList[FileIndex] = '5' then
     begin
       // mkvextract
       CurrentProgressBar.Position :=
         MkvExtractPercentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Style := pbstNormal;
     end
     else if ProcessTypeList[FileIndex] = '6' then
     begin
       // faac
       CurrentProgressBar.Position := FAACPercentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Style := pbstNormal;
     end
     else if ProcessTypeList[FileIndex] = '7' then
     begin
       // neroaacenc
       CurrentProgressBar.Position := NeroPercentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Style := pbstNormal;
+    end
+    else if ProcessTypeList[FileIndex] = '8' then
+    begin
+      // qaac
+      CurrentProgressBar.Position := x264Percentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Style := pbstNormal;
+    end
+    else if ProcessTypeList[FileIndex] = '9' then
+    begin
+      // mp4box - demux
+      CurrentProgressBar.Style := pbstMarquee
+    end
+    else if ProcessTypeList[FileIndex] = '10' then
+    begin
+      // ogg vorbis
+      CurrentProgressBar.Position := x264Percentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Style := pbstNormal;
     end;
 
     TotalProgressBar.Position := LastPercent +
@@ -1862,7 +2089,8 @@ begin
     Form1.Caption := FloatToStr(CurrentProgressBar.Position) + '% / ' +
       FloatToStr(TotalProgressBar.Position) + '% [TX264]';
     TotalProgressLabel.Caption := FloatToStr(TotalProgressBar.Position) + '%';
-    CurrentProgressLabel.Caption := FloatToStr(CurrentProgressBar.Position) + '%';
+    CurrentProgressLabel.Caption :=
+      FloatToStr(CurrentProgressBar.Position) + '%';
 
     SetProgressValue(Form1.Handle, TotalProgressBar.Position, 100);
 
@@ -1946,6 +2174,17 @@ begin
       WriteString('Settings', 'NeroBitrate', NeroBitrateEdit.Text);
       WriteInteger('Settings', 'NeroProfile', NeroProfileList.ItemIndex);
 
+      WriteInteger('Settings', 'QaacEncode', QaacEncodeMethodList.ItemIndex);
+      WriteString('Settings', 'QaacQuality', QaacvQualityEdit.Text);
+      WriteString('Settings', 'QaacBitrate', QaacBitrateEdit.Text);
+      WriteInteger('Settings', 'QaacProfile', QaacQualityList.ItemIndex);
+      WriteBool('Settings', 'QaacHE', QaacHEBtn.Checked);
+
+      WriteInteger('Settings', 'OggEncode', OggencodeList.ItemIndex);
+      WriteString('Settings', 'OggQuality', OggQualityEdit.Text);
+      WriteString('Settings', 'OggBitrate', OggBitrateEdit.Text);
+      WriteBool('Settings', 'OggManaged', OggManagedBitrateBtn.Checked);
+
       WriteString('Settings', 'CustomVideo', CustomVideoOptionsEdit.Text);
       WriteString('Settings', 'CustomAudio', CustomAudioOptionsEdit.Text);
       WriteString('Settings', 'CustomMKV', CustomMKVEdit.Text);
@@ -1996,8 +2235,11 @@ begin
         Durations.Clear;
         ProcessTypeList.Clear;
         Infos.Clear;
+        Process.ConsoleOutput.Clear;
 
         Form1.Caption := 'Creating command lines, please wait...';
+
+        DeleteTempFiles();
         DisableUI;
 
         for i := 0 to FileList.Items.Count - 1 do
@@ -2007,7 +2249,20 @@ begin
           // create and command line to VideoCommandLines
           AddCommandLine(i);
         end;
-        CommandLines.SaveToFile('C:\CMD.txt');
+
+        // add commandlines to the log
+        Form3.OutputList.Items.Add('');
+        Form3.OutputList.Items.Add
+          ('--------------------------------------------');
+        Form3.OutputList.Items.Add('[' + DateTimeToStr(Now) + ']' +
+          ' Starting encoding process');
+        Form3.OutputList.Items.Add('[' + DateTimeToStr(Now) + ']' +
+          ' Command lines:');
+        Form3.OutputList.Items.AddStrings(CommandLines);
+        Form3.OutputList.Items.Add
+          ('--------------------------------------------');
+        Form3.OutputList.Items.Add('');
+
         FileIndex := 0;
         DurationIndex := 0;
         LastPercent := 0;
@@ -2104,6 +2359,7 @@ begin
     end;
 
   end;
+
 end;
 
 procedure TForm1.UpBtnClick(Sender: TObject);
@@ -2139,9 +2395,8 @@ begin
             ('There is a new version. Would you like to go homepage and download it?',
             'New Version', MB_ICONQUESTION or MB_YESNO) then
           begin
-            ShellExecute(0, 'open',
-              'https://sourceforge.net/projects/tx264/', nil, nil,
-              SW_SHOWNORMAL);
+            ShellExecute(0, 'open', 'https://sourceforge.net/projects/tx264/',
+              nil, nil, SW_SHOWNORMAL);
           end;
 
         end;
@@ -2313,7 +2568,7 @@ end;
 procedure TForm1.ProcessRead(Sender: TObject; const S: string;
   const StartsOnNewLine: Boolean);
 begin
-  log.Add(S);
+
   ConsoleOutputEdit.Text := Trim(S);
 
 end;
@@ -2321,20 +2576,116 @@ end;
 procedure TForm1.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
 begin
 
+  // add to log
+  with Form3.OutputList.Items do
+  begin
+    case StrToInt(ProcessTypeList[FileIndex]) of
+      1:
+        begin
+          Add('');
+          Add('[' + DateTimeToStr(Now) + ']' + ' Done video encoding ');
+          AddStrings(Process.ConsoleOutput);
+          Add('');
+          Process.ConsoleOutput.Clear;
+        end;
+      2:
+        begin
+          Add('');
+          Add('[' + DateTimeToStr(Now) + ']' + ' Done audio decoding ');
+          AddStrings(Process.ConsoleOutput);
+          Add('');
+          Process.ConsoleOutput.Clear;
+        end;
+      3:
+        begin
+          Add('');
+          Add('[' + DateTimeToStr(Now) + ']' + ' Done muxing to mkv ');
+          AddStrings(Process.ConsoleOutput);
+          Add('');
+          Process.ConsoleOutput.Clear;
+        end;
+      4:
+        begin
+          Add('');
+          Add('[' + DateTimeToStr(Now) + ']' + ' Done muxing to mp4 ');
+          AddStrings(Process.ConsoleOutput);
+          Add('');
+          Process.ConsoleOutput.Clear;
+        end;
+      5:
+        begin
+          Add('');
+          Add('[' + DateTimeToStr(Now) + ']' +
+            ' Done extracting subtitle from mkv ');
+          AddStrings(Process.ConsoleOutput);
+          Add('');
+          Process.ConsoleOutput.Clear;
+        end;
+      6:
+        begin
+          Add('');
+          Add('[' + DateTimeToStr(Now) + ']' +
+            ' Done audio encoding with faac ');
+          AddStrings(Process.ConsoleOutput);
+          Add('');
+          Process.ConsoleOutput.Clear;
+        end;
+      7:
+        begin
+          Add('');
+          Add('[' + DateTimeToStr(Now) + ']' +
+            ' Done audio encoding with neroaac ');
+          AddStrings(Process.ConsoleOutput);
+          Add('');
+          Process.ConsoleOutput.Clear;
+        end;
+      8:
+        begin
+          Add('');
+          Add('[' + DateTimeToStr(Now) + ']' +
+            ' Done audio encoding with qaac ');
+          AddStrings(Process.ConsoleOutput);
+          Add('');
+          Process.ConsoleOutput.Clear;
+        end;
+      9:
+        begin
+          Add('');
+          Add('[' + DateTimeToStr(Now) + ']' +
+            ' Done extracting subtitle from mp4 ');
+          AddStrings(Process.ConsoleOutput);
+          Add('');
+          Process.ConsoleOutput.Clear;
+        end;
+      10:
+        begin
+          Add('');
+          Add('[' + DateTimeToStr(Now) + ']' +
+            ' Done audio encoding with oggenc ');
+          AddStrings(Process.ConsoleOutput);
+          Add('');
+          Process.ConsoleOutput.Clear;
+        end;
+    end;
+  end;
+
   // if muxer clear temp folder
-  if (ProcessTypeList[FileIndex] = '3') or
-    (ProcessTypeList[FileIndex] = '4') then
+  if (ProcessTypeList[FileIndex] = '3') or (ProcessTypeList[FileIndex] = '4')
+  then
   begin
     DeleteTempFiles();
   end;
 
+  // to the next item
   Inc(FileIndex);
 
   if FileIndex < ProcessTypeList.Count then
   begin
 
-    if (ProcessTypeList[FileIndex] = '2') or
-      (ProcessTypeList[FileIndex] = '7') then
+    // if encoding was something that required
+    // duration info
+    if (ProcessTypeList[FileIndex] = '2') or (ProcessTypeList[FileIndex] = '7')
+    then
     begin
       Inc(DurationIndex); // to next item in the list
 
@@ -2344,22 +2695,13 @@ begin
       end;
 
     end;
+
   end;
 
   LastPercent := Round((100 * FileIndex) div CommandLines.Count);
 
   if StoppedByUser then
   begin
-    with Form3.OutputList.Items do
-    begin
-      Add('Command lines:');
-      AddStrings(CommandLines);
-      Add('');
-      Add('Outputs:');
-      AddStrings(Process.ConsoleOutput);
-      Add('');
-    end;
-
     EnableUI;
 
     ConsoleOutputEdit.Text := '';
@@ -2370,11 +2712,10 @@ begin
     SetProgressValue(Form1.Handle, 0, 100);
     SetProgressState(Form1.Handle, tbpsNone);
     PositionTimer.Enabled := False;
+    CurrentProgressBar.Style := pbstNormal;
     CurrentProgressBar.Position := 0;
     TotalProgressLabel.Caption := '0%';
     CurrentProgressLabel.Caption := '0%';
-
-    DeleteTempFiles();
   end
   else
   begin
@@ -2389,7 +2730,7 @@ begin
       end
       else if ProcessTypeList[FileIndex] = '2' then
       begin
-        // audio encoding
+        // audio decoding
         Process.ApplicationName := FFMpegPath;
       end
       else if ProcessTypeList[FileIndex] = '3' then
@@ -2417,10 +2758,20 @@ begin
         // neroaacenc
         Process.ApplicationName := NeroAACPath;
       end
+      else if ProcessTypeList[FileIndex] = '8' then
+      begin
+        // mp4box
+        Process.ApplicationName := QaacPath;
+      end
       else if ProcessTypeList[FileIndex] = '9' then
       begin
         // mp4box
         Process.ApplicationName := Mp4BoxPath;
+      end
+      else if ProcessTypeList[FileIndex] = '10' then
+      begin
+        // oggenc
+        Process.ApplicationName := OggEncPath;
       end;
 
       if not FileExists(Process.ApplicationName) then
@@ -2439,16 +2790,6 @@ begin
     end
     else
     begin
-      with Form3.OutputList.Items do
-      begin
-        Add('Command lines:');
-        AddStrings(CommandLines);
-        Add('');
-        Add('Outputs:');
-        AddStrings(Process.ConsoleOutput);
-        Add('');
-      end;
-
       EnableUI;
 
       ConsoleOutputEdit.Text := '';
@@ -2459,11 +2800,55 @@ begin
       SetProgressValue(Form1.Handle, 0, 100);
       SetProgressState(Form1.Handle, tbpsNone);
       PositionTimer.Enabled := False;
+      CurrentProgressBar.Style := pbstNormal;
       CurrentProgressBar.Position := 0;
       TotalProgressLabel.Caption := '0%';
       CurrentProgressLabel.Caption := '0%';
+    end;
 
-      DeleteTempFiles();
+  end;
+
+end;
+
+procedure TForm1.QaacEncodeMethodListChange(Sender: TObject);
+begin
+
+  if QaacEncodeMethodList.ItemIndex = 1 then
+  begin
+    QaacvQualityEdit.Enabled := True;
+    QaacBitrateEdit.Enabled := False;
+  end
+  else
+  begin
+    QaacvQualityEdit.Enabled := False;
+    QaacBitrateEdit.Enabled := True;
+  end;
+
+  if QaacHEBtn.Checked then
+  begin
+
+    if QaacEncodeMethodList.ItemIndex = 1 then
+    begin
+      Application.MessageBox('TVBR is not available with HE AAC mode.',
+        'Warning', MB_ICONWARNING);
+      QaacHEBtn.Checked := False;
+    end;
+
+  end;
+
+end;
+
+procedure TForm1.QaacHEBtnClick(Sender: TObject);
+begin
+
+  if QaacHEBtn.Checked then
+  begin
+
+    if QaacEncodeMethodList.ItemIndex = 1 then
+    begin
+      Application.MessageBox('TVBR is not available with HE AAC mode.',
+        'Warning', MB_ICONWARNING);
+      QaacHEBtn.Checked := False;
     end;
 
   end;

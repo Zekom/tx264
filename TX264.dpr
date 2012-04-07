@@ -7,12 +7,14 @@ uses
   madListProcesses,
   madListModules,
   Forms,
-  UnitMain in 'Forms\UnitMain.pas' {Form1},
-  UnitLog in 'Forms\UnitLog.pas' {Form3},
+  UnitMain in 'Forms\UnitMain.pas' {Form1} ,
+  UnitLog in 'Forms\UnitLog.pas' {Form3} ,
   windows7taskbar in 'Units\windows7taskbar.pas',
   MediaInfoDLL in 'Units\MediaInfoDLL.pas',
-  UnitInfo in 'Forms\UnitInfo.pas' {Form2},
-  UnitAbout in 'Forms\UnitAbout.pas' {AboutForm};
+  UnitInfo in 'Forms\UnitInfo.pas' {Form2} ,
+  UnitAbout in 'Forms\UnitAbout.pas' {AboutForm} ,
+  Vcl.Themes,
+  Vcl.Styles;
 
 {$R *.res}
 

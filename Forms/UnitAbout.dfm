@@ -3,7 +3,7 @@ object AboutForm: TAboutForm
   Top = 0
   BorderStyle = bsDialog
   Caption = 'About'
-  ClientHeight = 336
+  ClientHeight = 352
   ClientWidth = 338
   Color = 13946053
   Font.Charset = DEFAULT_CHARSET
@@ -17,7 +17,7 @@ object AboutForm: TAboutForm
   OnShow = FormShow
   DesignSize = (
     338
-    336)
+    352)
   PixelsPerInch = 96
   TextHeight = 13
   object Image1: TImage
@@ -341,7 +341,7 @@ object AboutForm: TAboutForm
     Align = alTop
     Alignment = taCenter
     AutoSize = False
-    Caption = 'TX264 0.1 Alpha Build: x'
+    Caption = 'TX264 0.2 Alpha Build: x'
     ExplicitWidth = 486
   end
   object Label2: TLabel
@@ -394,9 +394,10 @@ object AboutForm: TAboutForm
     Left = 0
     Top = 163
     Width = 338
-    Height = 126
+    Height = 157
     Align = alTop
     Alignment = taCenter
+    Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
     BorderStyle = bsNone
     Color = 13946053
@@ -409,28 +410,32 @@ object AboutForm: TAboutForm
       'faac.exe'
       'neroaacenc.exe (if present)'
       'JVCL 3.40'
-      'Mediainfo.dll')
+      'Mediainfo.dll'
+      'oggenc2.exe'
+      'aften.exe')
     ReadOnly = True
     TabOrder = 0
   end
   object CloseBtn: TButton
     Left = 255
-    Top = 303
+    Top = 319
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Close'
     TabOrder = 1
     OnClick = CloseBtnClick
+    ExplicitTop = 303
   end
   object HomepageBtn: TButton
     Left = 8
-    Top = 303
+    Top = 319
     Width = 75
     Height = 25
     Anchors = [akLeft, akBottom]
     Caption = 'Homepage'
     TabOrder = 2
     OnClick = HomepageBtnClick
+    ExplicitTop = 303
   end
 end

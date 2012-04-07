@@ -17,6 +17,9 @@ type
     procedure SaveBtnClick(Sender: TObject);
     procedure CloseBtnClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure OutputListAddString(Sender: TObject; Item: string);
+    procedure OutputListDrawItem(Control: TWinControl; Index: Integer;
+      Rect: TRect; State: TOwnerDrawState);
   private
     { Private declarations }
   public
@@ -54,6 +57,44 @@ begin
   if Key = VK_ESCAPE then
   begin
     CloseBtn.OnClick(Self);
+  end;
+
+end;
+
+procedure TForm3.OutputListAddString(Sender: TObject; Item: string);
+begin
+
+  OutputList.TopIndex := OutputList.Items.Count - 1;
+
+end;
+
+procedure TForm3.OutputListDrawItem(Control: TWinControl; Index: Integer;
+  Rect: TRect; State: TOwnerDrawState);
+begin
+
+  with Control as TJvListBox, Canvas do
+  begin
+
+    // item selected
+    if odSelected in State then
+    begin
+
+      Brush.Color := Self.Color;
+      Font.Color := clBlack;
+      FillRect(Rect);
+      TextOut(Rect.Left + 2, Rect.Top, Items[Index])
+
+    end
+    else
+    begin
+      // item not selected
+      Brush.Color := (Control as TJvListBox).Color;
+      Font.Color := (Control as TJvListBox).Font.Color;
+      FillRect(Rect);
+      TextOut(Rect.Left + 2, Rect.Top, Items[Index])
+
+    end;
+
   end;
 
 end;

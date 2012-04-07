@@ -31,7 +31,7 @@ var
   AboutForm: TAboutForm;
 
 const
-  Build = '388';
+  Build = '410';
 
 implementation
 
@@ -56,14 +56,15 @@ end;
 procedure TAboutForm.FormShow(Sender: TObject);
 begin
 
-  Label1.Caption := 'TX264 0.1 Alpha Build: ' + Build;
+  Label1.Caption := 'TX264 0.2 Alpha Build: ' + Build;
 
 end;
 
 procedure TAboutForm.HomepageBtnClick(Sender: TObject);
 begin
 
-  ShellExecute(Application.Handle, 'open', 'https://sourceforge.net/projects/tx264/', nil,nil, SW_SHOWNORMAL);
+  ShellExecute(Application.Handle, 'open',
+    'https://sourceforge.net/projects/tx264/', nil, nil, SW_SHOWNORMAL);
 
 end;
 

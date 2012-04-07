@@ -31,9 +31,9 @@ object Form1: TForm1
     Caption = 'Output folder:'
   end
   object StartBtn: TButton
-    Left = 507
+    Left = 482
     Top = 634
-    Width = 75
+    Width = 100
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Start'
@@ -41,9 +41,9 @@ object Form1: TForm1
     OnClick = StartBtnClick
   end
   object StopBtn: TButton
-    Left = 426
+    Left = 376
     Top = 634
-    Width = 75
+    Width = 100
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Stop'
@@ -940,6 +940,211 @@ object Form1: TForm1
               end
             end
           end
+          object TabSheet6: TTabSheet
+            Caption = 'QAAC'
+            ImageIndex = 2
+            object Panel7: TPanel
+              Left = 0
+              Top = 0
+              Width = 552
+              Height = 113
+              Align = alClient
+              BevelOuter = bvNone
+              Color = 13946053
+              ParentBackground = False
+              TabOrder = 0
+              object Label33: TLabel
+                Left = 12
+                Top = 12
+                Width = 76
+                Height = 13
+                Caption = 'Encoding Mode:'
+              end
+              object Label34: TLabel
+                Left = 59
+                Top = 39
+                Width = 29
+                Height = 13
+                Caption = 'TBVR:'
+              end
+              object Label35: TLabel
+                Left = 52
+                Top = 66
+                Width = 36
+                Height = 13
+                Caption = 'Bitrate:'
+              end
+              object Label36: TLabel
+                Left = 367
+                Top = 12
+                Width = 84
+                Height = 13
+                Caption = 'Encoding Quality:'
+              end
+              object QaacEncodeMethodList: TComboBox
+                Left = 94
+                Top = 8
+                Width = 75
+                Height = 21
+                Style = csDropDownList
+                ItemIndex = 0
+                TabOrder = 0
+                Text = 'ABR'
+                OnChange = QaacEncodeMethodListChange
+                Items.Strings = (
+                  'ABR'
+                  'TVBR'
+                  'CVBR'
+                  'CBR')
+              end
+              object QaacQualityList: TComboBox
+                Left = 457
+                Top = 8
+                Width = 75
+                Height = 21
+                Style = csDropDownList
+                ItemIndex = 2
+                TabOrder = 1
+                Text = '2'
+                Items.Strings = (
+                  '0'
+                  '1'
+                  '2')
+              end
+              object QaacBitrateEdit: TJvSpinEdit
+                Left = 94
+                Top = 62
+                Width = 50
+                Height = 21
+                CheckMinValue = True
+                ButtonKind = bkClassic
+                Value = 80.000000000000000000
+                TabOrder = 2
+              end
+              object QaacvQualityEdit: TJvSpinEdit
+                Left = 94
+                Top = 35
+                Width = 50
+                Height = 21
+                ButtonKind = bkClassic
+                MaxValue = 127.000000000000000000
+                Value = 64.000000000000000000
+                Enabled = False
+                TabOrder = 3
+              end
+              object QaacHEBtn: TCheckBox
+                Left = 367
+                Top = 35
+                Width = 97
+                Height = 17
+                Caption = 'HE AAC mode'
+                TabOrder = 4
+                OnClick = QaacHEBtnClick
+              end
+            end
+          end
+          object TabSheet8: TTabSheet
+            Caption = 'Aften'
+            ImageIndex = 3
+            object Panel9: TPanel
+              Left = 0
+              Top = 0
+              Width = 552
+              Height = 113
+              Align = alClient
+              BevelOuter = bvNone
+              Color = 13946053
+              ParentBackground = False
+              TabOrder = 0
+              ExplicitLeft = 240
+              ExplicitTop = 48
+              ExplicitWidth = 185
+              ExplicitHeight = 41
+            end
+          end
+          object TabSheet9: TTabSheet
+            Caption = 'Ogg Vorbis'
+            ImageIndex = 4
+            object Panel10: TPanel
+              Left = 0
+              Top = 0
+              Width = 552
+              Height = 113
+              Align = alClient
+              BevelOuter = bvNone
+              Color = 13946053
+              ParentBackground = False
+              TabOrder = 0
+              ExplicitLeft = 192
+              ExplicitTop = 48
+              ExplicitWidth = 185
+              ExplicitHeight = 41
+              object Label37: TLabel
+                Left = 12
+                Top = 12
+                Width = 76
+                Height = 13
+                Caption = 'Encoding Mode:'
+              end
+              object Label38: TLabel
+                Left = 50
+                Top = 39
+                Width = 38
+                Height = 13
+                Caption = 'Quality:'
+              end
+              object Label39: TLabel
+                Left = 52
+                Top = 66
+                Width = 36
+                Height = 13
+                Caption = 'Bitrate:'
+              end
+              object OggencodeList: TComboBox
+                Left = 94
+                Top = 8
+                Width = 75
+                Height = 21
+                Style = csDropDownList
+                ItemIndex = 0
+                TabOrder = 0
+                Text = 'Quality'
+                OnChange = OggencodeListChange
+                Items.Strings = (
+                  'Quality'
+                  'Bitrate')
+              end
+              object OggQualityEdit: TJvSpinEdit
+                Left = 94
+                Top = 35
+                Width = 50
+                Height = 21
+                ButtonKind = bkClassic
+                MaxValue = 10.000000000000000000
+                MinValue = -2.000000000000000000
+                Value = 6.000000000000000000
+                TabOrder = 1
+              end
+              object OggBitrateEdit: TJvSpinEdit
+                Left = 94
+                Top = 62
+                Width = 50
+                Height = 21
+                CheckMinValue = True
+                ButtonKind = bkClassic
+                Value = 80.000000000000000000
+                TabOrder = 2
+              end
+              object OggManagedBitrateBtn: TCheckBox
+                Left = 427
+                Top = 10
+                Width = 97
+                Height = 17
+                Caption = 'Managed bitrate'
+                TabOrder = 3
+              end
+            end
+          end
         end
         object AudioChannelList: TComboBox
           Left = 418
@@ -1158,6 +1363,7 @@ object Form1: TForm1
     Width = 443
     Height = 21
     DialogKind = dkWin32
+    BevelOuter = bvNone
     ButtonFlat = True
     Color = clWhite
     Anchors = [akLeft, akRight, akBottom]

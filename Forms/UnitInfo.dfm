@@ -33,8 +33,10 @@ object Form2: TForm2
     Top = 8
     Width = 649
     Height = 568
-    ItemHeight = 13
+    Style = lbOwnerDrawFixed
+    ItemHeight = 15
     TabOrder = 1
+    OnDrawItem = InfoListDrawItem
   end
   object SaveBtn: TButton
     Left = 8

@@ -26,10 +26,12 @@ object Form3: TForm3
     Width = 809
     Height = 528
     Anchors = [akLeft, akTop, akRight, akBottom]
-    ItemHeight = 13
     Background.FillMode = bfmTile
     Background.Visible = False
+    Style = lbOwnerDrawFixed
     TabOrder = 0
+    OnDrawItem = OutputListDrawItem
+    OnAddString = OutputListAddString
   end
   object SaveBtn: TButton
     Left = 8
