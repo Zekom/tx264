@@ -83,8 +83,9 @@
 			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+			<VerInfo_Build>420</VerInfo_Build>
 			<VerInfo_PreRelease>true</VerInfo_PreRelease>
-			<VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+			<VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=0.1.0.420;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
 			<VerInfo_Locale>1033</VerInfo_Locale>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -103,15 +104,15 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<DCCReference Include="Forms\UnitMain.pas">
-				<Form>Form1</Form>
+				<Form>MainForm</Form>
 			</DCCReference>
 			<DCCReference Include="Forms\UnitLog.pas">
-				<Form>Form3</Form>
+				<Form>LogForm</Form>
 			</DCCReference>
 			<DCCReference Include="Units\windows7taskbar.pas"/>
 			<DCCReference Include="Units\MediaInfoDLL.pas"/>
 			<DCCReference Include="Forms\UnitInfo.pas">
-				<Form>Form2</Form>
+				<Form>InfoForm</Form>
 			</DCCReference>
 			<DCCReference Include="Forms\UnitAbout.pas">
 				<Form>AboutForm</Form>
@@ -140,7 +141,7 @@
 						<VersionInfo Name="MajorVer">0</VersionInfo>
 						<VersionInfo Name="MinorVer">1</VersionInfo>
 						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">423</VersionInfo>
+						<VersionInfo Name="Build">439</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -152,7 +153,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName"/>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">0.1.0.423</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">0.1.0.439</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName"/>
 						<VersionInfoKeys Name="LegalCopyright"/>
 						<VersionInfoKeys Name="LegalTrademarks"/>

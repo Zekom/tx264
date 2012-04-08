@@ -14,7 +14,7 @@ uses
   JvUrlListGrabber, JvUrlGrabbers, CommCtrl;
 
 type
-  TForm1 = class(TForm)
+  TMainForm = class(TForm)
     RemoveBtn: TButton;
     RemoveAllBtn: TButton;
     UpBtn: TButton;
@@ -163,6 +163,12 @@ type
     Label37: TLabel;
     Label38: TLabel;
     Label39: TLabel;
+    AftenEncodeList: TComboBox;
+    AftenQualityEdit: TJvSpinEdit;
+    AftenBitrateEdit: TJvSpinEdit;
+    Label40: TLabel;
+    Label41: TLabel;
+    Label42: TLabel;
     procedure AddFiles1Click(Sender: TObject);
     procedure AddFolder1Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
@@ -204,11 +210,12 @@ type
     procedure QaacHEBtnClick(Sender: TObject);
     procedure QaacEncodeMethodListChange(Sender: TObject);
     procedure OggencodeListChange(Sender: TObject);
+    procedure AftenEncodeListChange(Sender: TObject);
   private
     { Private declarations }
     CommandLines: TStringList;
     ProcessTypeList: TStringList;
-    // 1=x264, 2=ffmpeg, 3=mkv, 4=mp4box, 5=mkvextract, 6=faac, 7=neroaac, 8=qaac, 9=mp4box_extract, 10=oggenc
+    // 1=x264, 2=ffmpeg, 3=mkv, 4=mp4box, 5=mkvextract, 6=faac, 7=neroaac, 8=qaac, 9=mp4box_extract, 10=oggenc, 11=ac3-ffmpeg
     Durations: TStringList;
     Infos: TStringList;
 
@@ -230,6 +237,7 @@ type
     function MkvExtractPercentage(const MkvExtractOutput: string): Integer;
     function NeroPercentage(const NeroOutput: string): Integer;
     function FAACPercentage(const FAACOutput: string): Integer;
+    function AftenPercentage(const AftenOutput: string): Integer;
 
     // get full info for selected file
     procedure GetFullInfo(const FileName: string);
@@ -265,7 +273,7 @@ type
     // gets subtitle kind
     function GetSubtitleKind(Index: Integer; SubIndex: Integer): string;
 
-    // finds external subntitles
+    // finds external subtitles
     function GetExternalSubtitles(Index: Integer): string;
 
     // save/load options
@@ -277,10 +285,10 @@ type
   end;
 
 const
-  BuildInt = 388;
+  BuildInt = 420;
 
 var
-  Form1: TForm1;
+  MainForm: TMainForm;
 
 implementation
 
@@ -288,23 +296,23 @@ uses UnitLog, windows7taskbar, UnitInfo, UnitAbout;
 
 {$R *.dfm}
 
-procedure TForm1.AboutBtnClick(Sender: TObject);
+procedure TMainForm.AboutBtnClick(Sender: TObject);
 begin
 
-  Form1.Enabled := False;
+  Self.Enabled := False;
   AboutForm.show;
 
 end;
 
-procedure TForm1.AddBtnClick(Sender: TObject);
+procedure TMainForm.AddBtnClick(Sender: TObject);
 begin
 
-  AddMenu.Popup(AddBtn.Left + Form1.Left + 15, Form1.Top + AddBtn.Top +
+  AddMenu.Popup(AddBtn.Left + Self.Left + 15, Self.Top + AddBtn.Top +
     AddBtn.Height * 2 + 15)
 
 end;
 
-procedure TForm1.AddCommandLine(Index: Integer);
+procedure TMainForm.AddCommandLine(Index: Integer);
 var
   OutFileName: string;
   OutAudioFile: string;
@@ -681,45 +689,31 @@ begin
 
         ProcessTypeList.Add('8');
       end;
-    3: // aften
+    3: // ac3
       begin
         // encoding mode
-        case QaacEncodeMethodList.ItemIndex of
-          0: // abr
+        case AftenEncodeList.ItemIndex of
+          0: // quality
             begin
-              AudioStr := AudioStr + ' --abr ' + QaacBitrateEdit.Text;
+              AudioStr := AudioStr + ' -q ' + AftenQualityEdit.Text;
             end;
-          1: // tvbr
+          1: // cbr
             begin
-              AudioStr := AudioStr + ' --tvbr ' + QaacvQualityEdit.Text;
+              AudioStr := AudioStr + ' -b ' + AftenBitrateEdit.Text;
             end;
-          2: // cvbr
-            begin
-              AudioStr := AudioStr + ' --cvbr ' + QaacBitrateEdit.Text;
-            end;
-          3: // cbr
-            begin
-              AudioStr := AudioStr + ' --cbr ' + QaacBitrateEdit.Text;
-            end;
-        end;
-
-        // profile
-        if QaacHEBtn.Checked then
-        begin
-          AudioStr := AudioStr + ' --he';
         end;
 
         // last cmd
-        AudioStr := AudioStr + ' --threading --rate keep "' + TempAudioFile +
-          '" -o "' + OutAudioFile + '"';
+        AudioStr := AudioStr + ' -y -v 1 -threads 1 "' + TempAudioFile + '" "' +
+          OutAudioFile + '"';
 
         CommandLines.Add(AudioStr);
-        // Durations.Add(GetDuration(index));
+        Durations.Add(GetDuration(index));
 
-        Infos.Add('Encoding audio(qaac): ' + ExtractFileName(FileName) + ' (' +
+        Infos.Add('Encoding audio(aften): ' + ExtractFileName(FileName) + ' (' +
           FloatToStr(Index + 1) + '/' + FloatToStr(FileList.Items.Count) + ')');
 
-        ProcessTypeList.Add('8');
+        ProcessTypeList.Add('11');
       end;
     4: // oggenc
       begin
@@ -840,7 +834,7 @@ begin
 
 end;
 
-procedure TForm1.AddFiles1Click(Sender: TObject);
+procedure TMainForm.AddFiles1Click(Sender: TObject);
 begin
 
   if OpenDialog.Execute then
@@ -850,7 +844,7 @@ begin
 
 end;
 
-procedure TForm1.AddFolder1Click(Sender: TObject);
+procedure TMainForm.AddFolder1Click(Sender: TObject);
 var
   Search: TSearchRec;
   FileName: String;
@@ -894,7 +888,54 @@ begin
 
 end;
 
-procedure TForm1.AudioPagesChange(Sender: TObject);
+procedure TMainForm.AftenEncodeListChange(Sender: TObject);
+begin
+
+  if AftenEncodeList.ItemIndex = 0 then
+  begin
+    AftenQualityEdit.Enabled := true;
+    AftenBitrateEdit.Enabled := False;
+  end
+  else
+  begin
+    AftenQualityEdit.Enabled := False;
+    AftenBitrateEdit.Enabled := true;
+  end;
+
+end;
+
+function TMainForm.AftenPercentage(const AftenOutput: string): Integer;
+var
+  StrPos1, StrPos2: Integer;
+  FConsoleOutput: string;
+begin
+
+  Result := 0;
+
+  FConsoleOutput := Trim(AftenOutput);
+
+  if Length(FConsoleOutput) > 0 then
+  begin
+    StrPos1 := Pos('progress', FConsoleOutput);
+    StrPos2 := Pos('% |', FConsoleOutput);
+
+    if StrPos2 > StrPos1 then
+    begin
+      FConsoleOutput := Trim(Copy(FConsoleOutput, StrPos1 + 1,
+        StrPos2 - StrPos1 - 1));
+      LogForm.OutputList.Items.Add('percent:' + FConsoleOutput);
+    end;
+
+    if IsStringNumeric(FConsoleOutput) then
+    begin
+      Result := StrToInt(FConsoleOutput);
+    end
+
+  end;
+
+end;
+
+procedure TMainForm.AudioPagesChange(Sender: TObject);
 begin
 
   // neroaac
@@ -908,7 +949,7 @@ begin
         ('Cannot find neroaacenc.exe! If you want to download it please click Yes. After downloading, put neroaacenc.exe into tools folder.',
         'NeroAACEnc', MB_ICONWARNING or MB_YESNO) = IDYES then
       begin
-        ShellExecute(Form1.Handle, 'open',
+        ShellExecute(Self.Handle, 'open',
           'http://www.nero.com/eng/downloads-nerodigital-nero-aac-codec.php',
           nil, nil, SW_NORMAL);
       end
@@ -923,14 +964,14 @@ begin
 
 end;
 
-procedure TForm1.BitrateTolBtnClick(Sender: TObject);
+procedure TMainForm.BitrateTolBtnClick(Sender: TObject);
 begin
 
   BitrateTolEdit.Enabled := BitrateTolBtn.Checked;
 
 end;
 
-procedure TForm1.CropBtnClick(Sender: TObject);
+procedure TMainForm.CropBtnClick(Sender: TObject);
 begin
 
   CropLeftEdit.Enabled := CropBtn.Checked;
@@ -940,12 +981,13 @@ begin
 
 end;
 
-procedure TForm1.DeleteTempFiles;
+procedure TMainForm.DeleteTempFiles;
 var
   Search: TSearchRec;
 begin
 
-  Form3.OutputList.Items.Add('[' + DateTimeToStr(Now) + ']' +
+  LogForm.OutputList.Items.Add('');
+  LogForm.OutputList.Items.Add('[' + DateTimeToStr(Now) + ']' +
     ' Started deleting temp files...');
   SetCurrentDir(TempFolder);
 
@@ -958,31 +1000,32 @@ begin
     until (FindNext(Search) <> 0);
     FindClose(Search);
   end;
-  Form3.OutputList.Items.Add('[' + DateTimeToStr(Now) + ']' +
+  LogForm.OutputList.Items.Add('[' + DateTimeToStr(Now) + ']' +
     ' Finished deleting temp files.');
+  LogForm.OutputList.Items.Add('');
 
 end;
 
-procedure TForm1.DisableUI;
+procedure TMainForm.DisableUI;
 begin
 
   PageControl.Enabled := False;
   GroupBox2.Enabled := False;
   AboutBtn.Enabled := False;
   StartBtn.Enabled := False;
-  StopBtn.Enabled := True;
+  StopBtn.Enabled := true;
   DirectoryEdit.Enabled := False;
 
 end;
 
-procedure TForm1.DownBtnClick(Sender: TObject);
+procedure TMainForm.DownBtnClick(Sender: TObject);
 begin
 
   FileList.MoveSelectedDown;
 
 end;
 
-procedure TForm1.DragDropDrop(Sender: TObject; Pos: TPoint; Value: TStrings);
+procedure TMainForm.DragDropDrop(Sender: TObject; Pos: TPoint; Value: TStrings);
 var
   i: Integer;
   Extension: string;
@@ -1005,61 +1048,61 @@ begin
 
 end;
 
-procedure TForm1.EnableUI;
+procedure TMainForm.EnableUI;
 begin
 
-  PageControl.Enabled := True;
-  GroupBox2.Enabled := True;
-  AboutBtn.Enabled := True;
-  StartBtn.Enabled := True;
+  PageControl.Enabled := true;
+  GroupBox2.Enabled := true;
+  AboutBtn.Enabled := true;
+  StartBtn.Enabled := true;
   StopBtn.Enabled := False;
-  DirectoryEdit.Enabled := True;
+  DirectoryEdit.Enabled := true;
 
 end;
 
-procedure TForm1.EncodeModeListChange(Sender: TObject);
+procedure TMainForm.EncodeModeListChange(Sender: TObject);
 begin
 
   case EncodeModeList.ItemIndex of
     0:
       begin
-        CRFEdit.Enabled := True;
+        CRFEdit.Enabled := true;
         QuantEdit.Enabled := False;
         BitrateEdit.Enabled := False;
       end;
     1:
       begin
         CRFEdit.Enabled := False;
-        QuantEdit.Enabled := True;
+        QuantEdit.Enabled := true;
         BitrateEdit.Enabled := False;
       end;
     2 .. 3:
       begin
         CRFEdit.Enabled := False;
         QuantEdit.Enabled := False;
-        BitrateEdit.Enabled := True;
+        BitrateEdit.Enabled := true;
       end;
   end;
 
 end;
 
-procedure TForm1.FAACEncodeListChange(Sender: TObject);
+procedure TMainForm.FAACEncodeListChange(Sender: TObject);
 begin
 
   if FAACEncodeList.ItemIndex = 0 then
   begin
-    FAACQualityEdit.Enabled := True;
+    FAACQualityEdit.Enabled := true;
     FAACBitrateEdit.Enabled := False;
   end
   else
   begin
     FAACQualityEdit.Enabled := False;
-    FAACBitrateEdit.Enabled := True;
+    FAACBitrateEdit.Enabled := true;
   end;
 
 end;
 
-function TForm1.FAACPercentage(const FAACOutput: string): Integer;
+function TMainForm.FAACPercentage(const FAACOutput: string): Integer;
 var
   StrPos1, StrPos2: Integer;
   FConsoleOutput: string;
@@ -1089,7 +1132,7 @@ begin
 
 end;
 
-function TForm1.FFMpegPercentage(const FFMpegOutput: string): Integer;
+function TMainForm.FFMpegPercentage(const FFMpegOutput: string): Integer;
 var
   pos1: Integer;
   pos2: Integer;
@@ -1124,7 +1167,7 @@ begin
 
 end;
 
-procedure TForm1.FileListDrawItem(Control: TWinControl; Index: Integer;
+procedure TMainForm.FileListDrawItem(Control: TWinControl; Index: Integer;
   Rect: TRect; State: TOwnerDrawState);
 begin
 
@@ -1155,13 +1198,13 @@ begin
 
 end;
 
-procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 
   if Process.ProcessInfo.hProcess > 0 then
   begin
     TerminateProcess(Process.ProcessInfo.hProcess, 0);
-    StoppedByUser := True;
+    StoppedByUser := true;
   end;
 
   if not LogThread.Terminated then
@@ -1190,7 +1233,7 @@ begin
 
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);
 begin
 
   if not FileExists(ExtractFileDir(Application.ExeName) + '\tools\x264.exe')
@@ -1363,7 +1406,7 @@ begin
 
 end;
 
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TMainForm.FormDestroy(Sender: TObject);
 begin
 
   FreeAndNil(CommandLines);
@@ -1373,7 +1416,7 @@ begin
 
 end;
 
-procedure TForm1.FormShow(Sender: TObject);
+procedure TMainForm.FormShow(Sender: TObject);
 begin
 
   LoadOptions();
@@ -1386,7 +1429,7 @@ begin
 
 end;
 
-function TForm1.GetDuration(Index: integer): string;
+function TMainForm.GetDuration(Index: integer): string;
 var
   MediaInfoHandle: Cardinal;
   VDuration: string;
@@ -1430,7 +1473,7 @@ begin
 
 end;
 
-function TForm1.GetExternalSubtitles(Index: Integer): string;
+function TMainForm.GetExternalSubtitles(Index: Integer): string;
 var
   FileName: string;
   SrtFile, AssFile, SubFile: string;
@@ -1474,7 +1517,7 @@ begin
 
 end;
 
-function TForm1.GetFPS(Index: Integer): string;
+function TMainForm.GetFPS(Index: Integer): string;
 var
   MediaInfoHandle: Cardinal;
   FPS: string;
@@ -1518,7 +1561,7 @@ begin
 
 end;
 
-procedure TForm1.GetFullInfo(const FileName: string);
+procedure TMainForm.GetFullInfo(const FileName: string);
 var
   MediaInfoHandle: Cardinal;
 begin
@@ -1537,7 +1580,7 @@ begin
         MediaInfo_Open(MediaInfoHandle, PwideChar(FileName));
         MediaInfo_Option(0, 'Complete', '1');
 
-        Form2.InfoList.Items.Text :=
+        InfoForm.InfoList.Items.Text :=
           string(MediaInfo_Inform(MediaInfoHandle, 0));
 
       finally
@@ -1550,7 +1593,7 @@ begin
 
 end;
 
-function TForm1.GetSubtitleCount(Index: integer): Integer;
+function TMainForm.GetSubtitleCount(Index: integer): Integer;
 var
   MediaInfoHandle: Cardinal;
   SubCount: string;
@@ -1603,7 +1646,7 @@ begin
 
 end;
 
-function TForm1.GetSubtitleID(Index, SubIndex: Integer): string;
+function TMainForm.GetSubtitleID(Index, SubIndex: Integer): string;
 var
   MediaInfoHandle: Cardinal;
   SubID: string;
@@ -1654,7 +1697,7 @@ begin
 
 end;
 
-function TForm1.GetSubtitleKind(Index, SubIndex: Integer): string;
+function TMainForm.GetSubtitleKind(Index, SubIndex: Integer): string;
 var
   MediaInfoHandle: Cardinal;
   SubKind: string;
@@ -1698,7 +1741,7 @@ begin
 
 end;
 
-procedure TForm1.InfoBtnClick(Sender: TObject);
+procedure TMainForm.InfoBtnClick(Sender: TObject);
 var
   index: Integer;
 begin
@@ -1708,12 +1751,12 @@ begin
   if index > -1 then
   begin
     GetFullInfo(FileList.Items.Strings[index]);
-    Form2.show;
+    InfoForm.show;
   end;
 
 end;
 
-function TForm1.IsStringNumeric(Str: string): Boolean;
+function TMainForm.IsStringNumeric(Str: string): Boolean;
 var
   p: PChar;
 begin
@@ -1739,10 +1782,10 @@ begin
     Inc(p);
   end;
 
-  Result := True;
+  Result := true;
 end;
 
-procedure TForm1.LoadOptions;
+procedure TMainForm.LoadOptions;
 var
   SettingsFile: TIniFile;
 begin
@@ -1806,6 +1849,10 @@ begin
       OggBitrateEdit.Text := ReadString('Settings', 'OggBitrate', '80');
       OggManagedBitrateBtn.Checked := ReadBool('Settings', 'OggManaged', False);
 
+      AftenEncodeList.ItemIndex := ReadInteger('Settings', 'AftenEncode', 0);
+      AftenQualityEdit.Text := ReadString('Settings', 'AftenQuality', '240');
+      AftenBitrateEdit.Text := ReadString('Settings', 'AftenBitrate', '320');
+
       CustomVideoOptionsEdit.Text := ReadString('Settings', 'CustomVideo', '');
       CustomAudioOptionsEdit.Text := ReadString('Settings', 'CustomAudio', '');
       CustomMKVEdit.Text := ReadString('Settings', 'CustomMKV', '');
@@ -1818,7 +1865,7 @@ begin
       SliceThreadsBtn.Checked := ReadBool('Settings', 'Slice', False);
       SliceThreadsEdit.Text := ReadString('Settings', 'SliceThreadStr',
         FloatToStr(SystemInfo.CPU.LogicalCore));
-      CheckUpdateBtn.Checked := ReadBool('Settings', 'Update', True);
+      CheckUpdateBtn.Checked := ReadBool('Settings', 'Update', true);
     end;
 
   finally
@@ -1832,28 +1879,29 @@ begin
     NeroEncodingList.OnChange(Self);
     QaacEncodeMethodList.OnChange(Self);
     OggencodeList.OnChange(Self);
+    AftenEncodeList.OnChange(Self);
     ThreadsBtn.OnClick(Self);
     SliceThreadsBtn.OnClick(Self);
   end;
 
 end;
 
-procedure TForm1.LogsBtnClick(Sender: TObject);
+procedure TMainForm.LogsBtnClick(Sender: TObject);
 begin
 
-  Form3.show;
+  LogForm.show;
 
 end;
 
-procedure TForm1.LogThreadExecute(Sender: TObject; Params: Pointer);
+procedure TMainForm.LogThreadExecute(Sender: TObject; Params: Pointer);
 begin
 
-  if not Assigned(Form3) then
+  if not Assigned(LogForm) then
   begin
     Exit;
   end;
 
-  with Form3.OutputList.Items do
+  with LogForm.OutputList.Items do
   begin
     Add('Command lines:');
     AddStrings(CommandLines);
@@ -1867,7 +1915,8 @@ begin
 
 end;
 
-function TForm1.MkvExtractPercentage(const MkvExtractOutput: string): Integer;
+function TMainForm.MkvExtractPercentage(const MkvExtractOutput: string)
+  : Integer;
 var
   TmpInt: Integer;
   FConsoleOutput: string;
@@ -1896,7 +1945,7 @@ begin
 
 end;
 
-function TForm1.Mp4BoxPercentage(const Mp4BoxOutput: string): Integer;
+function TMainForm.Mp4BoxPercentage(const Mp4BoxOutput: string): Integer;
 var
   TmpStr: string;
   TmpInt: Integer;
@@ -1920,8 +1969,6 @@ begin
         TmpStr := Copy(FConsoleOutput, StrPos, MaxInt);
         Delete(TmpStr, Length(TmpStr) - 6, 7);
 
-        Form1.Caption := TmpStr;
-
         if TryStrToInt(TmpStr, TmpInt) then
         begin
           Result := TmpInt;
@@ -1929,33 +1976,29 @@ begin
 
       end;
 
-    end
-    else
-    begin
-      Form1.Caption := Copy(FConsoleOutput, 0, 16);
     end;
 
   end;
 
 end;
 
-procedure TForm1.NeroEncodingListChange(Sender: TObject);
+procedure TMainForm.NeroEncodingListChange(Sender: TObject);
 begin
 
   if NeroEncodingList.ItemIndex = 0 then
   begin
-    NeroQualityEdit.Enabled := True;
+    NeroQualityEdit.Enabled := true;
     NeroBitrateEdit.Enabled := False;
   end
   else
   begin
     NeroQualityEdit.Enabled := False;
-    NeroBitrateEdit.Enabled := True;
+    NeroBitrateEdit.Enabled := true;
   end;
 
 end;
 
-function TForm1.NeroPercentage(const NeroOutput: string): Integer;
+function TMainForm.NeroPercentage(const NeroOutput: string): Integer;
 var
   FConsoleOutput: string;
 begin
@@ -1981,25 +2024,25 @@ begin
 
 end;
 
-procedure TForm1.OggencodeListChange(Sender: TObject);
+procedure TMainForm.OggencodeListChange(Sender: TObject);
 begin
 
   if OggencodeList.ItemIndex = 0 then
   begin
-    OggQualityEdit.Enabled := True;
+    OggQualityEdit.Enabled := true;
     OggBitrateEdit.Enabled := False;
     OggManagedBitrateBtn.Enabled := False;
   end
   else
   begin
     OggQualityEdit.Enabled := False;
-    OggBitrateEdit.Enabled := True;
-    OggManagedBitrateBtn.Enabled := True;
+    OggBitrateEdit.Enabled := true;
+    OggManagedBitrateBtn.Enabled := true;
   end;
 
 end;
 
-procedure TForm1.OutputBtnClick(Sender: TObject);
+procedure TMainForm.OutputBtnClick(Sender: TObject);
 begin
 
   if (DirectoryExists(DirectoryEdit.Text)) then
@@ -2016,7 +2059,7 @@ begin
 
 end;
 
-procedure TForm1.PositionTimerTimer(Sender: TObject);
+procedure TMainForm.PositionTimerTimer(Sender: TObject);
 
 begin
 
@@ -2032,7 +2075,7 @@ begin
     end
     else if ProcessTypeList[FileIndex] = '2' then
     begin
-      // audio encoding
+      // audio decoding
       CurrentProgressBar.Position := FFMpegPercentage(ConsoleOutputEdit.Text);
       CurrentProgressBar.Style := pbstNormal;
     end
@@ -2081,38 +2124,44 @@ begin
       // ogg vorbis
       CurrentProgressBar.Position := x264Percentage(ConsoleOutputEdit.Text);
       CurrentProgressBar.Style := pbstNormal;
+    end
+    else if ProcessTypeList[FileIndex] = '11' then
+    begin
+      // aften
+      CurrentProgressBar.Position := AftenPercentage(ConsoleOutputEdit.Text);
+      CurrentProgressBar.Style := pbstNormal;
     end;
 
     TotalProgressBar.Position := LastPercent +
       (CurrentProgressBar.Position div CommandLines.Count);
 
-    Form1.Caption := FloatToStr(CurrentProgressBar.Position) + '% / ' +
-      FloatToStr(TotalProgressBar.Position) + '% [TX264]';
+    // Form1.Caption := FloatToStr(CurrentProgressBar.Position) + '% / ' +
+    // FloatToStr(TotalProgressBar.Position) + '% [TX264]';
     TotalProgressLabel.Caption := FloatToStr(TotalProgressBar.Position) + '%';
     CurrentProgressLabel.Caption :=
       FloatToStr(CurrentProgressBar.Position) + '%';
 
-    SetProgressValue(Form1.Handle, TotalProgressBar.Position, 100);
+    SetProgressValue(Self.Handle, TotalProgressBar.Position, 100);
 
   end;
 
 end;
 
-procedure TForm1.RemoveAllBtnClick(Sender: TObject);
+procedure TMainForm.RemoveAllBtnClick(Sender: TObject);
 begin
 
   FileList.Items.Clear;
 
 end;
 
-procedure TForm1.RemoveBtnClick(Sender: TObject);
+procedure TMainForm.RemoveBtnClick(Sender: TObject);
 begin
 
   FileList.DeleteSelected;
 
 end;
 
-procedure TForm1.ResizeBtnClick(Sender: TObject);
+procedure TMainForm.ResizeBtnClick(Sender: TObject);
 begin
 
   WidthEdit.Enabled := ResizeBtn.Checked;
@@ -2122,7 +2171,7 @@ begin
 
 end;
 
-procedure TForm1.SaveOptions;
+procedure TMainForm.SaveOptions;
 var
   SettingsFile: TIniFile;
 begin
@@ -2185,6 +2234,10 @@ begin
       WriteString('Settings', 'OggBitrate', OggBitrateEdit.Text);
       WriteBool('Settings', 'OggManaged', OggManagedBitrateBtn.Checked);
 
+      WriteInteger('Settings', 'AftenEncode', AftenEncodeList.ItemIndex);
+      WriteString('Settings', 'AftenQuality', AftenQualityEdit.Text);
+      WriteString('Settings', 'AftenBitrate', AftenBitrateEdit.Text);
+
       WriteString('Settings', 'CustomVideo', CustomVideoOptionsEdit.Text);
       WriteString('Settings', 'CustomAudio', CustomAudioOptionsEdit.Text);
       WriteString('Settings', 'CustomMKV', CustomMKVEdit.Text);
@@ -2204,14 +2257,14 @@ begin
 
 end;
 
-procedure TForm1.SliceThreadsBtnClick(Sender: TObject);
+procedure TMainForm.SliceThreadsBtnClick(Sender: TObject);
 begin
 
   SliceThreadsEdit.Enabled := SliceThreadsBtn.Checked;
 
 end;
 
-procedure TForm1.StartBtnClick(Sender: TObject);
+procedure TMainForm.StartBtnClick(Sender: TObject);
 var
   i: Integer;
 begin
@@ -2237,7 +2290,7 @@ begin
         Infos.Clear;
         Process.ConsoleOutput.Clear;
 
-        Form1.Caption := 'Creating command lines, please wait...';
+        Self.Caption := 'Creating command lines, please wait...';
 
         DeleteTempFiles();
         DisableUI;
@@ -2251,32 +2304,29 @@ begin
         end;
 
         // add commandlines to the log
-        Form3.OutputList.Items.Add('');
-        Form3.OutputList.Items.Add
-          ('--------------------------------------------');
-        Form3.OutputList.Items.Add('[' + DateTimeToStr(Now) + ']' +
-          ' Starting encoding process');
-        Form3.OutputList.Items.Add('[' + DateTimeToStr(Now) + ']' +
-          ' Command lines:');
-        Form3.OutputList.Items.AddStrings(CommandLines);
-        Form3.OutputList.Items.Add
-          ('--------------------------------------------');
-        Form3.OutputList.Items.Add('');
+        with LogForm.OutputList.Items do
+        begin
+          Add('');
+          Add('--------------------------------------------');
+          Add('[' + DateTimeToStr(Now) + ']' + ' Starting encoding process');
+          Add('[' + DateTimeToStr(Now) + ']' + ' Command lines:');
+          AddStrings(CommandLines);
+          Add('--------------------------------------------');
+          Add('');
+        end;
 
         FileIndex := 0;
         DurationIndex := 0;
         LastPercent := 0;
         StoppedByUser := False;
 
-        Form1.Caption := 'TX264';
-
         Process.ApplicationName := x264Path;;
         Process.CommandLine := CommandLines.Strings[0];
         InfoEdit.Text := Infos[0];
         Process.Run;
 
-        PositionTimer.Enabled := True;
-        SetProgressState(Form1.Handle, tbpsNormal);
+        PositionTimer.Enabled := true;
+        SetProgressState(Self.Handle, tbpsNormal);
       end;
 
     end;
@@ -2285,7 +2335,7 @@ begin
 
 end;
 
-procedure TForm1.StopBtnClick(Sender: TObject);
+procedure TMainForm.StopBtnClick(Sender: TObject);
 begin
 
   if ID_YES = Application.MessageBox('Stop encoding?', 'Stop',
@@ -2295,21 +2345,21 @@ begin
     if Process.ProcessInfo.hProcess > 0 then
     begin
       TerminateProcess(Process.ProcessInfo.hProcess, 0);
-      StoppedByUser := True;
+      StoppedByUser := true;
     end;
 
   end;
 
 end;
 
-procedure TForm1.ThreadsBtnClick(Sender: TObject);
+procedure TMainForm.ThreadsBtnClick(Sender: TObject);
 begin
 
   ThreadsEdit.Enabled := ThreadsBtn.Checked;
 
 end;
 
-function TForm1.TimeToInt(const TimeStr: string): Integer;
+function TMainForm.TimeToInt(const TimeStr: string): Integer;
 var
   TimeList: TStringList;
   hour: Integer;
@@ -2325,7 +2375,7 @@ begin
     TimeList := TStringList.Create;
     try
       TimeList.Delimiter := ':';
-      TimeList.StrictDelimiter := True;
+      TimeList.StrictDelimiter := true;
       TimeList.DelimitedText := TimeStr;
 
       hour := 0;
@@ -2362,14 +2412,14 @@ begin
 
 end;
 
-procedure TForm1.UpBtnClick(Sender: TObject);
+procedure TMainForm.UpBtnClick(Sender: TObject);
 begin
 
   FileList.MoveSelectedUp;
 
 end;
 
-procedure TForm1.UpdateCheckerDoneFile(Sender: TObject; FileName: string;
+procedure TMainForm.UpdateCheckerDoneFile(Sender: TObject; FileName: string;
   FileSize: Integer; Url: string);
 var
   VersionFile: TStringList;
@@ -2384,7 +2434,7 @@ begin
     if VersionFile.Count = 1 then
     begin
 
-      if Form1.IsStringNumeric(VersionFile.Strings[0]) then
+      if IsStringNumeric(VersionFile.Strings[0]) then
       begin
         LatestVersion := StrToInt(VersionFile.Strings[0]);
 
@@ -2411,7 +2461,7 @@ begin
 
 end;
 
-procedure TForm1.UpdateThreadExecute(Sender: TObject; Params: Pointer);
+procedure TMainForm.UpdateThreadExecute(Sender: TObject; Params: Pointer);
 begin
 
   with UpdateChecker do
@@ -2425,7 +2475,7 @@ begin
 
 end;
 
-procedure TForm1.VideoSizeListChange(Sender: TObject);
+procedure TMainForm.VideoSizeListChange(Sender: TObject);
 begin
 
   case VideoSizeList.ItemIndex of
@@ -2528,7 +2578,7 @@ begin
 
 end;
 
-function TForm1.x264Percentage(const x264Output: string): Integer;
+function TMainForm.x264Percentage(const x264Output: string): Integer;
 var
   TmpStr: string;
   TmpInt: Integer;
@@ -2565,7 +2615,7 @@ begin
 
 end;
 
-procedure TForm1.ProcessRead(Sender: TObject; const S: string;
+procedure TMainForm.ProcessRead(Sender: TObject; const S: string;
   const StartsOnNewLine: Boolean);
 begin
 
@@ -2573,11 +2623,11 @@ begin
 
 end;
 
-procedure TForm1.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
+procedure TMainForm.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
 begin
 
   // add to log
-  with Form3.OutputList.Items do
+  with LogForm.OutputList.Items do
   begin
     case StrToInt(ProcessTypeList[FileIndex]) of
       1:
@@ -2666,6 +2716,15 @@ begin
           Add('');
           Process.ConsoleOutput.Clear;
         end;
+      11:
+        begin
+          Add('');
+          Add('[' + DateTimeToStr(Now) + ']' +
+            ' Done audio encoding with aften ');
+          AddStrings(Process.ConsoleOutput);
+          Add('');
+          Process.ConsoleOutput.Clear;
+        end;
     end;
   end;
 
@@ -2706,11 +2765,11 @@ begin
 
     ConsoleOutputEdit.Text := '';
     InfoEdit.Text := '';
-    Form1.Caption := 'TX264';
+    Self.Caption := 'TX264';
 
     TotalProgressBar.Position := 0;
-    SetProgressValue(Form1.Handle, 0, 100);
-    SetProgressState(Form1.Handle, tbpsNone);
+    SetProgressValue(Self.Handle, 0, 100);
+    SetProgressState(Self.Handle, tbpsNone);
     PositionTimer.Enabled := False;
     CurrentProgressBar.Style := pbstNormal;
     CurrentProgressBar.Position := 0;
@@ -2772,13 +2831,18 @@ begin
       begin
         // oggenc
         Process.ApplicationName := OggEncPath;
+      end
+      else if ProcessTypeList[FileIndex] = '11' then
+      begin
+        // oggenc
+        Process.ApplicationName := AftenPath;
       end;
 
       if not FileExists(Process.ApplicationName) then
       begin
         Application.MessageBox('Cannot find encoder!', 'Fatal Error',
           MB_ICONERROR);
-        StoppedByUser := True;
+        StoppedByUser := true;
       end
       else
       begin
@@ -2794,11 +2858,11 @@ begin
 
       ConsoleOutputEdit.Text := '';
       InfoEdit.Text := '';
-      Form1.Caption := 'TX264';
+      Self.Caption := 'TX264';
 
       TotalProgressBar.Position := 0;
-      SetProgressValue(Form1.Handle, 0, 100);
-      SetProgressState(Form1.Handle, tbpsNone);
+      SetProgressValue(Self.Handle, 0, 100);
+      SetProgressState(Self.Handle, tbpsNone);
       PositionTimer.Enabled := False;
       CurrentProgressBar.Style := pbstNormal;
       CurrentProgressBar.Position := 0;
@@ -2810,18 +2874,18 @@ begin
 
 end;
 
-procedure TForm1.QaacEncodeMethodListChange(Sender: TObject);
+procedure TMainForm.QaacEncodeMethodListChange(Sender: TObject);
 begin
 
   if QaacEncodeMethodList.ItemIndex = 1 then
   begin
-    QaacvQualityEdit.Enabled := True;
+    QaacvQualityEdit.Enabled := true;
     QaacBitrateEdit.Enabled := False;
   end
   else
   begin
     QaacvQualityEdit.Enabled := False;
-    QaacBitrateEdit.Enabled := True;
+    QaacBitrateEdit.Enabled := true;
   end;
 
   if QaacHEBtn.Checked then
@@ -2838,7 +2902,7 @@ begin
 
 end;
 
-procedure TForm1.QaacHEBtnClick(Sender: TObject);
+procedure TMainForm.QaacHEBtnClick(Sender: TObject);
 begin
 
   if QaacHEBtn.Checked then

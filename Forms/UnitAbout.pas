@@ -31,7 +31,7 @@ var
   AboutForm: TAboutForm;
 
 const
-  Build = '410';
+  Build = '420';
 
 implementation
 
@@ -49,7 +49,7 @@ end;
 procedure TAboutForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 
-  Form1.Enabled := True;
+  MainForm.Enabled := True;
 
 end;
 

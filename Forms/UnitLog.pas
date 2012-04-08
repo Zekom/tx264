@@ -7,7 +7,7 @@ uses
   Dialogs, StdCtrls, JvExStdCtrls, JvListBox;
 
 type
-  TForm3 = class(TForm)
+  TLogForm = class(TForm)
     OutputList: TJvListBox;
     SaveBtn: TButton;
     ClearBtn: TButton;
@@ -27,13 +27,13 @@ type
   end;
 
 var
-  Form3: TForm3;
+  LogForm: TLogForm;
 
 implementation
 
 {$R *.dfm}
 
-procedure TForm3.ClearBtnClick(Sender: TObject);
+procedure TLogForm.ClearBtnClick(Sender: TObject);
 begin
 
   if OutputList.Items.Count > 0 then
@@ -43,14 +43,14 @@ begin
 
 end;
 
-procedure TForm3.CloseBtnClick(Sender: TObject);
+procedure TLogForm.CloseBtnClick(Sender: TObject);
 begin
 
   Self.Close;
 
 end;
 
-procedure TForm3.FormKeyDown(Sender: TObject; var Key: Word;
+procedure TLogForm.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
 
@@ -61,14 +61,14 @@ begin
 
 end;
 
-procedure TForm3.OutputListAddString(Sender: TObject; Item: string);
+procedure TLogForm.OutputListAddString(Sender: TObject; Item: string);
 begin
 
   OutputList.TopIndex := OutputList.Items.Count - 1;
 
 end;
 
-procedure TForm3.OutputListDrawItem(Control: TWinControl; Index: Integer;
+procedure TLogForm.OutputListDrawItem(Control: TWinControl; Index: Integer;
   Rect: TRect; State: TOwnerDrawState);
 begin
 
@@ -99,7 +99,7 @@ begin
 
 end;
 
-procedure TForm3.SaveBtnClick(Sender: TObject);
+procedure TLogForm.SaveBtnClick(Sender: TObject);
 begin
 
   if OutputList.Items.Count > 0 then

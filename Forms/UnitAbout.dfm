@@ -3,7 +3,7 @@ object AboutForm: TAboutForm
   Top = 0
   BorderStyle = bsDialog
   Caption = 'About'
-  ClientHeight = 352
+  ClientHeight = 340
   ClientWidth = 338
   Color = 13946053
   Font.Charset = DEFAULT_CHARSET
@@ -17,7 +17,7 @@ object AboutForm: TAboutForm
   OnShow = FormShow
   DesignSize = (
     338
-    352)
+    340)
   PixelsPerInch = 96
   TextHeight = 13
   object Image1: TImage
@@ -394,7 +394,7 @@ object AboutForm: TAboutForm
     Left = 0
     Top = 163
     Width = 338
-    Height = 157
+    Height = 145
     Align = alTop
     Alignment = taCenter
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -415,27 +415,28 @@ object AboutForm: TAboutForm
       'aften.exe')
     ReadOnly = True
     TabOrder = 0
+    ExplicitHeight = 157
   end
   object CloseBtn: TButton
     Left = 255
-    Top = 319
+    Top = 307
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Close'
     TabOrder = 1
     OnClick = CloseBtnClick
-    ExplicitTop = 303
+    ExplicitTop = 319
   end
   object HomepageBtn: TButton
     Left = 8
-    Top = 319
+    Top = 307
     Width = 75
     Height = 25
     Anchors = [akLeft, akBottom]
     Caption = 'Homepage'
     TabOrder = 2
     OnClick = HomepageBtnClick
-    ExplicitTop = 303
+    ExplicitTop = 319
   end
 end

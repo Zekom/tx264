@@ -1,4 +1,4 @@
-object Form1: TForm1
+object MainForm: TMainForm
   Left = 0
   Top = 0
   Caption = 'TX264'
@@ -1056,10 +1056,62 @@ object Form1: TForm1
               Color = 13946053
               ParentBackground = False
               TabOrder = 0
-              ExplicitLeft = 240
-              ExplicitTop = 48
-              ExplicitWidth = 185
-              ExplicitHeight = 41
+              object Label40: TLabel
+                Left = 12
+                Top = 12
+                Width = 76
+                Height = 13
+                Caption = 'Encoding Mode:'
+              end
+              object Label41: TLabel
+                Left = 50
+                Top = 39
+                Width = 38
+                Height = 13
+                Caption = 'Quality:'
+              end
+              object Label42: TLabel
+                Left = 52
+                Top = 66
+                Width = 36
+                Height = 13
+                Caption = 'Bitrate:'
+              end
+              object AftenEncodeList: TComboBox
+                Left = 94
+                Top = 8
+                Width = 75
+                Height = 21
+                Style = csDropDownList
+                ItemIndex = 1
+                TabOrder = 0
+                Text = 'CBR'
+                OnChange = AftenEncodeListChange
+                Items.Strings = (
+                  'Quality'
+                  'CBR')
+              end
+              object AftenQualityEdit: TJvSpinEdit
+                Left = 94
+                Top = 35
+                Width = 50
+                Height = 21
+                ButtonKind = bkClassic
+                MaxValue = 1023.000000000000000000
+                Value = 240.000000000000000000
+                Enabled = False
+                TabOrder = 1
+              end
+              object AftenBitrateEdit: TJvSpinEdit
+                Left = 94
+                Top = 62
+                Width = 50
+                Height = 21
+                CheckMinValue = True
+                ButtonKind = bkClassic
+                Value = 96.000000000000000000
+                TabOrder = 2
+              end
             end
           end
           object TabSheet9: TTabSheet
@@ -1075,10 +1127,6 @@ object Form1: TForm1
               Color = 13946053
               ParentBackground = False
               TabOrder = 0
-              ExplicitLeft = 192
-              ExplicitTop = 48
-              ExplicitWidth = 185
-              ExplicitHeight = 41
               object Label37: TLabel
                 Left = 12
                 Top = 12
@@ -1299,7 +1347,7 @@ object Form1: TForm1
           Top = 3
           Width = 197
           Height = 86
-          Caption = 'Threading'
+          Caption = 'x264.exe Threading'
           TabOrder = 0
           object ThreadsBtn: TCheckBox
             Left = 16

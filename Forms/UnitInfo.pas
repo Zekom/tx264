@@ -7,7 +7,7 @@ uses
   Dialogs, StdCtrls;
 
 type
-  TForm2 = class(TForm)
+  TInfoForm = class(TForm)
     CloseBtn: TButton;
     InfoList: TListBox;
     SaveDialog1: TSaveDialog;
@@ -24,27 +24,27 @@ type
   end;
 
 var
-  Form2: TForm2;
+  InfoForm: TInfoForm;
 
 implementation
 
 {$R *.dfm}
 
-procedure TForm2.CloseBtnClick(Sender: TObject);
+procedure TInfoForm.CloseBtnClick(Sender: TObject);
 begin
 
   Self.Close;
 
 end;
 
-procedure TForm2.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TInfoForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 
   InfoList.Items.Clear;
 
 end;
 
-procedure TForm2.InfoListDrawItem(Control: TWinControl; Index: Integer;
+procedure TInfoForm.InfoListDrawItem(Control: TWinControl; Index: Integer;
   Rect: TRect; State: TOwnerDrawState);
 begin
 
@@ -75,7 +75,7 @@ begin
 
 end;
 
-procedure TForm2.SaveBtnClick(Sender: TObject);
+procedure TInfoForm.SaveBtnClick(Sender: TObject);
 begin
 
   if InfoList.Items.Count > 0 then

@@ -1,4 +1,4 @@
-object Form2: TForm2
+object InfoForm: TInfoForm
   Left = 0
   Top = 0
   BorderStyle = bsDialog

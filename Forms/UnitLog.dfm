@@ -1,4 +1,4 @@
-object Form3: TForm3
+object LogForm: TLogForm
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu, biMaximize]
