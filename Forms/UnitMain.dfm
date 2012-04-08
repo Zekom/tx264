@@ -1433,8 +1433,8 @@ object MainForm: TMainForm
     Top = 120
   end
   object AddMenu: TPopupMenu
-    Left = 136
-    Top = 112
+    Left = 144
+    Top = 96
     object AddFiles1: TMenuItem
       Caption = 'Add Files'
       OnClick = AddFiles1Click
@@ -1462,8 +1462,8 @@ object MainForm: TMainForm
     ConsoleOptions = [coRedirect]
     OnTerminate = ProcessTerminate
     OnRead = ProcessRead
-    Left = 72
-    Top = 112
+    Left = 40
+    Top = 80
   end
   object LogThread: TJvThread
     Exclusive = True
@@ -1471,8 +1471,8 @@ object MainForm: TMainForm
     RunOnCreate = True
     FreeOnTerminate = True
     OnExecute = LogThreadExecute
-    Left = 264
-    Top = 112
+    Left = 272
+    Top = 104
   end
   object PositionTimer: TTimer
     Enabled = False
@@ -1482,8 +1482,8 @@ object MainForm: TMainForm
     Top = 112
   end
   object SystemInfo: TJvComputerInfoEx
-    Left = 32
-    Top = 144
+    Left = 40
+    Top = 176
   end
   object DragDrop: TJvDragDrop
     DropTarget = Owner
@@ -1497,7 +1497,7 @@ object MainForm: TMainForm
     RunOnCreate = True
     FreeOnTerminate = True
     OnExecute = UpdateThreadExecute
-    Left = 152
+    Left = 136
     Top = 184
   end
   object UpdateChecker: TJvHttpUrlGrabber
@@ -1507,7 +1507,7 @@ object MainForm: TMainForm
     ProxyAddresses = 'proxyserver'
     ProxyIgnoreList = '<local>'
     OnDoneFile = UpdateCheckerDoneFile
-    Left = 248
-    Top = 176
+    Left = 240
+    Top = 184
   end
 end

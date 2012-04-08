@@ -230,6 +230,8 @@ type
     StoppedByUser: Boolean;
     LastPercent: Integer;
 
+    LastDirectory: string;
+
     // returns % done
     function x264Percentage(const x264Output: string): Integer;
     function FFMpegPercentage(const FFMpegOutput: string): Integer;
@@ -837,9 +839,11 @@ end;
 procedure TMainForm.AddFiles1Click(Sender: TObject);
 begin
 
+  OpenDialog.InitialDir := LastDirectory;
   if OpenDialog.Execute then
   begin
     FileList.Items.AddStrings(OpenDialog.Files);
+    LastDirectory := ExtractFileDir(OpenDialog.FileName);
   end;
 
 end;
@@ -850,6 +854,8 @@ var
   FileName: String;
   Extension: String;
 begin
+
+  OpenFolderDialog.Directory := LastDirectory;
 
   if OpenFolderDialog.Execute then
   begin
@@ -873,6 +879,7 @@ begin
             (Extension = '.flv') or (Extension = '.avi') then
           begin
             FileList.Items.Add(FileName);
+            LastDirectory := ExtractFileDir(FileName);
           end;
 
         until (FindNext(Search) <> 0);
@@ -881,7 +888,7 @@ begin
 
     finally
       FileList.Items.EndUpdate;
-      // LastMusicDir := SelectDirectory.Directory;
+      LastDirectory := OpenFolderDialog.Directory;
     end;
 
   end;
@@ -1866,6 +1873,8 @@ begin
       SliceThreadsEdit.Text := ReadString('Settings', 'SliceThreadStr',
         FloatToStr(SystemInfo.CPU.LogicalCore));
       CheckUpdateBtn.Checked := ReadBool('Settings', 'Update', true);
+
+      LastDirectory := ReadString('Settings', 'LastDir', AppFolder);
     end;
 
   finally
@@ -2135,8 +2144,8 @@ begin
     TotalProgressBar.Position := LastPercent +
       (CurrentProgressBar.Position div CommandLines.Count);
 
-    // Form1.Caption := FloatToStr(CurrentProgressBar.Position) + '% / ' +
-    // FloatToStr(TotalProgressBar.Position) + '% [TX264]';
+    Self.Caption := FloatToStr(CurrentProgressBar.Position) + '% / ' +
+      FloatToStr(TotalProgressBar.Position) + '% [TX264]';
     TotalProgressLabel.Caption := FloatToStr(TotalProgressBar.Position) + '%';
     CurrentProgressLabel.Caption :=
       FloatToStr(CurrentProgressBar.Position) + '%';
@@ -2249,6 +2258,8 @@ begin
       WriteBool('Settings', 'Slice', SliceThreadsBtn.Checked);
       WriteString('Settings', 'SliceThreadStr', SliceThreadsEdit.Text);
       WriteBool('Settings', 'Update', CheckUpdateBtn.Checked);
+
+      WriteString('Settings', 'LastDir', LastDirectory);
     end;
 
   finally
