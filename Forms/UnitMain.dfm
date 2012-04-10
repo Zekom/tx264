@@ -65,13 +65,13 @@ object MainForm: TMainForm
     Left = 8
     Top = 8
     Width = 574
-    Height = 261
+    Height = 233
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'Files and Paths'
     TabOrder = 3
     DesignSize = (
       574
-      261)
+      233)
     object DownBtn: TButton
       Left = 344
       Top = 16
@@ -86,7 +86,7 @@ object MainForm: TMainForm
       Left = 12
       Top = 47
       Width = 550
-      Height = 205
+      Height = 177
       Anchors = [akLeft, akTop, akRight, akBottom]
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
@@ -102,6 +102,7 @@ object MainForm: TMainForm
       Style = lbOwnerDrawFixed
       TabOrder = 1
       OnDrawItem = FileListDrawItem
+      ExplicitHeight = 205
     end
     object RemoveAllBtn: TButton
       Left = 452
@@ -241,37 +242,44 @@ object MainForm: TMainForm
   end
   object PageControl: TPageControl
     Left = 8
-    Top = 275
+    Top = 247
     Width = 574
-    Height = 202
+    Height = 230
     ActivePage = TabSheet1
     Anchors = [akLeft, akRight, akBottom]
     MultiLine = True
     TabOrder = 6
     object TabSheet1: TTabSheet
       Caption = 'General'
+      ExplicitHeight = 174
       object Panel1: TPanel
         Left = 0
         Top = 0
         Width = 566
-        Height = 174
+        Height = 202
         Align = alClient
         BevelOuter = bvNone
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
+        ExplicitHeight = 174
         DesignSize = (
           566
-          174)
+          202)
         object Label21: TLabel
-          Left = 443
-          Top = 153
+          Left = 425
+          Top = 151
           Width = 51
           Height = 13
           Anchors = [akRight, akBottom]
           Caption = 'Container:'
-          ExplicitLeft = 429
-          ExplicitTop = 150
+        end
+        object Label43: TLabel
+          Left = 433
+          Top = 178
+          Width = 43
+          Height = 13
+          Caption = 'Encoder:'
         end
         object GroupBox4: TGroupBox
           Left = 4
@@ -464,7 +472,7 @@ object MainForm: TMainForm
         end
         object ConstantFPSBtn: TCheckBox
           Left = 12
-          Top = 124
+          Top = 122
           Width = 113
           Height = 17
           Anchors = [akLeft, akBottom]
@@ -474,8 +482,8 @@ object MainForm: TMainForm
           TabOrder = 2
         end
         object BitrateTolBtn: TCheckBox
-          Left = 394
-          Top = 124
+          Left = 376
+          Top = 122
           Width = 100
           Height = 17
           Anchors = [akRight, akBottom]
@@ -486,11 +494,12 @@ object MainForm: TMainForm
           OnClick = BitrateTolBtnClick
         end
         object BitrateTolEdit: TJvSpinEdit
-          Left = 500
-          Top = 122
-          Width = 50
+          Left = 482
+          Top = 120
+          Width = 70
           Height = 21
           CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
           ButtonKind = bkClassic
           MaxValue = 1.000000000000000000
           ValueType = vtFloat
@@ -500,9 +509,9 @@ object MainForm: TMainForm
           TabOrder = 4
         end
         object ContainerList: TComboBox
-          Left = 500
+          Left = 482
           Top = 147
-          Width = 52
+          Width = 70
           Height = 21
           Style = csDropDownList
           Anchors = [akRight, akBottom]
@@ -515,29 +524,55 @@ object MainForm: TMainForm
         end
         object SubtitleBtn: TCheckBox
           Left = 12
-          Top = 144
+          Top = 150
           Width = 229
           Height = 17
+          Anchors = [akLeft, akBottom]
           Caption = 'Copy subtitle to destination from mkv/mp4'
           Checked = True
           State = cbChecked
           TabOrder = 6
+        end
+        object CopyChapertBtn: TCheckBox
+          Left = 12
+          Top = 177
+          Width = 190
+          Height = 17
+          Anchors = [akLeft, akBottom]
+          Caption = 'Copy chapter info from source'
+          TabOrder = 7
+        end
+        object EncoderList: TComboBox
+          Left = 482
+          Top = 174
+          Width = 70
+          Height = 21
+          Style = csDropDownList
+          Anchors = [akRight, akBottom]
+          ItemIndex = 1
+          TabOrder = 8
+          Text = 'FFMpeg'
+          Items.Strings = (
+            'x264'
+            'FFMpeg')
         end
       end
     end
     object TabSheet2: TTabSheet
       Caption = 'Filters'
       ImageIndex = 1
+      ExplicitHeight = 174
       object Panel2: TPanel
         Left = 0
         Top = 0
         Width = 566
-        Height = 174
+        Height = 202
         Align = alClient
         BevelOuter = bvNone
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
+        ExplicitHeight = 174
         object Label11: TLabel
           Left = 391
           Top = 93
@@ -738,16 +773,18 @@ object MainForm: TMainForm
     object TabSheet3: TTabSheet
       Caption = 'Audio'
       ImageIndex = 2
+      ExplicitHeight = 174
       object Panel8: TPanel
         Left = 0
         Top = 0
         Width = 566
-        Height = 174
+        Height = 202
         Align = alClient
         BevelOuter = bvNone
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
+        ExplicitHeight = 174
         object Label18: TLabel
           Left = 3
           Top = 154
@@ -1232,19 +1269,21 @@ object MainForm: TMainForm
     object TabSheet4: TTabSheet
       Caption = 'Custom Options'
       ImageIndex = 3
+      ExplicitHeight = 174
       object Panel4: TPanel
         Left = 0
         Top = 0
         Width = 566
-        Height = 174
+        Height = 202
         Align = alClient
         BevelOuter = bvNone
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
+        ExplicitHeight = 174
         DesignSize = (
           566
-          174)
+          202)
         object Label22: TLabel
           Left = 42
           Top = 12
@@ -1332,16 +1371,18 @@ object MainForm: TMainForm
     object TabSheet5: TTabSheet
       Caption = 'Other Options'
       ImageIndex = 4
+      ExplicitHeight = 174
       object Panel5: TPanel
         Left = 0
         Top = 0
         Width = 566
-        Height = 174
+        Height = 202
         Align = alClient
         BevelOuter = bvNone
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
+        ExplicitHeight = 174
         object GroupBox1: TGroupBox
           Left = 4
           Top = 3
@@ -1402,6 +1443,14 @@ object MainForm: TMainForm
           State = cbChecked
           TabOrder = 1
         end
+        object NoNeroNotifyBtn: TCheckBox
+          Left = 11
+          Top = 118
+          Width = 238
+          Height = 17
+          Caption = 'Do not warn me if neroaacenc is not present'
+          TabOrder = 2
+        end
       end
     end
   end
@@ -1429,12 +1478,12 @@ object MainForm: TMainForm
     OnClick = OutputBtnClick
   end
   object XPManifest1: TXPManifest
-    Left = 208
-    Top = 120
+    Left = 176
+    Top = 88
   end
   object AddMenu: TPopupMenu
-    Left = 144
-    Top = 96
+    Left = 104
+    Top = 80
     object AddFiles1: TMenuItem
       Caption = 'Add Files'
       OnClick = AddFiles1Click
@@ -1447,12 +1496,12 @@ object MainForm: TMainForm
   object OpenDialog: TOpenDialog
     Filter = 'Supported|*.mp4;*.mkv;*.avi;*.mov;*.m4v;*.mpeg;*.mpg;*.flv'
     Options = [ofHideReadOnly, ofAllowMultiSelect, ofEnableSizing]
-    Left = 336
-    Top = 112
+    Left = 328
+    Top = 88
   end
   object OpenFolderDialog: TJvBrowseForFolderDialog
     Left = 408
-    Top = 112
+    Top = 88
   end
   object Process: TJvCreateProcess
     StartupInfo.DefaultPosition = False
@@ -1471,25 +1520,25 @@ object MainForm: TMainForm
     RunOnCreate = True
     FreeOnTerminate = True
     OnExecute = LogThreadExecute
-    Left = 272
-    Top = 104
+    Left = 248
+    Top = 88
   end
   object PositionTimer: TTimer
     Enabled = False
     Interval = 100
     OnTimer = PositionTimerTimer
     Left = 496
-    Top = 112
+    Top = 80
   end
   object SystemInfo: TJvComputerInfoEx
-    Left = 40
-    Top = 176
+    Left = 56
+    Top = 152
   end
   object DragDrop: TJvDragDrop
     DropTarget = Owner
     OnDrop = DragDropDrop
-    Left = 368
-    Top = 184
+    Left = 472
+    Top = 168
   end
   object UpdateThread: TJvThread
     Exclusive = True
@@ -1497,8 +1546,8 @@ object MainForm: TMainForm
     RunOnCreate = True
     FreeOnTerminate = True
     OnExecute = UpdateThreadExecute
-    Left = 136
-    Top = 184
+    Left = 240
+    Top = 160
   end
   object UpdateChecker: TJvHttpUrlGrabber
     FileName = 'output.txt'
@@ -1507,7 +1556,7 @@ object MainForm: TMainForm
     ProxyAddresses = 'proxyserver'
     ProxyIgnoreList = '<local>'
     OnDoneFile = UpdateCheckerDoneFile
-    Left = 240
-    Top = 184
+    Left = 368
+    Top = 168
   end
 end

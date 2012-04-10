@@ -415,7 +415,6 @@ object AboutForm: TAboutForm
       'aften.exe')
     ReadOnly = True
     TabOrder = 0
-    ExplicitHeight = 157
   end
   object CloseBtn: TButton
     Left = 255
@@ -426,7 +425,6 @@ object AboutForm: TAboutForm
     Caption = 'Close'
     TabOrder = 1
     OnClick = CloseBtnClick
-    ExplicitTop = 319
   end
   object HomepageBtn: TButton
     Left = 8
@@ -437,6 +435,5 @@ object AboutForm: TAboutForm
     Caption = 'Homepage'
     TabOrder = 2
     OnClick = HomepageBtnClick
-    ExplicitTop = 319
   end
 end
