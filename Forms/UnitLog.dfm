@@ -2,7 +2,7 @@ object LogForm: TLogForm
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu, biMaximize]
-  Caption = 'Console outputs'
+  Caption = 'Logs/Outputs'
   ClientHeight = 575
   ClientWidth = 825
   Color = 13946053

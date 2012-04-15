@@ -173,6 +173,8 @@ type
     CopyChapertBtn: TCheckBox;
     EncoderList: TComboBox;
     Label43: TLabel;
+    UseAdvancedBtn: TCheckBox;
+    AdvancedBtn: TButton;
     procedure AddFiles1Click(Sender: TObject);
     procedure AddFolder1Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
@@ -215,6 +217,8 @@ type
     procedure QaacEncodeMethodListChange(Sender: TObject);
     procedure OggencodeListChange(Sender: TObject);
     procedure AftenEncodeListChange(Sender: TObject);
+    procedure UseAdvancedBtnClick(Sender: TObject);
+    procedure AdvancedBtnClick(Sender: TObject);
   private
     { Private declarations }
     CommandLines: TStringList;
@@ -230,7 +234,6 @@ type
       AftenPath, OggEncPath: string;
     NeroAACPath, FAACPath: string;
     TempFolder: string;
-    AppFolder: string;
 
     FileIndex: Integer;
     DurationIndex: Integer;
@@ -271,7 +274,10 @@ type
     procedure EnableUI();
 
     // adds command line for x264.exe
-    procedure AddCommandLine(Index: Integer);
+    procedure AddCommandLine(Index: Integer; AdvancedOptions: string);
+
+    // creates advanced command line
+    function CreateAdvancedCommandLine: string;
 
     // gets subtitle count from file
     function GetSubtitleCount(Index: integer): Integer;
@@ -291,6 +297,7 @@ type
 
   public
     { Public declarations }
+    AppFolder: string;
   end;
 
 const
@@ -301,7 +308,7 @@ var
 
 implementation
 
-uses UnitLog, windows7taskbar, UnitInfo, UnitAbout;
+uses UnitLog, windows7taskbar, UnitInfo, UnitAbout, UnitAdvancedOptions;
 
 {$R *.dfm}
 
@@ -321,7 +328,7 @@ begin
 
 end;
 
-procedure TMainForm.AddCommandLine(Index: Integer);
+procedure TMainForm.AddCommandLine(Index: Integer; AdvancedOptions: string);
 var
   OutFileName: string;
   OutAudioFile: string;
@@ -388,64 +395,73 @@ begin
             end;
         end;
 
-        // profile
-        case ProfileList.ItemIndex of
-          1:
-            TmpStr := TmpStr + ' --profile baseline';
-          2:
-            TmpStr := TmpStr + ' --profile main';
-          3:
-            TmpStr := TmpStr + ' --profile high';
-          4:
-            TmpStr := TmpStr + ' --profile high10';
-          5:
-            TmpStr := TmpStr + ' --profile high422';
-          6:
-            TmpStr := TmpStr + ' --profile high444';
-        end;
+        if UseAdvancedBtn.Checked then
+        begin
+          TmpStr := TmpStr + AdvancedOptions;
+        end
+        else
+        begin
 
-        // presets
-        case PresetsList.ItemIndex of
-          1:
-            TmpStr := TmpStr + ' --preset ultrafast';
-          2:
-            TmpStr := TmpStr + ' --preset superfast';
-          3:
-            TmpStr := TmpStr + ' --preset veryfast';
-          4:
-            TmpStr := TmpStr + ' --preset faster';
-          5:
-            TmpStr := TmpStr + ' --preset fast';
-          6:
-            TmpStr := TmpStr + ' --preset medium';
-          7:
-            TmpStr := TmpStr + ' --preset slow';
-          8:
-            TmpStr := TmpStr + ' --preset slower';
-          9:
-            TmpStr := TmpStr + ' --preset veryslow';
-          10:
-            TmpStr := TmpStr + ' --preset placebo';
-        end;
+          // profile
+          case ProfileList.ItemIndex of
+            1:
+              TmpStr := TmpStr + ' --profile baseline';
+            2:
+              TmpStr := TmpStr + ' --profile main';
+            3:
+              TmpStr := TmpStr + ' --profile high';
+            4:
+              TmpStr := TmpStr + ' --profile high10';
+            5:
+              TmpStr := TmpStr + ' --profile high422';
+            6:
+              TmpStr := TmpStr + ' --profile high444';
+          end;
 
-        // tune
-        case TuneList.ItemIndex of
-          1:
-            TmpStr := TmpStr + ' --tune film';
-          2:
-            TmpStr := TmpStr + ' --tune animation';
-          3:
-            TmpStr := TmpStr + ' --tune grain';
-          4:
-            TmpStr := TmpStr + ' --tune stillimage';
-          5:
-            TmpStr := TmpStr + ' --tune psnr';
-          6:
-            TmpStr := TmpStr + ' --tune ssim';
-          7:
-            TmpStr := TmpStr + ' --tune fastdecode';
-          8:
-            TmpStr := TmpStr + ' --tune zerolatency';
+          // presets
+          case PresetsList.ItemIndex of
+            1:
+              TmpStr := TmpStr + ' --preset ultrafast';
+            2:
+              TmpStr := TmpStr + ' --preset superfast';
+            3:
+              TmpStr := TmpStr + ' --preset veryfast';
+            4:
+              TmpStr := TmpStr + ' --preset faster';
+            5:
+              TmpStr := TmpStr + ' --preset fast';
+            6:
+              TmpStr := TmpStr + ' --preset medium';
+            7:
+              TmpStr := TmpStr + ' --preset slow';
+            8:
+              TmpStr := TmpStr + ' --preset slower';
+            9:
+              TmpStr := TmpStr + ' --preset veryslow';
+            10:
+              TmpStr := TmpStr + ' --preset placebo';
+          end;
+
+          // tune
+          case TuneList.ItemIndex of
+            1:
+              TmpStr := TmpStr + ' --tune film';
+            2:
+              TmpStr := TmpStr + ' --tune animation';
+            3:
+              TmpStr := TmpStr + ' --tune grain';
+            4:
+              TmpStr := TmpStr + ' --tune stillimage';
+            5:
+              TmpStr := TmpStr + ' --tune psnr';
+            6:
+              TmpStr := TmpStr + ' --tune ssim';
+            7:
+              TmpStr := TmpStr + ' --tune fastdecode';
+            8:
+              TmpStr := TmpStr + ' --tune zerolatency';
+          end;
+
         end;
 
         // constant fps
@@ -542,13 +558,14 @@ begin
             TmpStr := TmpStr + ' -cqp ' + FloatToStr(QuantEdit.Value);
           2 .. 3:
             begin
-              TmpStr := TmpStr + ' -b:v ' + FloatToStr(BitrateEdit.Value) + '000';
+              TmpStr := TmpStr + ' -b:v ' +
+                FloatToStr(BitrateEdit.Value) + '000';
 
               // bitrate tolerance
               if BitrateTolBtn.Checked then
               begin
                 TmpStr := TmpStr + ' -bt ' +
-                  ReplaceStr(BitrateTolEdit.Text, ',', '.');
+                  FloatToStr(Round(100 * BitrateTolEdit.Value));
               end;
 
             end;
@@ -632,23 +649,23 @@ begin
 
           TmpStr := TmpStr + ' -s ' + WidthEdit.Text + 'x' + HeightEdit.Text;
 
-//          if CropBtn.Checked then
-//          begin
-//            TmpStr := TmpStr + '/crop:' + CropLeftEdit.Text + ',' +
-//              CropTopEdit.Text + ',' + CropRightEdit.Text + ',' +
-//              CropBottomEdit.Text;
-//          end;
+          // if CropBtn.Checked then
+          // begin
+          // TmpStr := TmpStr + '/crop:' + CropLeftEdit.Text + ',' +
+          // CropTopEdit.Text + ',' + CropRightEdit.Text + ',' +
+          // CropBottomEdit.Text;
+          // end;
 
         end
         else
         begin
 
-//          if CropBtn.Checked then
-//          begin
-//            TmpStr := TmpStr + ' --video-filter crop:' + CropLeftEdit.Text + ','
-//              + CropTopEdit.Text + ',' + CropRightEdit.Text + ',' +
-//              CropBottomEdit.Text;
-//          end;
+          // if CropBtn.Checked then
+          // begin
+          // TmpStr := TmpStr + ' --video-filter crop:' + CropLeftEdit.Text + ','
+          // + CropTopEdit.Text + ',' + CropRightEdit.Text + ',' +
+          // CropBottomEdit.Text;
+          // end;
 
         end;
 
@@ -663,11 +680,11 @@ begin
           Durations.Add(GetDuration(i));
           Durations.Add(GetDuration(i));
 
-          Infos.Add('Encoding video(ffmpeg)(1/2): ' + ExtractFileName(FileName) + ' (' +
-            FloatToStr(Index + 1) + '/' +
+          Infos.Add('Encoding video(ffmpeg)(1/2): ' + ExtractFileName(FileName)
+            + ' (' + FloatToStr(Index + 1) + '/' +
             FloatToStr(FileList.Items.Count) + ')');
-          Infos.Add('Encoding video(ffmpeg)(2/2): ' + ExtractFileName(FileName) + ' (' +
-            FloatToStr(Index + 1) + '/' +
+          Infos.Add('Encoding video(ffmpeg)(2/2): ' + ExtractFileName(FileName)
+            + ' (' + FloatToStr(Index + 1) + '/' +
             FloatToStr(FileList.Items.Count) + ')');
 
           ProcessTypeList.Add('14');
@@ -679,8 +696,8 @@ begin
           CommandLines.Add(TmpStr + ' "' + OutFileName + '"');
           Durations.Add(GetDuration(i));
 
-          Infos.Add('Encoding video(ffmpeg): ' + ExtractFileName(FileName) + ' (' +
-            FloatToStr(Index + 1) + '/' +
+          Infos.Add('Encoding video(ffmpeg): ' + ExtractFileName(FileName) +
+            ' (' + FloatToStr(Index + 1) + '/' +
             FloatToStr(FileList.Items.Count) + ')');
 
           ProcessTypeList.Add('14');
@@ -1127,6 +1144,14 @@ begin
 
 end;
 
+procedure TMainForm.AdvancedBtnClick(Sender: TObject);
+begin
+
+  Self.Enabled := False;
+  AdvancedOptionsForm.show;
+
+end;
+
 procedure TMainForm.AftenEncodeListChange(Sender: TObject);
 begin
 
@@ -1210,6 +1235,195 @@ begin
 
 end;
 
+function TMainForm.CreateAdvancedCommandLine: string;
+var
+  TmpStr: string;
+  Partition: string;
+begin
+
+  with AdvancedOptionsForm do
+  begin
+    // rate control
+    if FastFirstPassBtn.Checked then
+    begin
+      TmpStr := TmpStr + ' --slow-firstpass';
+    end;
+    if not MBTreeRCBtn.Checked then
+    begin
+      TmpStr := TmpStr + ' --no-mbtree';
+    end;
+    TmpStr := TmpStr + ' --rc-lookahead ' + FrameLookEdit.Text;
+
+    // motion estimation
+    case MEMethodList.ItemIndex of
+      0:
+        TmpStr := TmpStr + ' --me dia';
+      1:
+        TmpStr := TmpStr + ' --me hex';
+      2:
+        TmpStr := TmpStr + ' --me umh';
+      3:
+        TmpStr := TmpStr + ' --me esa';
+      4:
+        TmpStr := TmpStr + ' --me tesa';
+    end;
+    TmpStr := TmpStr + ' --subme ' + MESubpixelEdit.Text;
+    TmpStr := TmpStr + ' --merange ' + MEMaxsearhcRangeEdit.Text;
+    if not MeWeightBBtn.Checked then
+    begin
+      TmpStr := TmpStr + ' --no-weightb';
+    end;
+    case MEPredictModeList.ItemIndex of
+      0:
+        TmpStr := TmpStr + ' --direct none ';
+      1:
+        TmpStr := TmpStr + ' --direct spatial';
+      2:
+        TmpStr := TmpStr + ' --direct temporal';
+      3:
+        TmpStr := TmpStr + ' --direct auto';
+    end;
+    if MEConstrainedBtn.Checked then
+    begin
+      TmpStr := TmpStr + ' --constrained-intra';
+    end;
+    TmpStr := TmpStr + ' --weightp ' + FloatToStr(MeWeightPList.ItemIndex);
+
+    // partition
+    Partition := ' --partitions ';
+    if not Prediction1Btn.Checked then
+    begin
+      TmpStr := TmpStr + ' --no-8x8dct';
+    end;
+    if not Prediction2Btn.Checked then
+    begin
+      Partition := Partition + ' p8x8,';
+    end;
+    if not Prediction3Btn.Checked then
+    begin
+      Partition := Partition + 'b8x8,';
+    end;
+    if not Prediction4Btn.Checked then
+    begin
+      Partition := Partition + 'p4x4,';
+    end;
+    if not Prediction5Btn.Checked then
+    begin
+      Partition := Partition + 'i8x8,';
+    end;
+    if not Prediction6Btn.Checked then
+    begin
+      Partition := Partition + 'i4x4';
+    end;
+    TmpStr := TmpStr + ' ' + Partition;
+
+    // frame
+    if not FrameCABACBtn.Checked then
+    begin
+      TmpStr := TmpStr + ' --no-cabac';
+    end;
+    if FrameLoopBtn.Checked then
+    begin
+      TmpStr := TmpStr + ' --deblock ' + FrameLoopStrEdit.Text + ':' +
+        FrameLoopThrEdit.Text;
+    end;
+    if FrameOpenGOPBtn.Checked then
+    begin
+      case FrameGopList.ItemIndex of
+        0:
+          TmpStr := TmpStr + ' --opengop normal';
+        1:
+          TmpStr := TmpStr + ' --opengop bluray';
+      end;
+    end;
+    if FrameInterlacedBtn.Checked then
+    begin
+      case FrameInterlacedList.ItemIndex of
+        0:
+          TmpStr := TmpStr + ' --bff';
+        1:
+          TmpStr := TmpStr + ' --tff';
+        2:
+          TmpStr := TmpStr + ' --fake-interlaced';
+      end;
+    end;
+    TmpStr := TmpStr + ' --ref ' + FrameMaxRefEdit.Text;
+    TmpStr := TmpStr + ' --bframes ' + FrameMaxConBEdit.Text;
+    TmpStr := TmpStr + ' --b-bias ' + FrameBBiasEdit.Text;
+    TmpStr := TmpStr + ' --b-adapt ' + FloatToStr(FrameAdaptiveBList.ItemIndex);
+    case FrameRefList.ItemIndex of
+      0:
+        TmpStr := TmpStr + ' --b-pyramid none';
+      1:
+        TmpStr := TmpStr + ' --b-pyramid strict';
+      2:
+        TmpStr := TmpStr + ' --b-pyramid normal';
+    end;
+    // todo: I-frame stuff is not done!
+
+    // analysis
+    if not AnalysisMixedRefBtn.Checked then
+    begin
+      TmpStr := TmpStr + ' --no-mixed-refs';
+    end;
+    if not AnalysisChromaBtn.Checked then
+    begin
+      TmpStr := TmpStr + ' --no-chroma-me';
+    end;
+    if AnalysisTrellisBtn.Checked then
+    begin
+      TmpStr := TmpStr + ' --trellis ' +
+        FloatToStr(AnalysisTrellisList.ItemIndex);
+    end;
+    if not AnalysisFastSkipBtn.Checked then
+    begin
+      TmpStr := TmpStr + ' --no-fast-pskip';
+    end;
+    if not AnalysisDCTBtn.Checked then
+    begin
+      TmpStr := TmpStr + ' --no-dct-decimate';
+    end;
+    TmpStr := TmpStr + ' --psy-rd ' + ReplaceStr(AnalysisPRateEdit.Text, ',',
+      '.') + ':' + ReplaceStr(AnalysisPTrellistEdit.Text, ',', '.');
+    TmpStr := TmpStr + ' --nr ' + AnalysisNoiseEdit.Text;
+    TmpStr := TmpStr + ' --deadzone-intra ' + AnalysisLuma1Edit.Text;
+    TmpStr := TmpStr + ' --deadzone-inter ' + AnalysisLuma2Edit.Text;
+    case AnalysisMatrixList.ItemIndex of
+      0:
+        TmpStr := TmpStr + ' --cqm flat';
+      1:
+        TmpStr := TmpStr + ' --cqm jvt';
+    end;
+
+    // quantiser
+    TmpStr := TmpStr + ' --qpmin ' + MinQuantEdit.Text;
+    TmpStr := TmpStr + ' --qpmax ' + MaxQuantEdit.Text;
+    TmpStr := TmpStr + ' --qpstep ' + QauntStepEdit.Text;
+    TmpStr := TmpStr + ' --ipratio ' + ReplaceStr(IPQuantEdit.Text, ',', '.');
+    TmpStr := TmpStr + ' --pbratio ' + ReplaceStr(PBQuantEdit.Text, ',', '.');
+    TmpStr := TmpStr + ' --chroma-qp-offset ' + CLQuantEdit.Text;
+    TmpStr := TmpStr + ' --qcomp ' + ReplaceStr(QuantCurve1Edit.Text, ',', '.');
+    TmpStr := TmpStr + ' --cplxblur ' + ReplaceStr(QuantCurve2Edit.Text,
+      ',', '.');
+    TmpStr := TmpStr + ' --qblur ' + ReplaceStr(QuantCurve3Edit.Text, ',', '.');
+    TmpStr := TmpStr + ' --aq-mode ' + FloatToStr(VarianceAQList.ItemIndex);
+    TmpStr := TmpStr + ' --aq-strength ' + ReplaceStr(AdaptiveEdit.Text,
+      ',', '.');
+
+    // advanced
+    TmpStr := TmpStr + ' --vbv-maxrate ' + VBFMaxBitrateEdit.Text;
+    TmpStr := TmpStr + ' --vbv-bufsize ' + VBFBufferSizeEdit.Text;
+    TmpStr := TmpStr + ' --vbv-init ' + ReplaceStr(VBFInitialEdit.Text,
+      ',', '.');
+    TmpStr := TmpStr + ' --slices ' + Slice3Edit.Text;
+    TmpStr := TmpStr + ' --slice-max-size ' + Slice1Edit.Text;
+    TmpStr := TmpStr + ' --slice-max-mbs ' + Slice2Edit.Text;
+  end;
+
+  Result := TmpStr;
+
+end;
+
 procedure TMainForm.CropBtnClick(Sender: TObject);
 begin
 
@@ -1226,7 +1440,6 @@ var
   i: Integer;
 begin
 
-  LogForm.OutputList.Items.Add('');
   LogForm.OutputList.Items.Add('[' + DateTimeToStr(Now) + ']' +
     ' Started deleting temp files...');
 
@@ -1323,18 +1536,24 @@ begin
         CRFEdit.Enabled := true;
         QuantEdit.Enabled := False;
         BitrateEdit.Enabled := False;
+        BitrateTolBtn.Enabled := False;
+        BitrateTolEdit.Enabled := False;
       end;
     1:
       begin
         CRFEdit.Enabled := False;
         QuantEdit.Enabled := true;
         BitrateEdit.Enabled := False;
+        BitrateTolBtn.Enabled := False;
+        BitrateTolEdit.Enabled := False;
       end;
     2 .. 3:
       begin
         CRFEdit.Enabled := False;
         QuantEdit.Enabled := False;
         BitrateEdit.Enabled := true;
+        BitrateTolBtn.Enabled := true;
+        BitrateTolEdit.Enabled := true;
       end;
   end;
 
@@ -1839,7 +2058,7 @@ begin
       try
         // Open a file in complete mode
         MediaInfo_Open(MediaInfoHandle, PwideChar(FileName));
-        MediaInfo_Option(0, 'Complete', '1');
+        MediaInfo_Option(0, 'Complete', '');
 
         InfoForm.InfoList.Items.Text :=
           string(MediaInfo_Inform(MediaInfoHandle, 0));
@@ -2129,6 +2348,8 @@ begin
         FloatToStr(SystemInfo.CPU.LogicalCore));
       CheckUpdateBtn.Checked := ReadBool('Settings', 'Update', true);
       NoNeroNotifyBtn.Checked := ReadBool('Settings', 'NeroCheck', False);
+      EncoderList.ItemIndex := ReadInteger('Settings', 'Encoder', 0);
+      UseAdvancedBtn.Checked := ReadBool('Settings', 'Advanced', False);
 
       LastDirectory := ReadString('Settings', 'LastDir', AppFolder);
     end;
@@ -2147,6 +2368,7 @@ begin
     AftenEncodeList.OnChange(Self);
     ThreadsBtn.OnClick(Self);
     SliceThreadsBtn.OnClick(Self);
+    UseAdvancedBtn.OnClick(Self);
   end;
 
 end;
@@ -2531,6 +2753,8 @@ begin
       WriteString('Settings', 'SliceThreadStr', SliceThreadsEdit.Text);
       WriteBool('Settings', 'Update', CheckUpdateBtn.Checked);
       WriteBool('Settings', 'NeroCheck', NoNeroNotifyBtn.Checked);
+      WriteInteger('Settings', 'Encoder', EncoderList.ItemIndex);
+      WriteBool('Settings', 'Advanced', UseAdvancedBtn.Checked);
 
       WriteString('Settings', 'LastDir', LastDirectory);
     end;
@@ -2551,6 +2775,7 @@ end;
 procedure TMainForm.StartBtnClick(Sender: TObject);
 var
   i: Integer;
+  AdvancedOptions: string;
 begin
 
   if FileList.Items.Count > 0 then
@@ -2580,12 +2805,18 @@ begin
         DeleteTempFiles();
         DisableUI;
 
+        // generate advanced options
+        if UseAdvancedBtn.Checked then
+        begin
+          AdvancedOptions := CreateAdvancedCommandLine;
+        end;
+
         for i := 0 to FileList.Items.Count - 1 do
         begin
           Application.ProcessMessages;
 
           // create and add command line to CommandLines
-          AddCommandLine(i);
+          AddCommandLine(i, AdvancedOptions);
         end;
 
         // add commandlines to the log
@@ -2765,6 +2996,22 @@ begin
 
 end;
 
+procedure TMainForm.UseAdvancedBtnClick(Sender: TObject);
+begin
+
+  if UseAdvancedBtn.Checked then
+  begin
+    GroupBox6.Enabled := False;
+    AdvancedBtn.Enabled := true;
+  end
+  else
+  begin
+    GroupBox6.Enabled := true;
+    AdvancedBtn.Enabled := False;
+  end;
+
+end;
+
 procedure TMainForm.VideoSizeListChange(Sender: TObject);
 begin
 
@@ -2922,15 +3169,14 @@ begin
     case StrToInt(ProcessTypeList[FileIndex]) of
       1:
         begin
-          Add('');
-          Add('[' + DateTimeToStr(Now) + ']' + ' Done video encoding with x264');
+          Add('[' + DateTimeToStr(Now) + ']' +
+            ' Done video encoding with x264');
           AddStrings(Process.ConsoleOutput);
           Add('');
           Process.ConsoleOutput.Clear;
         end;
       2:
         begin
-          Add('');
           Add('[' + DateTimeToStr(Now) + ']' + ' Done audio decoding ');
           AddStrings(Process.ConsoleOutput);
           Add('');
@@ -2938,7 +3184,6 @@ begin
         end;
       3:
         begin
-          Add('');
           Add('[' + DateTimeToStr(Now) + ']' + ' Done muxing to mkv ');
           AddStrings(Process.ConsoleOutput);
           Add('');
@@ -2946,7 +3191,6 @@ begin
         end;
       4:
         begin
-          Add('');
           Add('[' + DateTimeToStr(Now) + ']' + ' Done muxing to mp4 ');
           AddStrings(Process.ConsoleOutput);
           Add('');
@@ -2954,7 +3198,6 @@ begin
         end;
       5:
         begin
-          Add('');
           Add('[' + DateTimeToStr(Now) + ']' +
             ' Done extracting subtitle from mkv ');
           AddStrings(Process.ConsoleOutput);
@@ -2963,7 +3206,6 @@ begin
         end;
       6:
         begin
-          Add('');
           Add('[' + DateTimeToStr(Now) + ']' +
             ' Done audio encoding with faac ');
           AddStrings(Process.ConsoleOutput);
@@ -2972,7 +3214,6 @@ begin
         end;
       7:
         begin
-          Add('');
           Add('[' + DateTimeToStr(Now) + ']' +
             ' Done audio encoding with neroaac ');
           AddStrings(Process.ConsoleOutput);
@@ -2981,7 +3222,6 @@ begin
         end;
       8:
         begin
-          Add('');
           Add('[' + DateTimeToStr(Now) + ']' +
             ' Done audio encoding with qaac ');
           AddStrings(Process.ConsoleOutput);
@@ -2990,7 +3230,6 @@ begin
         end;
       9:
         begin
-          Add('');
           Add('[' + DateTimeToStr(Now) + ']' +
             ' Done extracting subtitle from mp4 ');
           AddStrings(Process.ConsoleOutput);
@@ -2999,7 +3238,6 @@ begin
         end;
       10:
         begin
-          Add('');
           Add('[' + DateTimeToStr(Now) + ']' +
             ' Done audio encoding with oggenc ');
           AddStrings(Process.ConsoleOutput);
@@ -3008,7 +3246,6 @@ begin
         end;
       11:
         begin
-          Add('');
           Add('[' + DateTimeToStr(Now) + ']' +
             ' Done audio encoding with aften ');
           AddStrings(Process.ConsoleOutput);
@@ -3017,7 +3254,6 @@ begin
         end;
       12:
         begin
-          Add('');
           Add('[' + DateTimeToStr(Now) + ']' +
             ' Done extracting chapters from mkv ');
           AddStrings(Process.ConsoleOutput);
@@ -3030,7 +3266,6 @@ begin
         end;
       13:
         begin
-          Add('');
           Add('[' + DateTimeToStr(Now) + ']' +
             ' Done extracting chapters from mp4 ');
           AddStrings(Process.ConsoleOutput);
@@ -3039,8 +3274,8 @@ begin
         end;
       14:
         begin
-          Add('');
-          Add('[' + DateTimeToStr(Now) + ']' + ' Done video encoding with ffmpeg');
+          Add('[' + DateTimeToStr(Now) + ']' +
+            ' Done video encoding with ffmpeg');
           AddStrings(Process.ConsoleOutput);
           Add('');
           Process.ConsoleOutput.Clear;
@@ -3064,7 +3299,7 @@ begin
     // if encoding was something that required
     // duration info
     if (ProcessTypeList[FileIndex] = '2') or (ProcessTypeList[FileIndex] = '7')
-    or (ProcessTypeList[FileIndex] = '14') then
+      or (ProcessTypeList[FileIndex] = '14') then
     begin
       Inc(DurationIndex); // to next item in the list
 

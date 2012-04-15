@@ -54,10 +54,10 @@ object MainForm: TMainForm
   object LogsBtn: TButton
     Left = 63
     Top = 634
-    Width = 100
+    Width = 75
     Height = 25
     Anchors = [akLeft, akBottom]
-    Caption = 'Console outputs'
+    Caption = 'Logs/Outputs'
     TabOrder = 2
     OnClick = LogsBtnClick
   end
@@ -102,7 +102,6 @@ object MainForm: TMainForm
       Style = lbOwnerDrawFixed
       TabOrder = 1
       OnDrawItem = FileListDrawItem
-      ExplicitHeight = 205
     end
     object RemoveAllBtn: TButton
       Left = 452
@@ -251,7 +250,6 @@ object MainForm: TMainForm
     TabOrder = 6
     object TabSheet1: TTabSheet
       Caption = 'General'
-      ExplicitHeight = 174
       object Panel1: TPanel
         Left = 0
         Top = 0
@@ -262,7 +260,6 @@ object MainForm: TMainForm
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
-        ExplicitHeight = 174
         DesignSize = (
           566
           202)
@@ -279,15 +276,19 @@ object MainForm: TMainForm
           Top = 178
           Width = 43
           Height = 13
+          Anchors = [akRight, akBottom]
           Caption = 'Encoder:'
         end
         object GroupBox4: TGroupBox
           Left = 4
           Top = 3
           Width = 320
-          Height = 110
+          Height = 141
           Caption = 'Rate Control'
           TabOrder = 0
+          DesignSize = (
+            320
+            141)
           object Label1: TLabel
             Left = 47
             Top = 82
@@ -310,8 +311,8 @@ object MainForm: TMainForm
             Caption = 'Encoding Method:'
           end
           object Label4: TLabel
-            Left = 222
-            Top = 55
+            Left = 74
+            Top = 109
             Width = 24
             Height = 13
             Caption = 'CRF:'
@@ -323,6 +324,7 @@ object MainForm: TMainForm
             Height = 21
             CheckOptions = [coCheckOnChange, coCropBeyondLimit]
             CheckMinValue = True
+            Alignment = taCenter
             ButtonKind = bkClassic
             Value = 386.000000000000000000
             TabOrder = 0
@@ -355,6 +357,7 @@ object MainForm: TMainForm
             Width = 53
             Height = 21
             CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+            Alignment = taCenter
             ButtonKind = bkClassic
             MaxValue = 51.000000000000000000
             Value = 21.000000000000000000
@@ -362,16 +365,45 @@ object MainForm: TMainForm
             TabOrder = 2
           end
           object CRFEdit: TJvSpinEdit
-            Left = 252
-            Top = 51
+            Left = 104
+            Top = 105
             Width = 53
             Height = 21
             CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+            Alignment = taCenter
             ButtonKind = bkClassic
             MaxValue = 51.000000000000000000
             Value = 21.000000000000000000
             Enabled = False
             TabOrder = 3
+          end
+          object BitrateTolBtn: TCheckBox
+            Left = 179
+            Top = 53
+            Width = 70
+            Height = 17
+            Anchors = [akRight, akBottom]
+            Caption = 'Tolerance:'
+            Checked = True
+            State = cbChecked
+            TabOrder = 4
+            OnClick = BitrateTolBtnClick
+          end
+          object BitrateTolEdit: TJvSpinEdit
+            Left = 255
+            Top = 51
+            Width = 50
+            Height = 21
+            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+            Alignment = taCenter
+            ButtonKind = bkClassic
+            Increment = 0.010000000000000000
+            MaxValue = 1.000000000000000000
+            ValueType = vtFloat
+            Value = 0.010000000000000000
+            Enabled = False
+            Anchors = [akRight, akBottom]
+            TabOrder = 5
           end
         end
         object GroupBox6: TGroupBox
@@ -380,7 +412,7 @@ object MainForm: TMainForm
           Width = 217
           Height = 110
           Anchors = [akTop, akRight]
-          Caption = 'Presets'
+          Caption = 'Simple Options'
           TabOrder = 1
           DesignSize = (
             217
@@ -471,8 +503,8 @@ object MainForm: TMainForm
           end
         end
         object ConstantFPSBtn: TCheckBox
-          Left = 12
-          Top = 122
+          Left = 259
+          Top = 177
           Width = 113
           Height = 17
           Anchors = [akLeft, akBottom]
@@ -480,33 +512,6 @@ object MainForm: TMainForm
           Checked = True
           State = cbChecked
           TabOrder = 2
-        end
-        object BitrateTolBtn: TCheckBox
-          Left = 376
-          Top = 122
-          Width = 100
-          Height = 17
-          Anchors = [akRight, akBottom]
-          Caption = 'Bitrate tolerance:'
-          Checked = True
-          State = cbChecked
-          TabOrder = 3
-          OnClick = BitrateTolBtnClick
-        end
-        object BitrateTolEdit: TJvSpinEdit
-          Left = 482
-          Top = 120
-          Width = 70
-          Height = 21
-          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-          Alignment = taCenter
-          ButtonKind = bkClassic
-          MaxValue = 1.000000000000000000
-          ValueType = vtFloat
-          Value = 0.010000000000000000
-          Enabled = False
-          Anchors = [akRight, akBottom]
-          TabOrder = 4
         end
         object ContainerList: TComboBox
           Left = 482
@@ -516,7 +521,7 @@ object MainForm: TMainForm
           Style = csDropDownList
           Anchors = [akRight, akBottom]
           ItemIndex = 0
-          TabOrder = 5
+          TabOrder = 3
           Text = 'MKV'
           Items.Strings = (
             'MKV'
@@ -531,7 +536,7 @@ object MainForm: TMainForm
           Caption = 'Copy subtitle to destination from mkv/mp4'
           Checked = True
           State = cbChecked
-          TabOrder = 6
+          TabOrder = 4
         end
         object CopyChapertBtn: TCheckBox
           Left = 12
@@ -540,7 +545,7 @@ object MainForm: TMainForm
           Height = 17
           Anchors = [akLeft, akBottom]
           Caption = 'Copy chapter info from source'
-          TabOrder = 7
+          TabOrder = 5
         end
         object EncoderList: TComboBox
           Left = 482
@@ -549,19 +554,39 @@ object MainForm: TMainForm
           Height = 21
           Style = csDropDownList
           Anchors = [akRight, akBottom]
-          ItemIndex = 1
-          TabOrder = 8
-          Text = 'FFMpeg'
+          ItemIndex = 0
+          TabOrder = 6
+          Text = 'x264'
           Items.Strings = (
             'x264'
             'FFMpeg')
+        end
+        object UseAdvancedBtn: TCheckBox
+          Left = 344
+          Top = 120
+          Width = 102
+          Height = 17
+          Anchors = [akRight, akBottom]
+          Caption = 'Advanced options'
+          TabOrder = 7
+          OnClick = UseAdvancedBtnClick
+        end
+        object AdvancedBtn: TButton
+          Left = 452
+          Top = 116
+          Width = 105
+          Height = 25
+          Anchors = [akRight, akBottom]
+          Caption = 'Advanced Options'
+          Enabled = False
+          TabOrder = 8
+          OnClick = AdvancedBtnClick
         end
       end
     end
     object TabSheet2: TTabSheet
       Caption = 'Filters'
       ImageIndex = 1
-      ExplicitHeight = 174
       object Panel2: TPanel
         Left = 0
         Top = 0
@@ -572,7 +597,6 @@ object MainForm: TMainForm
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
-        ExplicitHeight = 174
         object Label11: TLabel
           Left = 391
           Top = 93
@@ -636,6 +660,7 @@ object MainForm: TMainForm
           Height = 21
           CheckOptions = [coCheckOnExit, coCropBeyondLimit]
           CheckMinValue = True
+          Alignment = taCenter
           ButtonKind = bkClassic
           Enabled = False
           TabOrder = 0
@@ -656,6 +681,7 @@ object MainForm: TMainForm
           Height = 21
           CheckOptions = [coCheckOnExit, coCropBeyondLimit]
           CheckMinValue = True
+          Alignment = taCenter
           ButtonKind = bkClassic
           Enabled = False
           TabOrder = 2
@@ -667,6 +693,7 @@ object MainForm: TMainForm
           Height = 21
           CheckOptions = [coCheckOnExit, coCropBeyondLimit]
           CheckMinValue = True
+          Alignment = taCenter
           ButtonKind = bkClassic
           Enabled = False
           TabOrder = 3
@@ -678,6 +705,7 @@ object MainForm: TMainForm
           Height = 21
           CheckOptions = [coCheckOnExit, coCropBeyondLimit]
           CheckMinValue = True
+          Alignment = taCenter
           ButtonKind = bkClassic
           Enabled = False
           TabOrder = 4
@@ -689,6 +717,7 @@ object MainForm: TMainForm
           Height = 21
           CheckOptions = [coCheckOnExit, coCropBeyondLimit]
           CheckMinValue = True
+          Alignment = taCenter
           ButtonKind = bkClassic
           Value = 240.000000000000000000
           TabOrder = 5
@@ -764,6 +793,7 @@ object MainForm: TMainForm
           Height = 21
           CheckOptions = [coCheckOnExit, coCropBeyondLimit]
           CheckMinValue = True
+          Alignment = taCenter
           ButtonKind = bkClassic
           Value = 320.000000000000000000
           TabOrder = 9
@@ -773,7 +803,6 @@ object MainForm: TMainForm
     object TabSheet3: TTabSheet
       Caption = 'Audio'
       ImageIndex = 2
-      ExplicitHeight = 174
       object Panel8: TPanel
         Left = 0
         Top = 0
@@ -784,7 +813,6 @@ object MainForm: TMainForm
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
-        ExplicitHeight = 174
         object Label18: TLabel
           Left = 3
           Top = 154
@@ -860,6 +888,7 @@ object MainForm: TMainForm
                 Width = 50
                 Height = 21
                 CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+                Alignment = taCenter
                 ButtonKind = bkClassic
                 MaxValue = 500.000000000000000000
                 MinValue = 10.000000000000000000
@@ -872,6 +901,7 @@ object MainForm: TMainForm
                 Width = 50
                 Height = 21
                 CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+                Alignment = taCenter
                 ButtonKind = bkClassic
                 MaxValue = 600.000000000000000000
                 MinValue = 24.000000000000000000
@@ -942,6 +972,7 @@ object MainForm: TMainForm
                 Width = 50
                 Height = 21
                 CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+                Alignment = taCenter
                 ButtonKind = bkClassic
                 MaxValue = 1.000000000000000000
                 ValueType = vtFloat
@@ -954,6 +985,7 @@ object MainForm: TMainForm
                 Width = 50
                 Height = 21
                 CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+                Alignment = taCenter
                 ButtonKind = bkClassic
                 MaxValue = 600.000000000000000000
                 MinValue = 24.000000000000000000
@@ -1054,6 +1086,7 @@ object MainForm: TMainForm
                 Width = 50
                 Height = 21
                 CheckMinValue = True
+                Alignment = taCenter
                 ButtonKind = bkClassic
                 Value = 80.000000000000000000
                 TabOrder = 2
@@ -1063,6 +1096,7 @@ object MainForm: TMainForm
                 Top = 35
                 Width = 50
                 Height = 21
+                Alignment = taCenter
                 ButtonKind = bkClassic
                 MaxValue = 127.000000000000000000
                 Value = 64.000000000000000000
@@ -1133,6 +1167,7 @@ object MainForm: TMainForm
                 Top = 35
                 Width = 50
                 Height = 21
+                Alignment = taCenter
                 ButtonKind = bkClassic
                 MaxValue = 1023.000000000000000000
                 Value = 240.000000000000000000
@@ -1145,6 +1180,7 @@ object MainForm: TMainForm
                 Width = 50
                 Height = 21
                 CheckMinValue = True
+                Alignment = taCenter
                 ButtonKind = bkClassic
                 Value = 96.000000000000000000
                 TabOrder = 2
@@ -1204,6 +1240,7 @@ object MainForm: TMainForm
                 Top = 35
                 Width = 50
                 Height = 21
+                Alignment = taCenter
                 ButtonKind = bkClassic
                 MaxValue = 10.000000000000000000
                 MinValue = -2.000000000000000000
@@ -1216,6 +1253,7 @@ object MainForm: TMainForm
                 Width = 50
                 Height = 21
                 CheckMinValue = True
+                Alignment = taCenter
                 ButtonKind = bkClassic
                 Value = 80.000000000000000000
                 TabOrder = 2
@@ -1269,7 +1307,6 @@ object MainForm: TMainForm
     object TabSheet4: TTabSheet
       Caption = 'Custom Options'
       ImageIndex = 3
-      ExplicitHeight = 174
       object Panel4: TPanel
         Left = 0
         Top = 0
@@ -1280,7 +1317,6 @@ object MainForm: TMainForm
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
-        ExplicitHeight = 174
         DesignSize = (
           566
           202)
@@ -1371,7 +1407,6 @@ object MainForm: TMainForm
     object TabSheet5: TTabSheet
       Caption = 'Other Options'
       ImageIndex = 4
-      ExplicitHeight = 174
       object Panel5: TPanel
         Left = 0
         Top = 0
@@ -1382,7 +1417,6 @@ object MainForm: TMainForm
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
-        ExplicitHeight = 174
         object GroupBox1: TGroupBox
           Left = 4
           Top = 3
@@ -1413,6 +1447,7 @@ object MainForm: TMainForm
             Top = 24
             Width = 50
             Height = 21
+            Alignment = taCenter
             ButtonKind = bkClassic
             MaxValue = 128.000000000000000000
             MinValue = 1.000000000000000000
@@ -1425,6 +1460,7 @@ object MainForm: TMainForm
             Top = 51
             Width = 50
             Height = 21
+            Alignment = taCenter
             ButtonKind = bkClassic
             MaxValue = 128.000000000000000000
             MinValue = 1.000000000000000000

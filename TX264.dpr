@@ -14,7 +14,8 @@ uses
   UnitInfo in 'Forms\UnitInfo.pas' {InfoForm} ,
   UnitAbout in 'Forms\UnitAbout.pas' {AboutForm} ,
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  UnitAdvancedOptions in 'Forms\UnitAdvancedOptions.pas' {AdvancedOptionsForm};
 
 {$R *.res}
 
@@ -27,6 +28,7 @@ begin
   Application.CreateForm(TLogForm, LogForm);
   Application.CreateForm(TInfoForm, InfoForm);
   Application.CreateForm(TAboutForm, AboutForm);
+  Application.CreateForm(TAdvancedOptionsForm, AdvancedOptionsForm);
   Application.Run;
 
 end.
