@@ -83,9 +83,9 @@
 			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-			<VerInfo_Build>475</VerInfo_Build>
-			<VerInfo_PreRelease>true</VerInfo_PreRelease>
-			<VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=0.1.0.475;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+			<VerInfo_MinorVer>3</VerInfo_MinorVer>
+			<VerInfo_Build>624</VerInfo_Build>
+			<VerInfo_Keys>CompanyName=ozok;FileDescription=TX264 - x264 GUI;FileVersion=0.3.0.624;InternalName=tx264;LegalCopyright=2012 ozok;LegalTrademarks=ozok;OriginalFilename=TX264.exe;ProductName=tx264;ProductVersion=1.0.0.0;Comments=tx264</VerInfo_Keys>
 			<VerInfo_Locale>1033</VerInfo_Locale>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -145,7 +145,7 @@
 						<VersionInfo Name="MajorVer">0</VersionInfo>
 						<VersionInfo Name="MinorVer">1</VersionInfo>
 						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">484</VersionInfo>
+						<VersionInfo Name="Build">540</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -157,7 +157,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName"/>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">0.1.0.484</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">0.1.0.540</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName"/>
 						<VersionInfoKeys Name="LegalCopyright"/>
 						<VersionInfoKeys Name="LegalTrademarks"/>

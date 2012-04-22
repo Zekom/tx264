@@ -3,8 +3,10 @@ object MainForm: TMainForm
   Top = 0
   Caption = 'TX264'
   ClientHeight = 667
-  ClientWidth = 590
+  ClientWidth = 589
   Color = 13946053
+  Constraints.MinHeight = 705
+  Constraints.MinWidth = 605
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,7 +20,7 @@ object MainForm: TMainForm
   OnDestroy = FormDestroy
   OnShow = FormShow
   DesignSize = (
-    590
+    589
     667)
   PixelsPerInch = 96
   TextHeight = 13
@@ -31,7 +33,7 @@ object MainForm: TMainForm
     Caption = 'Output folder:'
   end
   object StartBtn: TButton
-    Left = 482
+    Left = 481
     Top = 634
     Width = 100
     Height = 25
@@ -39,9 +41,10 @@ object MainForm: TMainForm
     Caption = 'Start'
     TabOrder = 0
     OnClick = StartBtnClick
+    ExplicitLeft = 482
   end
   object StopBtn: TButton
-    Left = 376
+    Left = 375
     Top = 634
     Width = 100
     Height = 25
@@ -50,6 +53,7 @@ object MainForm: TMainForm
     Enabled = False
     TabOrder = 1
     OnClick = StopBtnClick
+    ExplicitLeft = 376
   end
   object LogsBtn: TButton
     Left = 63
@@ -64,16 +68,17 @@ object MainForm: TMainForm
   object GroupBox2: TGroupBox
     Left = 8
     Top = 8
-    Width = 574
+    Width = 573
     Height = 233
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'Files and Paths'
     TabOrder = 3
+    ExplicitWidth = 574
     DesignSize = (
-      574
+      573
       233)
     object DownBtn: TButton
-      Left = 344
+      Left = 343
       Top = 16
       Width = 50
       Height = 25
@@ -81,11 +86,12 @@ object MainForm: TMainForm
       Caption = 'Down'
       TabOrder = 0
       OnClick = DownBtnClick
+      ExplicitLeft = 344
     end
     object FileList: TJvListBox
       Left = 12
       Top = 47
-      Width = 550
+      Width = 549
       Height = 177
       Anchors = [akLeft, akTop, akRight, akBottom]
       Color = clWhite
@@ -102,9 +108,10 @@ object MainForm: TMainForm
       Style = lbOwnerDrawFixed
       TabOrder = 1
       OnDrawItem = FileListDrawItem
+      ExplicitWidth = 550
     end
     object RemoveAllBtn: TButton
-      Left = 452
+      Left = 451
       Top = 16
       Width = 50
       Height = 25
@@ -112,9 +119,10 @@ object MainForm: TMainForm
       Caption = 'Clear'
       TabOrder = 2
       OnClick = RemoveAllBtnClick
+      ExplicitLeft = 452
     end
     object RemoveBtn: TButton
-      Left = 400
+      Left = 399
       Top = 16
       Width = 50
       Height = 25
@@ -122,9 +130,10 @@ object MainForm: TMainForm
       Caption = 'Remove'
       TabOrder = 3
       OnClick = RemoveBtnClick
+      ExplicitLeft = 400
     end
     object UpBtn: TButton
-      Left = 288
+      Left = 287
       Top = 16
       Width = 50
       Height = 25
@@ -132,6 +141,7 @@ object MainForm: TMainForm
       Caption = 'Up'
       TabOrder = 4
       OnClick = UpBtnClick
+      ExplicitLeft = 288
     end
     object AddBtn: TButton
       Left = 12
@@ -143,7 +153,7 @@ object MainForm: TMainForm
       OnClick = AddBtnClick
     end
     object InfoBtn: TButton
-      Left = 512
+      Left = 511
       Top = 16
       Width = 50
       Height = 25
@@ -151,21 +161,23 @@ object MainForm: TMainForm
       Caption = 'Info'
       TabOrder = 6
       OnClick = InfoBtnClick
+      ExplicitLeft = 512
     end
   end
   object GroupBox3: TGroupBox
     Left = 8
     Top = 510
-    Width = 574
+    Width = 573
     Height = 118
     Anchors = [akLeft, akRight, akBottom]
     Caption = 'Progress'
     TabOrder = 4
+    ExplicitWidth = 574
     DesignSize = (
-      574
+      573
       118)
     object TotalProgressLabel: TLabel
-      Left = 519
+      Left = 518
       Top = 23
       Width = 37
       Height = 13
@@ -173,9 +185,10 @@ object MainForm: TMainForm
       Anchors = [akRight, akBottom]
       AutoSize = False
       Caption = '0%'
+      ExplicitLeft = 519
     end
     object CurrentProgressLabel: TLabel
-      Left = 519
+      Left = 518
       Top = 42
       Width = 37
       Height = 13
@@ -183,11 +196,12 @@ object MainForm: TMainForm
       Anchors = [akRight, akBottom]
       AutoSize = False
       Caption = '0%'
+      ExplicitLeft = 519
     end
     object ConsoleOutputEdit: TEdit
       Left = 12
       Top = 61
-      Width = 548
+      Width = 547
       Height = 21
       Alignment = taCenter
       Anchors = [akLeft, akRight, akBottom]
@@ -201,32 +215,36 @@ object MainForm: TMainForm
       ParentFont = False
       ReadOnly = True
       TabOrder = 0
+      ExplicitWidth = 548
     end
     object InfoEdit: TEdit
       Left = 12
       Top = 88
-      Width = 548
+      Width = 547
       Height = 21
       Alignment = taCenter
       Anchors = [akLeft, akRight, akBottom]
       Enabled = False
       TabOrder = 1
+      ExplicitWidth = 548
     end
     object TotalProgressBar: TProgressBar
       Left = 12
       Top = 23
-      Width = 501
+      Width = 500
       Height = 13
       Anchors = [akLeft, akRight, akBottom]
       TabOrder = 2
+      ExplicitWidth = 501
     end
     object CurrentProgressBar: TProgressBar
       Left = 12
       Top = 42
-      Width = 501
+      Width = 500
       Height = 13
       Anchors = [akLeft, akRight, akBottom]
       TabOrder = 3
+      ExplicitWidth = 501
     end
   end
   object AboutBtn: TButton
@@ -242,42 +260,47 @@ object MainForm: TMainForm
   object PageControl: TPageControl
     Left = 8
     Top = 247
-    Width = 574
+    Width = 573
     Height = 230
     ActivePage = TabSheet1
     Anchors = [akLeft, akRight, akBottom]
     MultiLine = True
     TabOrder = 6
+    ExplicitWidth = 574
     object TabSheet1: TTabSheet
       Caption = 'General'
+      ExplicitWidth = 566
       object Panel1: TPanel
         Left = 0
         Top = 0
-        Width = 566
+        Width = 565
         Height = 202
         Align = alClient
         BevelOuter = bvNone
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
+        ExplicitWidth = 566
         DesignSize = (
-          566
+          565
           202)
         object Label21: TLabel
-          Left = 425
+          Left = 424
           Top = 151
           Width = 51
           Height = 13
           Anchors = [akRight, akBottom]
           Caption = 'Container:'
+          ExplicitLeft = 425
         end
         object Label43: TLabel
-          Left = 433
+          Left = 432
           Top = 178
           Width = 43
           Height = 13
           Anchors = [akRight, akBottom]
           Caption = 'Encoder:'
+          ExplicitLeft = 433
         end
         object GroupBox4: TGroupBox
           Left = 4
@@ -407,13 +430,14 @@ object MainForm: TMainForm
           end
         end
         object GroupBox6: TGroupBox
-          Left = 344
+          Left = 343
           Top = 3
           Width = 217
           Height = 110
           Anchors = [akTop, akRight]
           Caption = 'Simple Options'
           TabOrder = 1
+          ExplicitLeft = 344
           DesignSize = (
             217
             110)
@@ -514,7 +538,7 @@ object MainForm: TMainForm
           TabOrder = 2
         end
         object ContainerList: TComboBox
-          Left = 482
+          Left = 481
           Top = 147
           Width = 70
           Height = 21
@@ -526,14 +550,15 @@ object MainForm: TMainForm
           Items.Strings = (
             'MKV'
             'MP4')
+          ExplicitLeft = 482
         end
         object SubtitleBtn: TCheckBox
           Left = 12
           Top = 150
-          Width = 229
+          Width = 241
           Height = 17
           Anchors = [akLeft, akBottom]
-          Caption = 'Copy subtitle to destination from mkv/mp4'
+          Caption = 'Mux subtitles to output mkv/mp4 from source'
           Checked = True
           State = cbChecked
           TabOrder = 4
@@ -548,7 +573,7 @@ object MainForm: TMainForm
           TabOrder = 5
         end
         object EncoderList: TComboBox
-          Left = 482
+          Left = 481
           Top = 174
           Width = 70
           Height = 21
@@ -560,9 +585,10 @@ object MainForm: TMainForm
           Items.Strings = (
             'x264'
             'FFMpeg')
+          ExplicitLeft = 482
         end
         object UseAdvancedBtn: TCheckBox
-          Left = 344
+          Left = 343
           Top = 120
           Width = 102
           Height = 17
@@ -570,9 +596,10 @@ object MainForm: TMainForm
           Caption = 'Advanced options'
           TabOrder = 7
           OnClick = UseAdvancedBtnClick
+          ExplicitLeft = 344
         end
         object AdvancedBtn: TButton
-          Left = 452
+          Left = 451
           Top = 116
           Width = 105
           Height = 25
@@ -581,22 +608,25 @@ object MainForm: TMainForm
           Enabled = False
           TabOrder = 8
           OnClick = AdvancedBtnClick
+          ExplicitLeft = 452
         end
       end
     end
     object TabSheet2: TTabSheet
       Caption = 'Filters'
       ImageIndex = 1
+      ExplicitWidth = 566
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 566
+        Width = 565
         Height = 202
         Align = alClient
         BevelOuter = bvNone
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
+        ExplicitWidth = 566
         object Label11: TLabel
           Left = 391
           Top = 93
@@ -803,16 +833,18 @@ object MainForm: TMainForm
     object TabSheet3: TTabSheet
       Caption = 'Audio'
       ImageIndex = 2
+      ExplicitWidth = 566
       object Panel8: TPanel
         Left = 0
         Top = 0
-        Width = 566
+        Width = 565
         Height = 202
         Align = alClient
         BevelOuter = bvNone
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
+        ExplicitWidth = 566
         object Label18: TLabel
           Left = 3
           Top = 154
@@ -1307,18 +1339,20 @@ object MainForm: TMainForm
     object TabSheet4: TTabSheet
       Caption = 'Custom Options'
       ImageIndex = 3
+      ExplicitWidth = 566
       object Panel4: TPanel
         Left = 0
         Top = 0
-        Width = 566
+        Width = 565
         Height = 202
         Align = alClient
         BevelOuter = bvNone
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
+        ExplicitWidth = 566
         DesignSize = (
-          566
+          565
           202)
         object Label22: TLabel
           Left = 42
@@ -1365,58 +1399,65 @@ object MainForm: TMainForm
         object CustomVideoOptionsEdit: TEdit
           Left = 98
           Top = 8
-          Width = 459
+          Width = 458
           Height = 21
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 0
+          ExplicitWidth = 459
         end
         object CustomAudioOptionsEdit: TEdit
           Left = 98
           Top = 35
-          Width = 459
+          Width = 458
           Height = 21
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 1
+          ExplicitWidth = 459
         end
         object CustomMKVEdit: TEdit
           Left = 98
           Top = 62
-          Width = 459
+          Width = 458
           Height = 21
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 2
+          ExplicitWidth = 459
         end
         object CustomMP4Edit: TEdit
           Left = 98
           Top = 89
-          Width = 459
+          Width = 458
           Height = 21
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 3
+          ExplicitWidth = 459
         end
         object CustomMKVExtractEdit: TEdit
           Left = 98
           Top = 116
-          Width = 459
+          Width = 458
           Height = 21
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 4
+          ExplicitWidth = 459
         end
       end
     end
     object TabSheet5: TTabSheet
       Caption = 'Other Options'
       ImageIndex = 4
+      ExplicitWidth = 566
       object Panel5: TPanel
         Left = 0
         Top = 0
-        Width = 566
+        Width = 565
         Height = 202
         Align = alClient
         BevelOuter = bvNone
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
+        ExplicitWidth = 566
         object GroupBox1: TGroupBox
           Left = 4
           Top = 3
@@ -1493,7 +1534,7 @@ object MainForm: TMainForm
   object DirectoryEdit: TJvDirectoryEdit
     Left = 83
     Top = 483
-    Width = 443
+    Width = 442
     Height = 21
     DialogKind = dkWin32
     BevelOuter = bvNone
@@ -1502,9 +1543,10 @@ object MainForm: TMainForm
     Anchors = [akLeft, akRight, akBottom]
     TabOrder = 7
     Text = 'C:\'
+    ExplicitWidth = 443
   end
   object OutputBtn: TButton
-    Left = 532
+    Left = 531
     Top = 483
     Width = 50
     Height = 21
@@ -1512,6 +1554,7 @@ object MainForm: TMainForm
     Caption = 'Open'
     TabOrder = 8
     OnClick = OutputBtnClick
+    ExplicitLeft = 532
   end
   object XPManifest1: TXPManifest
     Left = 176
