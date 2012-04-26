@@ -175,6 +175,14 @@ type
     Label43: TLabel;
     UseAdvancedBtn: TCheckBox;
     AdvancedBtn: TButton;
+    FullLogBtn: TCheckBox;
+    TabSheet10: TTabSheet;
+    Panel11: TPanel;
+    GroupBox5: TGroupBox;
+    SplittingMethodList: TComboBox;
+    Label44: TLabel;
+    SplitEdit: TJvSpinEdit;
+    SplittingBtn: TCheckBox;
     procedure AddFiles1Click(Sender: TObject);
     procedure AddFolder1Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
@@ -219,13 +227,14 @@ type
     procedure AftenEncodeListChange(Sender: TObject);
     procedure UseAdvancedBtnClick(Sender: TObject);
     procedure AdvancedBtnClick(Sender: TObject);
+    procedure SplittingBtnClick(Sender: TObject);
   private
     { Private declarations }
     CommandLines: TStringList;
     ProcessTypeList: TStringList;
     { 1=x264, 2=ffmpeg, 3=mkv, 4=mp4box, 5=mkvextract, 6=faac, 7=neroaac, 8=qaac,
       9=mp4box_extract, 10=oggenc, 11=aften, 12=mkvextract-chapter, 13=mp4box-chapter,
-      14=ffmpeg-encoding }
+      14=ffmpeg-encoding, 15=enhAacPlusEnc }
     Durations: TStringList;
     Infos: TStringList;
     FilesToDelete: TStringList;
@@ -292,6 +301,8 @@ type
     // finds external subtitles
     procedure GetExternalSubtitles(Index: Integer);
 
+    function IntToTime(IntTime: Integer):string;
+
     // save/load options
     procedure LoadOptions();
     procedure SaveOptions();
@@ -304,7 +315,7 @@ type
   end;
 
 const
-  BuildInt = 624;
+  BuildInt = 703;
 
 var
   MainForm: TMainForm;
@@ -351,6 +362,7 @@ var
   ChapterOutName: string;
   i, j: Integer;
   Tmp: string;
+  SplittingStr: string;
 begin
 
   // paths and files
@@ -523,11 +535,11 @@ begin
             ChangeFileExt(OutFileName, '.stats') + '" --output "' + OutFileName
             + '" "' + FileName + '"');
 
-          Infos.Add('Encoding video(1/2): ' + ExtractFileName(FileName) + ' (' +
-            FloatToStr(Index + 1) + '/' +
+          Infos.Add('Encoding video(x264)(1/2): ' + ExtractFileName(FileName) +
+            ' (' + FloatToStr(Index + 1) + '/' +
             FloatToStr(FileList.Items.Count) + ')');
-          Infos.Add('Encoding video(2/2): ' + ExtractFileName(FileName) + ' (' +
-            FloatToStr(Index + 1) + '/' +
+          Infos.Add('Encoding video(x264)(2/2): ' + ExtractFileName(FileName) +
+            ' (' + FloatToStr(Index + 1) + '/' +
             FloatToStr(FileList.Items.Count) + ')');
 
           ProcessTypeList.Add('1');
@@ -539,8 +551,8 @@ begin
           CommandLines.Add(TmpStr + ' --output "' + OutFileName + '" "' +
             FileName + '"');
 
-          Infos.Add('Encoding video: ' + ExtractFileName(FileName) + ' (' +
-            FloatToStr(Index + 1) + '/' +
+          Infos.Add('Encoding video(x264): ' + ExtractFileName(FileName) + ' ('
+            + FloatToStr(Index + 1) + '/' +
             FloatToStr(FileList.Items.Count) + ')');
 
           ProcessTypeList.Add('1');
@@ -659,28 +671,28 @@ begin
         end;
 
         // filters
-        if ResizeBtn.Checked then
+        if CropBtn.Checked then
         begin
 
-          TmpStr := TmpStr + ' -s ' + WidthEdit.Text + 'x' + HeightEdit.Text;
+          TmpStr := TmpStr + ' -vf crop=' + CropLeftEdit.Text + ':' +
+            CropRightEdit.Text + ':' + CropTopEdit.Text + ':' +
+            CropBottomEdit.Text;
 
-          // if CropBtn.Checked then
-          // begin
-          // TmpStr := TmpStr + '/crop:' + CropLeftEdit.Text + ',' +
-          // CropTopEdit.Text + ',' + CropRightEdit.Text + ',' +
-          // CropBottomEdit.Text;
-          // end;
+          if ResizeBtn.Checked then
+          begin
+            TmpStr := TmpStr + ',scale=' + WidthEdit.Text + ':' +
+              HeightEdit.Text;
+          end;
 
         end
         else
         begin
 
-          // if CropBtn.Checked then
-          // begin
-          // TmpStr := TmpStr + ' --video-filter crop:' + CropLeftEdit.Text + ','
-          // + CropTopEdit.Text + ',' + CropRightEdit.Text + ',' +
-          // CropBottomEdit.Text;
-          // end;
+          if ResizeBtn.Checked then
+          begin
+            TmpStr := TmpStr + ' -vf scale=' + WidthEdit.Text + ':' +
+              HeightEdit.Text;
+          end;
 
         end;
 
@@ -1045,14 +1057,14 @@ begin
             // mp4 source
 
             // output to the file directory.
-            OutSubName := ChangeFileExt(FileName, '_' + FloatToStr(StrToInt(SubtitleID) + 1) + '_text.' +
+            OutSubName := ChangeFileExt(FileName,
+              '_' + FloatToStr(StrToInt(SubtitleID) + 1) + '_text.' +
               GetSubtitleKind(index, i - 1));
 
             // mp4 source
             // this requires to extract each subtitle stream seperately
-            CommandLines.Add(' -srt ' +
-              FloatToStr(StrToInt(SubtitleID) + 1) + ' "' + FileName + '"' + ' ' +
-              CustomMP4Edit.Text);
+            CommandLines.Add(' -srt ' + FloatToStr(StrToInt(SubtitleID) + 1) +
+              ' "' + FileName + '"' + ' ' + CustomMP4Edit.Text);
             Infos.Add('Extracting subtitle: ' + ExtractFileName(FileName) + ' ('
               + FloatToStr(Index + 1) + '/' +
               FloatToStr(FileList.Items.Count) + ')');
@@ -1166,6 +1178,49 @@ begin
 
   end;
 
+  // splitting
+  if SplittingBtn.Checked then
+  begin
+
+    case ContainerList.ItemIndex of
+      0: // mkv
+        begin
+
+          case SplittingMethodList.ItemIndex of
+            0: // time
+              begin
+                SplittingStr := ' --split ' + IntToTime(Round(SplitEdit.Value)) + ' ';
+              end;
+            1: // size
+              begin
+                SplittingStr := ' --split ' + SplitEdit.Text + 'm ';
+              end;
+          end;
+
+        end;
+      1: // mp4
+        begin
+
+          case SplittingMethodList.ItemIndex of
+            0: // time
+              begin
+                SplittingStr := ' -split ' + SplitEdit.Text;
+              end;
+            1: // size
+              begin
+                SplittingStr := ' -split-size ' + FloatToStr(Round(1024 * SplitEdit.Value));
+              end;
+          end;
+
+        end;
+    end;
+
+  end
+  else
+  begin
+    SplittingStr := '';
+  end;
+
   // muxer
   MuxerStr := '';
 
@@ -1182,13 +1237,13 @@ begin
         // with subtitle
         if subtitleMergeCMD <> '' then
         begin
-          MuxerStr := MuxerStr + ' -o "' + OutMuxerFile + '" ' +
+          MuxerStr := MuxerStr + SplittingStr + ' -o "' + OutMuxerFile + '" ' +
             subtitleMergeCMD + ' "' + OutFileName + '" "' + OutAudioFile + '"';
         end
         else
         begin
           // without subtitle
-          MuxerStr := MuxerStr + ' -o "' + OutMuxerFile + '" "' + OutFileName +
+          MuxerStr := MuxerStr + SplittingStr + ' -o "' + OutMuxerFile + '" "' + OutFileName +
             '" "' + OutAudioFile + '"';
         end;
 
@@ -1209,15 +1264,16 @@ begin
         // with subtitle
         if subtitleMergeCMD <> '' then
         begin
-          MuxerStr := MuxerStr + ' -add "' + OutFileName + '#video" -add "' +
+          MuxerStr := MuxerStr + SplittingStr + ' -add "' + OutFileName + '#video" -add "' +
             OutAudioFile + '#audio" ' + subtitleMergeCMD + ' -new "' +
             OutMuxerFile + '"';
         end
         else
         begin
           // without subtitle
-          MuxerStr := MuxerStr + ' -add "' + OutFileName + '#video" -add "' +
-            OutAudioFile + '#audio" -new "' + OutMuxerFile + '"';
+          MuxerStr := MuxerStr + SplittingStr + ' -add "' + OutFileName + '#video:fps=' +
+            GetFPS(Index) + '" -add "' + OutAudioFile + '#audio" -new "' +
+            OutMuxerFile + '"';
         end;
 
         CommandLines.Add(MuxerStr + ' ' + CustomMP4Edit.Text);
@@ -1898,30 +1954,31 @@ procedure TMainForm.EncodeModeListChange(Sender: TObject);
 begin
 
   case EncodeModeList.ItemIndex of
-    0:
+    0: // crf
       begin
         CRFEdit.Enabled := true;
         QuantEdit.Enabled := False;
         BitrateEdit.Enabled := False;
         BitrateTolBtn.Enabled := False;
+        BitrateTolEdit.Enabled := False;
       end;
-    1:
+    1: // cq
       begin
         CRFEdit.Enabled := False;
         QuantEdit.Enabled := true;
         BitrateEdit.Enabled := False;
         BitrateTolBtn.Enabled := False;
+        BitrateTolEdit.Enabled := False;
       end;
-    2 .. 3:
+    2 .. 3: // bitrate
       begin
         CRFEdit.Enabled := False;
         QuantEdit.Enabled := False;
-        BitrateEdit.Enabled := true;
         BitrateTolBtn.Enabled := true;
+        BitrateTolBtn.OnClick(Self);
       end;
   end;
 
-  BitrateTolBtn.OnClick(Self);
 end;
 
 procedure TMainForm.FAACEncodeListChange(Sender: TObject);
@@ -2634,6 +2691,59 @@ begin
 
 end;
 
+function TMainForm.IntToTime(IntTime: Integer): string;
+var
+  hour: Integer;
+  second: Integer;
+  minute: Integer;
+  strhour: string;
+  strminute: string;
+  strsecond: String;
+begin
+
+  if (Time > 0) then
+  begin
+
+    hour := IntTime div 3600;
+    minute := (IntTime div 60) - (hour * 60);
+    second := (IntTime mod 60);
+
+    if (second < 10) then
+    begin
+      strsecond := '0' + FloatToStr(second);
+    end
+    else
+    begin
+      strsecond := FloatToStr(second);
+    end;
+
+    if (minute < 10) then
+    begin
+      strminute := '0' + FloatToStr(minute);
+    end
+    else
+    begin
+      strminute := FloatToStr(minute);
+    end;
+
+    if (hour < 10) then
+    begin
+      strhour := '0' + FloatToStr(hour);
+    end
+    else
+    begin
+      strhour := FloatToStr(hour);
+    end;
+
+    Result := strhour + ':' + strminute + ':' + strsecond;
+  end
+  else
+  begin
+    Result := '00:00:00';
+  end;
+
+end;
+
 function TMainForm.IsStringNumeric(Str: string): Boolean;
 var
   p: PChar;
@@ -2694,7 +2804,7 @@ begin
       ResizeBtn.Checked := ReadBool('Settings', 'Resize', False);
       WidthEdit.Text := ReadString('Settings', 'Width', '320');
       HeightEdit.Text := ReadString('Settings', 'Height', '240');
-      VideoSizeList.ItemIndex := ReadInteger('Settings', 'SizeList', 4);
+      VideoSizeList.ItemIndex := ReadInteger('Settings', 'SizeList', 3);
       ResizeMethodList.ItemIndex := ReadInteger('Settings', 'ResizeMethod', 0);
 
       CropBtn.Checked := ReadBool('Settings', 'Crop', False);
@@ -2748,6 +2858,11 @@ begin
       NoNeroNotifyBtn.Checked := ReadBool('Settings', 'NeroCheck', False);
       EncoderList.ItemIndex := ReadInteger('Settings', 'Encoder', 0);
       UseAdvancedBtn.Checked := ReadBool('Settings', 'Advanced', False);
+      FullLogBtn.Checked := ReadBool('Settings', 'FullLog', False);
+
+      SplittingMethodList.ItemIndex := ReadInteger('Settings', 'SplitM', 1);
+      SplitEdit.Text := ReadString('Settings', 'SplitE', '1');
+      SplittingBtn.Checked := ReadBool('Settings', 'SplitB', False);
 
       LastDirectory := ReadString('Settings', 'LastDir', AppFolder);
     end;
@@ -2767,6 +2882,7 @@ begin
     ThreadsBtn.OnClick(Self);
     SliceThreadsBtn.OnClick(Self);
     UseAdvancedBtn.OnClick(Self);
+    SplittingBtn.OnClick(self);
   end;
 
 end;
@@ -3153,6 +3269,11 @@ begin
       WriteBool('Settings', 'NeroCheck', NoNeroNotifyBtn.Checked);
       WriteInteger('Settings', 'Encoder', EncoderList.ItemIndex);
       WriteBool('Settings', 'Advanced', UseAdvancedBtn.Checked);
+      WriteBool('Settings', 'FullLog', FullLogBtn.Checked);
+
+      WriteInteger('Settings', 'SplitM', SplittingMethodList.ItemIndex);
+      WriteString('Settings', 'SplitE', SplitEdit.Text);
+      WriteBool('Settings', 'SplitB', SplittingBtn.Checked);
 
       WriteString('Settings', 'LastDir', LastDirectory);
     end;
@@ -3167,6 +3288,14 @@ procedure TMainForm.SliceThreadsBtnClick(Sender: TObject);
 begin
 
   SliceThreadsEdit.Enabled := SliceThreadsBtn.Checked;
+
+end;
+
+procedure TMainForm.SplittingBtnClick(Sender: TObject);
+begin
+
+  SplittingMethodList.Enabled := SplittingBtn.Checked;
+  SplitEdit.Enabled := SplittingBtn.Checked;
 
 end;
 
@@ -3206,7 +3335,7 @@ begin
         // generate advanced options
         if UseAdvancedBtn.Checked then
         begin
-          AdvancedOptions := CreateAdvancedCommandLine;
+          AdvancedOptions := CreateAdvancedCommandLine();
         end;
 
         for i := 0 to FileList.Items.Count - 1 do
@@ -3553,6 +3682,11 @@ procedure TMainForm.ProcessRead(Sender: TObject; const S: string;
   const StartsOnNewLine: Boolean);
 begin
 
+  if FullLogBtn.Checked then
+  begin
+    LogForm.FullOutputList.Items.Add(S);
+  end;
+
   ConsoleOutputEdit.Text := Trim(S);
 
 end;
@@ -3561,6 +3695,10 @@ procedure TMainForm.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
 begin
 
   // add to log
+  if FullLogBtn.Checked then
+  begin
+    LogForm.FullOutputList.Items.Add('');
+  end;
   with LogForm.OutputList.Items do
   begin
     case StrToInt(ProcessTypeList[FileIndex]) of
@@ -3673,6 +3811,14 @@ begin
         begin
           Add('[' + DateTimeToStr(Now) + ']' +
             ' Done video encoding with ffmpeg');
+          AddStrings(Process.ConsoleOutput);
+          Add('');
+          Process.ConsoleOutput.Clear;
+        end;
+      15:
+        begin
+          Add('[' + DateTimeToStr(Now) + ']' +
+            ' Done audio encoding with EnhAACPlusEnc');
           AddStrings(Process.ConsoleOutput);
           Add('');
           Process.ConsoleOutput.Clear;

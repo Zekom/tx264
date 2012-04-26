@@ -41,7 +41,6 @@ object MainForm: TMainForm
     Caption = 'Start'
     TabOrder = 0
     OnClick = StartBtnClick
-    ExplicitLeft = 482
   end
   object StopBtn: TButton
     Left = 375
@@ -53,7 +52,6 @@ object MainForm: TMainForm
     Enabled = False
     TabOrder = 1
     OnClick = StopBtnClick
-    ExplicitLeft = 376
   end
   object LogsBtn: TButton
     Left = 63
@@ -73,12 +71,11 @@ object MainForm: TMainForm
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'Files and Paths'
     TabOrder = 3
-    ExplicitWidth = 574
     DesignSize = (
       573
       233)
     object DownBtn: TButton
-      Left = 343
+      Left = 339
       Top = 16
       Width = 50
       Height = 25
@@ -86,7 +83,6 @@ object MainForm: TMainForm
       Caption = 'Down'
       TabOrder = 0
       OnClick = DownBtnClick
-      ExplicitLeft = 344
     end
     object FileList: TJvListBox
       Left = 12
@@ -108,7 +104,6 @@ object MainForm: TMainForm
       Style = lbOwnerDrawFixed
       TabOrder = 1
       OnDrawItem = FileListDrawItem
-      ExplicitWidth = 550
     end
     object RemoveAllBtn: TButton
       Left = 451
@@ -119,10 +114,9 @@ object MainForm: TMainForm
       Caption = 'Clear'
       TabOrder = 2
       OnClick = RemoveAllBtnClick
-      ExplicitLeft = 452
     end
     object RemoveBtn: TButton
-      Left = 399
+      Left = 395
       Top = 16
       Width = 50
       Height = 25
@@ -130,10 +124,9 @@ object MainForm: TMainForm
       Caption = 'Remove'
       TabOrder = 3
       OnClick = RemoveBtnClick
-      ExplicitLeft = 400
     end
     object UpBtn: TButton
-      Left = 287
+      Left = 283
       Top = 16
       Width = 50
       Height = 25
@@ -141,7 +134,6 @@ object MainForm: TMainForm
       Caption = 'Up'
       TabOrder = 4
       OnClick = UpBtnClick
-      ExplicitLeft = 288
     end
     object AddBtn: TButton
       Left = 12
@@ -161,7 +153,6 @@ object MainForm: TMainForm
       Caption = 'Info'
       TabOrder = 6
       OnClick = InfoBtnClick
-      ExplicitLeft = 512
     end
   end
   object GroupBox3: TGroupBox
@@ -172,7 +163,6 @@ object MainForm: TMainForm
     Anchors = [akLeft, akRight, akBottom]
     Caption = 'Progress'
     TabOrder = 4
-    ExplicitWidth = 574
     DesignSize = (
       573
       118)
@@ -215,7 +205,6 @@ object MainForm: TMainForm
       ParentFont = False
       ReadOnly = True
       TabOrder = 0
-      ExplicitWidth = 548
     end
     object InfoEdit: TEdit
       Left = 12
@@ -226,7 +215,6 @@ object MainForm: TMainForm
       Anchors = [akLeft, akRight, akBottom]
       Enabled = False
       TabOrder = 1
-      ExplicitWidth = 548
     end
     object TotalProgressBar: TProgressBar
       Left = 12
@@ -235,7 +223,6 @@ object MainForm: TMainForm
       Height = 13
       Anchors = [akLeft, akRight, akBottom]
       TabOrder = 2
-      ExplicitWidth = 501
     end
     object CurrentProgressBar: TProgressBar
       Left = 12
@@ -244,7 +231,6 @@ object MainForm: TMainForm
       Height = 13
       Anchors = [akLeft, akRight, akBottom]
       TabOrder = 3
-      ExplicitWidth = 501
     end
   end
   object AboutBtn: TButton
@@ -266,10 +252,8 @@ object MainForm: TMainForm
     Anchors = [akLeft, akRight, akBottom]
     MultiLine = True
     TabOrder = 6
-    ExplicitWidth = 574
     object TabSheet1: TTabSheet
       Caption = 'General'
-      ExplicitWidth = 566
       object Panel1: TPanel
         Left = 0
         Top = 0
@@ -280,7 +264,6 @@ object MainForm: TMainForm
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
-        ExplicitWidth = 566
         DesignSize = (
           565
           202)
@@ -437,7 +420,6 @@ object MainForm: TMainForm
           Anchors = [akTop, akRight]
           Caption = 'Simple Options'
           TabOrder = 1
-          ExplicitLeft = 344
           DesignSize = (
             217
             110)
@@ -550,7 +532,6 @@ object MainForm: TMainForm
           Items.Strings = (
             'MKV'
             'MP4')
-          ExplicitLeft = 482
         end
         object SubtitleBtn: TCheckBox
           Left = 12
@@ -585,7 +566,6 @@ object MainForm: TMainForm
           Items.Strings = (
             'x264'
             'FFMpeg')
-          ExplicitLeft = 482
         end
         object UseAdvancedBtn: TCheckBox
           Left = 343
@@ -596,7 +576,6 @@ object MainForm: TMainForm
           Caption = 'Advanced options'
           TabOrder = 7
           OnClick = UseAdvancedBtnClick
-          ExplicitLeft = 344
         end
         object AdvancedBtn: TButton
           Left = 451
@@ -608,14 +587,12 @@ object MainForm: TMainForm
           Enabled = False
           TabOrder = 8
           OnClick = AdvancedBtnClick
-          ExplicitLeft = 452
         end
       end
     end
     object TabSheet2: TTabSheet
       Caption = 'Filters'
       ImageIndex = 1
-      ExplicitWidth = 566
       object Panel2: TPanel
         Left = 0
         Top = 0
@@ -626,20 +603,19 @@ object MainForm: TMainForm
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
-        ExplicitWidth = 566
         object Label11: TLabel
-          Left = 391
+          Left = 377
           Top = 93
-          Width = 38
+          Width = 55
           Height = 13
-          Caption = 'Bottom:'
+          Caption = 'Bottom (y):'
         end
         object Label12: TLabel
-          Left = 338
+          Left = 324
           Top = 66
-          Width = 23
+          Width = 42
           Height = 13
-          Caption = 'Left:'
+          Caption = 'Left (w):'
         end
         object Label28: TLabel
           Left = 54
@@ -670,18 +646,18 @@ object MainForm: TMainForm
           Caption = 'Resize method:'
         end
         object Label8: TLabel
-          Left = 407
+          Left = 394
           Top = 39
-          Width = 22
+          Width = 39
           Height = 13
-          Caption = 'Top:'
+          Caption = 'Top (x):'
         end
         object Label9: TLabel
-          Left = 469
+          Left = 455
           Top = 66
-          Width = 29
+          Width = 46
           Height = 13
-          Caption = 'Right:'
+          Caption = 'Right (h):'
         end
         object CropBottomEdit: TJvSpinEdit
           Left = 435
@@ -811,7 +787,7 @@ object MainForm: TMainForm
             '640x480'
             '720x480'
             '720x576'
-            '1080720'
+            '1080x720'
             '1280x720'
             '1440x1080'
             '1920x1080')
@@ -833,7 +809,6 @@ object MainForm: TMainForm
     object TabSheet3: TTabSheet
       Caption = 'Audio'
       ImageIndex = 2
-      ExplicitWidth = 566
       object Panel8: TPanel
         Left = 0
         Top = 0
@@ -844,7 +819,6 @@ object MainForm: TMainForm
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
-        ExplicitWidth = 566
         object Label18: TLabel
           Left = 3
           Top = 154
@@ -1339,7 +1313,6 @@ object MainForm: TMainForm
     object TabSheet4: TTabSheet
       Caption = 'Custom Options'
       ImageIndex = 3
-      ExplicitWidth = 566
       object Panel4: TPanel
         Left = 0
         Top = 0
@@ -1350,7 +1323,6 @@ object MainForm: TMainForm
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
-        ExplicitWidth = 566
         DesignSize = (
           565
           202)
@@ -1403,7 +1375,6 @@ object MainForm: TMainForm
           Height = 21
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 0
-          ExplicitWidth = 459
         end
         object CustomAudioOptionsEdit: TEdit
           Left = 98
@@ -1412,7 +1383,6 @@ object MainForm: TMainForm
           Height = 21
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 1
-          ExplicitWidth = 459
         end
         object CustomMKVEdit: TEdit
           Left = 98
@@ -1421,7 +1391,6 @@ object MainForm: TMainForm
           Height = 21
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 2
-          ExplicitWidth = 459
         end
         object CustomMP4Edit: TEdit
           Left = 98
@@ -1430,7 +1399,6 @@ object MainForm: TMainForm
           Height = 21
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 3
-          ExplicitWidth = 459
         end
         object CustomMKVExtractEdit: TEdit
           Left = 98
@@ -1439,14 +1407,79 @@ object MainForm: TMainForm
           Height = 21
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 4
-          ExplicitWidth = 459
+        end
+      end
+    end
+    object TabSheet10: TTabSheet
+      Caption = 'Splitting'
+      ImageIndex = 5
+      object Panel11: TPanel
+        Left = 0
+        Top = 0
+        Width = 565
+        Height = 202
+        Align = alClient
+        BevelOuter = bvNone
+        Color = 13946053
+        ParentBackground = False
+        TabOrder = 0
+        object GroupBox5: TGroupBox
+          Left = 4
+          Top = 3
+          Width = 277
+          Height = 86
+          Caption = 'Splitting'
+          TabOrder = 0
+          object Label44: TLabel
+            Left = 17
+            Top = 51
+            Width = 82
+            Height = 13
+            Caption = 'Split according to'
+          end
+          object SplittingMethodList: TComboBox
+            Left = 105
+            Top = 47
+            Width = 75
+            Height = 21
+            Style = csDropDownList
+            Enabled = False
+            ItemIndex = 1
+            TabOrder = 0
+            Text = 'Size (mb):'
+            Items.Strings = (
+              'Time (sec):'
+              'Size (mb):')
+          end
+          object SplitEdit: TJvSpinEdit
+            Left = 186
+            Top = 47
+            Width = 75
+            Height = 21
+            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+            CheckMaxValue = False
+            Alignment = taCenter
+            ButtonKind = bkClassic
+            MinValue = 1.000000000000000000
+            Value = 1.000000000000000000
+            Enabled = False
+            TabOrder = 1
+          end
+          object SplittingBtn: TCheckBox
+            Left = 17
+            Top = 24
+            Width = 120
+            Height = 17
+            Caption = 'Enable splitting'
+            TabOrder = 2
+            OnClick = SplittingBtnClick
+          end
         end
       end
     end
     object TabSheet5: TTabSheet
       Caption = 'Other Options'
       ImageIndex = 4
-      ExplicitWidth = 566
       object Panel5: TPanel
         Left = 0
         Top = 0
@@ -1457,7 +1490,6 @@ object MainForm: TMainForm
         Color = 13946053
         ParentBackground = False
         TabOrder = 0
-        ExplicitWidth = 566
         object GroupBox1: TGroupBox
           Left = 4
           Top = 3
@@ -1528,6 +1560,14 @@ object MainForm: TMainForm
           Caption = 'Do not warn me if neroaacenc is not present'
           TabOrder = 2
         end
+        object FullLogBtn: TCheckBox
+          Left = 11
+          Top = 141
+          Width = 222
+          Height = 17
+          Caption = 'Also keep all the outputs of backends'
+          TabOrder = 3
+        end
       end
     end
   end
@@ -1543,7 +1583,6 @@ object MainForm: TMainForm
     Anchors = [akLeft, akRight, akBottom]
     TabOrder = 7
     Text = 'C:\'
-    ExplicitWidth = 443
   end
   object OutputBtn: TButton
     Left = 531
@@ -1554,7 +1593,6 @@ object MainForm: TMainForm
     Caption = 'Open'
     TabOrder = 8
     OnClick = OutputBtnClick
-    ExplicitLeft = 532
   end
   object XPManifest1: TXPManifest
     Left = 176
@@ -1573,7 +1611,9 @@ object MainForm: TMainForm
     end
   end
   object OpenDialog: TOpenDialog
-    Filter = 'Supported|*.mp4;*.mkv;*.avi;*.mov;*.m4v;*.mpeg;*.mpg;*.flv'
+    Filter = 
+      'Supported|*.mp4;*.mkv;*.avi;*.mov;*.m4v;*.mpeg;*.mpg;*.flv|All F' +
+      'iles|*.*'
     Options = [ofHideReadOnly, ofAllowMultiSelect, ofEnableSizing]
     Left = 328
     Top = 88

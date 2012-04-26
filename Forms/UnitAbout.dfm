@@ -401,6 +401,7 @@ object AboutForm: TAboutForm
     BevelOuter = bvNone
     BorderStyle = bsNone
     Color = 13946053
+    Enabled = False
     Lines.Strings = (
       'x264.exe'
       'ffmpeg.exe'
@@ -415,7 +416,6 @@ object AboutForm: TAboutForm
       'aften.exe')
     ReadOnly = True
     TabOrder = 0
-    ExplicitHeight = 150
   end
   object CloseBtn: TButton
     Left = 255
@@ -426,7 +426,6 @@ object AboutForm: TAboutForm
     Caption = 'Close'
     TabOrder = 1
     OnClick = CloseBtnClick
-    ExplicitTop = 307
   end
   object HomepageBtn: TButton
     Left = 8
@@ -437,6 +436,5 @@ object AboutForm: TAboutForm
     Caption = 'Homepage'
     TabOrder = 2
     OnClick = HomepageBtnClick
-    ExplicitTop = 307
   end
 end

@@ -20,19 +20,6 @@ object LogForm: TLogForm
     575)
   PixelsPerInch = 96
   TextHeight = 13
-  object OutputList: TJvListBox
-    Left = 8
-    Top = 8
-    Width = 809
-    Height = 528
-    Anchors = [akLeft, akTop, akRight, akBottom]
-    Background.FillMode = bfmTile
-    Background.Visible = False
-    Style = lbOwnerDrawFixed
-    TabOrder = 0
-    OnDrawItem = OutputListDrawItem
-    OnAddString = OutputListAddString
-  end
   object SaveBtn: TButton
     Left = 8
     Top = 542
@@ -40,18 +27,8 @@ object LogForm: TLogForm
     Height = 25
     Anchors = [akLeft, akBottom]
     Caption = 'Save'
-    TabOrder = 1
+    TabOrder = 0
     OnClick = SaveBtnClick
-  end
-  object ClearBtn: TButton
-    Left = 64
-    Top = 542
-    Width = 50
-    Height = 25
-    Anchors = [akLeft, akBottom]
-    Caption = 'Clear'
-    TabOrder = 2
-    OnClick = ClearBtnClick
   end
   object CloseBtn: TButton
     Left = 767
@@ -60,14 +37,65 @@ object LogForm: TLogForm
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Close'
-    TabOrder = 3
+    TabOrder = 1
     OnClick = CloseBtnClick
+  end
+  object PageControl1: TPageControl
+    Left = 8
+    Top = 8
+    Width = 809
+    Height = 528
+    ActivePage = TabSheet1
+    TabOrder = 2
+    object TabSheet1: TTabSheet
+      Caption = 'Normal Log'
+      object OutputList: TJvListBox
+        Left = 0
+        Top = 0
+        Width = 801
+        Height = 500
+        Align = alClient
+        Background.FillMode = bfmTile
+        Background.Visible = False
+        Style = lbOwnerDrawFixed
+        TabOrder = 0
+        OnDrawItem = OutputListDrawItem
+        OnAddString = OutputListAddString
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Full Output'
+      ImageIndex = 1
+      object FullOutputList: TJvListBox
+        Left = 0
+        Top = 0
+        Width = 801
+        Height = 500
+        Align = alClient
+        Background.FillMode = bfmTile
+        Background.Visible = False
+        Style = lbOwnerDrawVariable
+        TabOrder = 0
+        OnDrawItem = FullOutputListDrawItem
+        OnChange = FullOutputListChange
+      end
+    end
+  end
+  object ClearBtn: TButton
+    Left = 64
+    Top = 542
+    Width = 50
+    Height = 25
+    Anchors = [akLeft, akBottom]
+    Caption = 'Clear'
+    TabOrder = 3
+    OnClick = ClearBtnClick
   end
   object SaveDialog1: TSaveDialog
     FileName = 'TX264.txt'
     Filter = 'Text files|*.txt'
     Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
-    Left = 224
-    Top = 480
+    Left = 624
+    Top = 448
   end
 end
