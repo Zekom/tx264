@@ -4,23 +4,25 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls;
+  Dialogs, StdCtrls, sSkinProvider, sListBox, Vcl.Buttons, sBitBtn, Vcl.ComCtrls;
 
 type
   TInfoForm = class(TForm)
-    CloseBtn: TButton;
-    InfoList: TListBox;
+    CloseBtn: TsBitBtn;
     SaveDialog1: TSaveDialog;
-    SaveBtn: TButton;
+    SaveBtn: TsBitBtn;
+    sSkinProvider1: TsSkinProvider;
+    InfoList: TListView;
     procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SaveBtnClick(Sender: TObject);
-    procedure InfoListDrawItem(Control: TWinControl; Index: Integer;
-      Rect: TRect; State: TOwnerDrawState);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
+    InfoTMP: TStringList;
   end;
 
 var
@@ -41,37 +43,21 @@ procedure TInfoForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 
   InfoList.Items.Clear;
+  InfoTMP.Clear;
 
 end;
 
-procedure TInfoForm.InfoListDrawItem(Control: TWinControl; Index: Integer;
-  Rect: TRect; State: TOwnerDrawState);
+procedure TInfoForm.FormCreate(Sender: TObject);
 begin
 
-  with Control as TListBox, Canvas do
-  begin
+  InfoTMP := TStringList.Create;
 
-    // item selected
-    if odSelected in State then
-    begin
+end;
 
-      Brush.Color := Self.Color;
-      Font.Color := clBlack;
-      FillRect(Rect);
-      TextOut(Rect.Left + 2, Rect.Top, Items[Index])
+procedure TInfoForm.FormDestroy(Sender: TObject);
+begin
 
-    end
-    else
-    begin
-      // item not selected
-      Brush.Color := (Control as TListBox).Color;
-      Font.Color := (Control as TListBox).Font.Color;
-      FillRect(Rect);
-      TextOut(Rect.Left + 2, Rect.Top, Items[Index])
-
-    end;
-
-  end;
+  FreeAndNil(InfoTMP);
 
 end;
 
@@ -83,7 +69,7 @@ begin
 
     if SaveDialog1.Execute then
     begin
-      InfoList.Items.SaveToFile(SaveDialog1.FileName);
+      InfoTMP.SaveToFile(SaveDialog1.FileName);
     end;
 
   end;

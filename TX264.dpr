@@ -15,7 +15,10 @@ uses
   UnitAbout in 'Forms\UnitAbout.pas' {AboutForm} ,
   Vcl.Themes,
   Vcl.Styles,
-  UnitAdvancedOptions in 'Forms\UnitAdvancedOptions.pas' {AdvancedOptionsForm};
+  UnitAdvancedOptions in 'Forms\UnitAdvancedOptions.pas' {AdvancedOptionsForm} ,
+  UnitUpdater in 'Forms\UnitUpdater.pas' {UpdaterForm} ,
+  UnitAvisFilters in 'Forms\UnitAvisFilters.pas' {AvisForm} ,
+  UnitSox in 'Forms\UnitSox.pas' {SoXForm};
 
 {$R *.res}
 
@@ -29,6 +32,9 @@ begin
   Application.CreateForm(TInfoForm, InfoForm);
   Application.CreateForm(TAboutForm, AboutForm);
   Application.CreateForm(TAdvancedOptionsForm, AdvancedOptionsForm);
+  Application.CreateForm(TUpdaterForm, UpdaterForm);
+  Application.CreateForm(TAvisForm, AvisForm);
+  Application.CreateForm(TSoXForm, SoXForm);
   Application.Run;
 
 end.
