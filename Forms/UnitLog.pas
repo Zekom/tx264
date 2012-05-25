@@ -25,6 +25,10 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure OutputListAddString(Sender: TObject; Item: string);
     procedure FullOutputListChange(Sender: TObject);
+    procedure OutputListDrawItem(Control: TWinControl; Index: Integer;
+      Rect: TRect; State: TOwnerDrawState);
+    procedure FullOutputListDrawItem(Control: TWinControl; Index: Integer;
+      Rect: TRect; State: TOwnerDrawState);
   private
     { Private declarations }
   public
@@ -97,10 +101,76 @@ begin
 
 end;
 
+procedure TLogForm.FullOutputListDrawItem(Control: TWinControl; Index: Integer;
+  Rect: TRect; State: TOwnerDrawState);
+begin
+
+  if (Control as TsListBox).Items.Count < 1 then
+    Exit;
+
+  with Control as TsListBox, Canvas do
+  begin
+
+    // item selected
+    if odSelected in State then
+    begin
+
+      Brush.Color := Self.Color;
+      Font.Color := clBlack;
+      FillRect(Rect);
+      TextOut(Rect.Left + 2, Rect.Top + 2, Items[Index])
+
+    end
+    else
+    begin
+      // item not selected
+      Brush.Color := (Control as TsListBox).Color;
+      Font.Color := (Control as TsListBox).Font.Color;
+      FillRect(Rect);
+      TextOut(Rect.Left + 2, Rect.Top + 2, Items[Index])
+    end;
+
+  end;
+
+end;
+
 procedure TLogForm.OutputListAddString(Sender: TObject; Item: string);
 begin
 
   OutputList.TopIndex := OutputList.Items.Count - 1;
+
+end;
+
+procedure TLogForm.OutputListDrawItem(Control: TWinControl; Index: Integer;
+  Rect: TRect; State: TOwnerDrawState);
+begin
+
+  if (Control as TsListBox).Items.Count < 1 then
+    Exit;
+
+  with Control as TsListBox, Canvas do
+  begin
+
+    // item selected
+    if odSelected in State then
+    begin
+
+      Brush.Color := Self.Color;
+      Font.Color := clBlack;
+      FillRect(Rect);
+      TextOut(Rect.Left + 2, Rect.Top + 2, Items[Index])
+
+    end
+    else
+    begin
+      // item not selected
+      Brush.Color := (Control as TsListBox).Color;
+      Font.Color := (Control as TsListBox).Font.Color;
+      FillRect(Rect);
+      TextOut(Rect.Left + 2, Rect.Top + 2, Items[Index])
+    end;
+
+  end;
 
 end;
 

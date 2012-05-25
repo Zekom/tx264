@@ -4,7 +4,7 @@ object MainForm: TMainForm
   Caption = 'TX264'
   ClientHeight = 601
   ClientWidth = 589
-  Color = clBtnFace
+  Color = 14870243
   Constraints.MinHeight = 659
   Constraints.MinWidth = 605
   DoubleBuffered = True
@@ -26,21 +26,6 @@ object MainForm: TMainForm
     601)
   PixelsPerInch = 96
   TextHeight = 13
-  object Label10: TsLabel
-    Left = 8
-    Top = 545
-    Width = 69
-    Height = 13
-    Anchors = [akLeft, akBottom]
-    Caption = 'Output folder:'
-    ParentFont = False
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ExplicitTop = 564
-  end
   object ProgressPanel: TsPanel
     Left = 0
     Top = 0
@@ -48,12 +33,9 @@ object MainForm: TMainForm
     Height = 601
     Align = alClient
     BevelOuter = bvNone
-    TabOrder = 0
+    TabOrder = 1
     Visible = False
     SkinData.SkinSection = 'CHECKBOX'
-    ExplicitLeft = -8
-    ExplicitTop = 8
-    ExplicitHeight = 537
     DesignSize = (
       589
       601)
@@ -123,7 +105,6 @@ object MainForm: TMainForm
       TabOrder = 0
       OnClick = StopBtnClick
       SkinData.SkinSection = 'BUTTON'
-      ExplicitTop = 504
     end
     object Log2Btn: TsBitBtn
       Left = 8
@@ -171,7 +152,6 @@ object MainForm: TMainForm
       TabOrder = 1
       OnClick = LogsBtnClick
       SkinData.SkinSection = 'BUTTON'
-      ExplicitTop = 504
     end
     object SummaryList: TsListBox
       Left = 8
@@ -193,7 +173,6 @@ object MainForm: TMainForm
       BoundLabel.MaxWidth = 0
       BoundLabel.UseSkinColor = True
       SkinData.SkinSection = 'EDIT'
-      ExplicitHeight = 378
     end
     object CommandEdit: TsEdit
       Left = 8
@@ -253,6 +232,81 @@ object MainForm: TMainForm
       BoundLabel.MaxWidth = 0
       BoundLabel.UseSkinColor = True
     end
+    object AddMoreBtn: TsBitBtn
+      Left = 114
+      Top = 568
+      Width = 125
+      Height = 25
+      Anchors = [akLeft, akBottom]
+      Caption = 'Add more files'
+      Glyph.Data = {
+        C6070000424DC607000000000000360000002800000016000000160000000100
+        2000000000009007000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000010000000200000003000000030000000200000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        000000000000000000000000000000000000000000000000000000000000A465
+        34CCA46534FFA46534FFA46534CC000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000000000000000000000000000000000300000000A46534FFEFE0D3FFE3C4
+        AAFFA46534FF0000000000000000000000010000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000A46534FFE7CBB5FFD29C6EFFA46534FF0000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        000000000000A46534FFE7CCB5FFD29D6FFFA46534FF00000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        000000000000000000000000000000000000000000000000000000000000A465
+        34FFE2C1A5FFD29E71FFA46534FF000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000A46534CCA46534FFA46534FFA46534FFA46534FFA46534FFE2C1A4FFD29E
+        71FFA46534FFA46534FFA46534FFA46534FFA46534FFA46534CC000000000000
+        0000000000000000000000000000000000000000000000000000A46534FFE5CC
+        B4FFDBB795FFDBB694FFDAB492FFDAB390FFD9B18DFFD9AF8AFFD9AD86FFD8AA
+        83FFD7A87FFFD7A67DFFE0BE9FFFA46534FF0000000000000000000000000000
+        000000000000000000000000000000000000A46534FFE8D3C0FFE7D1BBFFE7D1
+        BCFFE7D1BCFFE9D3BEFFE5CBB3FFE5CAB2FFE7D0BBFFE6CEB7FFE6CDB6FFE6CC
+        B5FFE6CCB6FFA46534FF00000000000000000000000000000000000000000000
+        00000000000000000000A46534CCA46534FFA46534FFA46534FFA46534FFA465
+        34FFE5CCB4FFE5CBB3FFA46534FFA46534FFA46534FFA46534FFA46534FFA465
+        34CC000000000000000000000000000000000000000000000000000000000000
+        00000000000000000000000000000000000000000000A46534FFE5CCB5FFE5CC
+        B3FFA46534FF0000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000A46534FFE5CCB5FFE5CCB4FFA46534FF0000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        000000000000A46534FFE5CCB5FFE5CCB4FFA46534FF00000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        000000000000000000000000000000000000000000000000000000000000A465
+        34FFE5CCB5FFE5CCB4FFA46534FF000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000000000000000000000000000000000000000000A46534CCA46534FFA465
+        34FFA46534CC0000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000000000000000000}
+      TabOrder = 7
+      OnClick = AddMoreBtnClick
+      SkinData.SkinSection = 'BUTTON'
+    end
   end
   object AboutBtn: TsBitBtn
     Left = 8
@@ -297,38 +351,35 @@ object MainForm: TMainForm
       BDFFC1A28CFD8D542CF6874A2078874A2002FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00874A2028874A2085874A20C5874A20F2874A20F2874A
       20C5874A2085874A2028FFFFFF00FFFFFF00FFFFFF00FFFFFF00}
-    TabOrder = 1
+    TabOrder = 2
     OnClick = AboutBtnClick
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 504
-  end
-  object DirectoryEdit: TJvDirectoryEdit
-    Left = 88
-    Top = 541
-    Width = 336
-    Height = 21
-    Hint = 'Select output directory'
-    DialogKind = dkWin32
-    BevelOuter = bvNone
-    ButtonFlat = True
-    Color = clWhite
-    Anchors = [akLeft, akRight, akBottom]
-    TabOrder = 2
-    Text = 'C:\'
-    ExplicitTop = 477
   end
   object GroupBox2: TGroupBox
     Left = 8
     Top = 8
     Width = 573
-    Height = 291
+    Height = 318
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'Files and Paths'
     TabOrder = 3
-    ExplicitHeight = 227
     DesignSize = (
       573
-      291)
+      318)
+    object Label10: TsLabel
+      Left = 13
+      Top = 292
+      Width = 69
+      Height = 13
+      Anchors = [akLeft, akBottom]
+      Caption = 'Output folder:'
+      ParentFont = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+    end
     object DownBtn: TsBitBtn
       Left = 8
       Top = 104
@@ -466,16 +517,17 @@ object MainForm: TMainForm
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000}
-      TabOrder = 0
+      TabOrder = 1
       OnClick = DownBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
     object FileList: TsListBox
       Left = 54
-      Top = 16
+      Top = 43
       Width = 507
-      Height = 266
+      Height = 239
       Hint = 'File list'
+      Style = lbOwnerDrawFixed
       Anchors = [akLeft, akTop, akRight, akBottom]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -486,7 +538,10 @@ object MainForm: TMainForm
       MultiSelect = True
       ParentFont = False
       PopupMenu = ListMenu
-      TabOrder = 1
+      TabOrder = 2
+      OnClick = FileListClick
+      OnDblClick = Play1Click
+      OnDrawItem = FileListDrawItem
       BoundLabel.Caption = 'FileList'
       BoundLabel.Indent = 0
       BoundLabel.Font.Charset = DEFAULT_CHARSET
@@ -637,7 +692,7 @@ object MainForm: TMainForm
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000}
-      TabOrder = 2
+      TabOrder = 3
       OnClick = RemoveAllBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
@@ -779,7 +834,7 @@ object MainForm: TMainForm
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000}
-      TabOrder = 3
+      TabOrder = 4
       OnClick = RemoveBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
@@ -920,7 +975,7 @@ object MainForm: TMainForm
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000}
-      TabOrder = 4
+      TabOrder = 5
       OnClick = UpBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
@@ -1061,7 +1116,7 @@ object MainForm: TMainForm
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000}
-      TabOrder = 5
+      TabOrder = 0
       OnClick = AddBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
@@ -1207,6 +1262,69 @@ object MainForm: TMainForm
       OnClick = InfoBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
+    object DirectoryEdit: TJvDirectoryEdit
+      Left = 88
+      Top = 288
+      Width = 319
+      Height = 21
+      Hint = 'Select output directory'
+      DialogKind = dkWin32
+      BevelOuter = bvNone
+      ButtonFlat = True
+      Color = clWhite
+      Anchors = [akLeft, akRight, akBottom]
+      TabOrder = 7
+      Text = 'C:\'
+    end
+    object OutputBtn: TsBitBtn
+      Left = 413
+      Top = 288
+      Width = 50
+      Height = 21
+      Hint = 'Open output directory'
+      Anchors = [akRight, akBottom]
+      Caption = 'Open'
+      TabOrder = 8
+      OnClick = OutputBtnClick
+      SkinData.SkinSection = 'BUTTON'
+    end
+    object SameAsSourceBtn: TsCheckBox
+      Left = 469
+      Top = 290
+      Width = 95
+      Height = 20
+      Hint = 'Make source directory as output directory'
+      Caption = 'Same as source'
+      Anchors = [akRight, akBottom]
+      TabOrder = 9
+      SkinData.SkinSection = 'CHECKBOX'
+      ImgChecked = 0
+      ImgUnchecked = 0
+    end
+    object AudioTrackList: TsComboBox
+      Left = 120
+      Top = 16
+      Width = 439
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      Alignment = taLeftJustify
+      BoundLabel.Active = True
+      BoundLabel.Caption = 'Audio track:'
+      BoundLabel.Indent = 0
+      BoundLabel.Font.Charset = DEFAULT_CHARSET
+      BoundLabel.Font.Color = clWindowText
+      BoundLabel.Font.Height = -11
+      BoundLabel.Font.Name = 'Tahoma'
+      BoundLabel.Font.Style = []
+      BoundLabel.Layout = sclLeft
+      BoundLabel.MaxWidth = 0
+      BoundLabel.UseSkinColor = True
+      SkinData.SkinSection = 'COMBOBOX'
+      Style = csDropDownList
+      ItemIndex = -1
+      TabOrder = 10
+      OnChange = AudioTrackListChange
+    end
   end
   object LogsBtn: TsBitBtn
     Left = 114
@@ -1254,36 +1372,19 @@ object MainForm: TMainForm
     TabOrder = 4
     OnClick = LogsBtnClick
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 504
-  end
-  object OutputBtn: TsBitBtn
-    Left = 430
-    Top = 541
-    Width = 50
-    Height = 21
-    Hint = 'Open output directory'
-    Anchors = [akRight, akBottom]
-    Caption = 'Open'
-    TabOrder = 5
-    OnClick = OutputBtnClick
-    SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 477
   end
   object PageControl: TPageControl
     Left = 8
-    Top = 305
+    Top = 332
     Width = 573
     Height = 230
     ActivePage = TabSheet1
     Anchors = [akLeft, akRight, akBottom]
     Images = PageImages
     MultiLine = True
-    TabOrder = 6
-    ExplicitTop = 241
+    TabOrder = 5
     object TabSheet1: TTabSheet
       Caption = 'General'
-      ExplicitTop = 24
-      ExplicitHeight = 202
       object Panel1: TsPanel
         Left = 0
         Top = 0
@@ -1295,7 +1396,6 @@ object MainForm: TMainForm
         ParentColor = True
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
-        ExplicitHeight = 202
         DesignSize = (
           565
           201)
@@ -1343,7 +1443,7 @@ object MainForm: TMainForm
             Width = 53
             Height = 21
             Hint = 'Bitrate'
-            CheckOptions = [coCheckOnChange, coCropBeyondLimit]
+            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
             CheckMinValue = True
             Alignment = taCenter
             ButtonKind = bkClassic
@@ -1566,7 +1666,7 @@ object MainForm: TMainForm
         end
         object ConstantFPSBtn: TsCheckBox
           Left = 436
-          Top = 176
+          Top = 165
           Width = 110
           Height = 20
           Caption = 'Force constant fps'
@@ -1577,11 +1677,10 @@ object MainForm: TMainForm
           SkinData.SkinSection = 'CHECKBOX'
           ImgChecked = 0
           ImgUnchecked = 0
-          ExplicitTop = 177
         end
         object ContainerList: TsComboBox
           Left = 481
-          Top = 146
+          Top = 135
           Width = 70
           Height = 21
           Anchors = [akRight, akBottom]
@@ -1611,11 +1710,10 @@ object MainForm: TMainForm
           Items.Strings = (
             'MKV'
             'MP4')
-          ExplicitTop = 147
         end
         object SubtitleBtn: TsCheckBox
           Left = 12
-          Top = 149
+          Top = 138
           Width = 237
           Height = 20
           Caption = 'Mux subtitles to output mkv/mp4 from source'
@@ -1626,11 +1724,10 @@ object MainForm: TMainForm
           SkinData.SkinSection = 'CHECKBOX'
           ImgChecked = 0
           ImgUnchecked = 0
-          ExplicitTop = 150
         end
         object CopyChapertBtn: TsCheckBox
           Left = 12
-          Top = 176
+          Top = 165
           Width = 166
           Height = 20
           Caption = 'Copy chapter info from source'
@@ -1639,11 +1736,10 @@ object MainForm: TMainForm
           SkinData.SkinSection = 'CHECKBOX'
           ImgChecked = 0
           ImgUnchecked = 0
-          ExplicitTop = 177
         end
         object UseAdvancedBtn: TsCheckBox
           Left = 343
-          Top = 119
+          Top = 113
           Width = 106
           Height = 20
           Hint = 'Use advanced options'
@@ -1654,13 +1750,12 @@ object MainForm: TMainForm
           SkinData.SkinSection = 'CHECKBOX'
           ImgChecked = 0
           ImgUnchecked = 0
-          ExplicitTop = 120
         end
         object AdvancedBtn: TsBitBtn
-          Left = 456
-          Top = 115
+          Left = 455
+          Top = 113
           Width = 100
-          Height = 25
+          Height = 20
           Hint = 'Edit advanced options'
           Anchors = [akRight, akBottom]
           Caption = 'Advanced Options'
@@ -1668,7 +1763,6 @@ object MainForm: TMainForm
           TabOrder = 7
           OnClick = AdvancedBtnClick
           SkinData.SkinSection = 'BUTTON'
-          ExplicitTop = 116
         end
         object BitrateTolBtn: TsCheckBox
           Left = 177
@@ -1688,8 +1782,6 @@ object MainForm: TMainForm
     object TabSheet2: TTabSheet
       Caption = 'Filters'
       ImageIndex = 1
-      ExplicitTop = 24
-      ExplicitHeight = 202
       object Panel2: TsPanel
         Left = 0
         Top = 0
@@ -1701,7 +1793,6 @@ object MainForm: TMainForm
         ParentColor = True
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
-        ExplicitHeight = 202
         object Label11: TLabel
           Left = 394
           Top = 93
@@ -1938,8 +2029,6 @@ object MainForm: TMainForm
     object TabSheet3: TTabSheet
       Caption = 'Audio'
       ImageIndex = 2
-      ExplicitTop = 24
-      ExplicitHeight = 202
       object Panel8: TsPanel
         Left = 0
         Top = 0
@@ -1951,7 +2040,6 @@ object MainForm: TMainForm
         ParentColor = True
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
-        ExplicitHeight = 202
         object AudioPages: TPageControl
           Left = 3
           Top = 3
@@ -2575,8 +2663,6 @@ object MainForm: TMainForm
     object TabSheet4: TTabSheet
       Caption = 'Custom Options'
       ImageIndex = 3
-      ExplicitTop = 24
-      ExplicitHeight = 202
       object Panel4: TsPanel
         Left = 0
         Top = 0
@@ -2588,7 +2674,6 @@ object MainForm: TMainForm
         ParentColor = True
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
-        ExplicitHeight = 202
         DesignSize = (
           565
           201)
@@ -2679,8 +2764,6 @@ object MainForm: TMainForm
     object TabSheet10: TTabSheet
       Caption = 'Splitting'
       ImageIndex = 4
-      ExplicitTop = 24
-      ExplicitHeight = 202
       object Panel11: TsPanel
         Left = 0
         Top = 0
@@ -2692,7 +2775,6 @@ object MainForm: TMainForm
         ParentColor = True
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
-        ExplicitHeight = 202
         object SplitEdit: TJvSpinEdit
           Left = 194
           Top = 41
@@ -2757,8 +2839,6 @@ object MainForm: TMainForm
     object TabSheet5: TTabSheet
       Caption = 'Other Options'
       ImageIndex = 5
-      ExplicitTop = 24
-      ExplicitHeight = 202
       object Panel5: TsPanel
         Left = 0
         Top = 0
@@ -2770,7 +2850,6 @@ object MainForm: TMainForm
         ParentColor = True
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
-        ExplicitHeight = 202
         object CheckUpdateBtn: TsCheckBox
           Left = 11
           Top = 91
@@ -2904,20 +2983,6 @@ object MainForm: TMainForm
       end
     end
   end
-  object SameAsSourceBtn: TsCheckBox
-    Left = 486
-    Top = 542
-    Width = 95
-    Height = 20
-    Hint = 'Make source directory as output directory'
-    Caption = 'Same as source'
-    Anchors = [akRight, akBottom]
-    TabOrder = 7
-    SkinData.SkinSection = 'CHECKBOX'
-    ImgChecked = 0
-    ImgUnchecked = 0
-    ExplicitTop = 478
-  end
   object StartBtn: TsBitBtn
     Left = 430
     Top = 568
@@ -2961,10 +3026,9 @@ object MainForm: TMainForm
       5FF4A56737F0A4653458FFFFFF00A4663566A46534FFA465340FFFFFFF00FFFF
       FF00FFFFFF00A465341DA7693A9FA76A3ADEA56736F6A76939E5A76A3ABCA465
       3453A4653405FFFFFF00FFFFFF00FFFFFF00A4653479A4653410}
-    TabOrder = 8
+    TabOrder = 0
     OnClick = StartBtnClick
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 504
   end
   object XPManifest1: TXPManifest
     Left = 248
@@ -2980,6 +3044,10 @@ object MainForm: TMainForm
     object AddFolder1: TMenuItem
       Caption = 'Add Folder'
       OnClick = AddFolder1Click
+    end
+    object AddFolderTree1: TMenuItem
+      Caption = 'Add Folder Tree'
+      OnClick = AddFolderTree1Click
     end
   end
   object OpenDialog: TOpenDialog
@@ -3002,8 +3070,8 @@ object MainForm: TMainForm
     ConsoleOptions = [coRedirect]
     OnTerminate = ProcessTerminate
     OnRead = ProcessRead
-    Left = 96
-    Top = 48
+    Left = 80
+    Top = 72
   end
   object LogThread: TJvThread
     Exclusive = True
@@ -3106,11 +3174,10 @@ object MainForm: TMainForm
     SkinData.SkinSection = 'FORM'
     ScreenSnap = True
     TitleButtons = <>
-    Left = 160
-    Top = 216
+    Left = 128
+    Top = 168
   end
   object MainMenu: TMainMenu
-    OwnerDraw = True
     Left = 504
     Top = 152
     object File1: TMenuItem
@@ -3171,8 +3238,8 @@ object MainForm: TMainForm
     end
   end
   object ListMenu: TPopupMenu
-    Left = 176
-    Top = 72
+    Left = 184
+    Top = 120
     object AddFiles3: TMenuItem
       Caption = 'Add Files'
       OnClick = AddFiles1Click
@@ -3180,6 +3247,14 @@ object MainForm: TMainForm
     object AddFolder3: TMenuItem
       Caption = 'Add Folder'
       OnClick = AddFolder1Click
+    end
+    object AddFolderTree2: TMenuItem
+      Caption = 'Add Folder Tree'
+      OnClick = AddFolderTree1Click
+    end
+    object Play1: TMenuItem
+      Caption = 'Play'
+      OnClick = Play1Click
     end
     object Remove2: TMenuItem
       Caption = 'Remove'
@@ -3352,5 +3427,29 @@ object MainForm: TMainForm
     Left = 224
     Top = 224
     Bitmap = {}
+  end
+  object FileSearch: TJvSearchFiles
+    RecurseDepth = 200
+    Options = [soAllowDuplicates, soSearchDirs, soSearchFiles, soSorted]
+    FileParams.SearchTypes = [stFileMask]
+    FileParams.FileMasks.Strings = (
+      '*.avi'
+      '*.mpeg'
+      '*.mpg'
+      '*.mp4'
+      '*.mov'
+      '*.wmv'
+      '*.mkv'
+      '*.flv'
+      '*.dat'
+      '*.vob'
+      '*.m4v'
+      '*.m2v'
+      '*.webm'
+      '*.m2ts')
+    OnFindFile = FileSearchFindFile
+    OnProgress = FileSearchProgress
+    Left = 240
+    Top = 152
   end
 end

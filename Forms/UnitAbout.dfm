@@ -5,7 +5,7 @@ object AboutForm: TAboutForm
   Caption = 'About'
   ClientHeight = 413
   ClientWidth = 338
-  Color = clBtnFace
+  Color = 14870243
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -435,7 +435,6 @@ object AboutForm: TAboutForm
     TabOrder = 0
     OnClick = CloseBtnClick
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 368
   end
   object HomepageBtn: TsBitBtn
     Left = 8
@@ -482,7 +481,6 @@ object AboutForm: TAboutForm
     TabOrder = 1
     OnClick = HomepageBtnClick
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 368
   end
   object Memo1: TMemo
     Left = 8
@@ -520,7 +518,6 @@ object AboutForm: TAboutForm
     TabOrder = 3
     OnClick = sButton1Click
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 342
   end
   object sButton2: TsButton
     Left = 230
@@ -532,7 +529,6 @@ object AboutForm: TAboutForm
     TabOrder = 4
     OnClick = sButton2Click
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 342
   end
   object sSkinProvider1: TsSkinProvider
     AddedTitle.Font.Charset = DEFAULT_CHARSET

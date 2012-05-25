@@ -18,7 +18,8 @@ uses
   UnitAdvancedOptions in 'Forms\UnitAdvancedOptions.pas' {AdvancedOptionsForm} ,
   UnitUpdater in 'Forms\UnitUpdater.pas' {UpdaterForm} ,
   UnitAvisFilters in 'Forms\UnitAvisFilters.pas' {AvisForm} ,
-  UnitSox in 'Forms\UnitSox.pas' {SoXForm};
+  UnitSox in 'Forms\UnitSox.pas' {SoXForm} ,
+  UnitProgress in 'Forms\UnitProgress.pas' {ProgressForm};
 
 {$R *.res}
 
@@ -35,6 +36,7 @@ begin
   Application.CreateForm(TUpdaterForm, UpdaterForm);
   Application.CreateForm(TAvisForm, AvisForm);
   Application.CreateForm(TSoXForm, SoXForm);
+  Application.CreateForm(TProgressForm, ProgressForm);
   Application.Run;
 
 end.

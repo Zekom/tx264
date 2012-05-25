@@ -5,7 +5,7 @@ object LogForm: TLogForm
   Caption = 'Logs/Outputs'
   ClientHeight = 575
   ClientWidth = 825
-  Color = clBtnFace
+  Color = 14870243
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -121,11 +121,16 @@ object LogForm: TLogForm
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Normal Log'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object OutputList: TsListBox
         Left = 0
         Top = 0
         Width = 801
         Height = 500
+        Style = lbOwnerDrawFixed
         Align = alClient
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
@@ -135,6 +140,7 @@ object LogForm: TLogForm
         ItemHeight = 18
         ParentFont = False
         TabOrder = 0
+        OnDrawItem = OutputListDrawItem
         BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = clWindowText
@@ -150,11 +156,16 @@ object LogForm: TLogForm
     object TabSheet2: TTabSheet
       Caption = 'Full Output'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object FullOutputList: TsListBox
         Left = 0
         Top = 0
         Width = 801
         Height = 500
+        Style = lbOwnerDrawFixed
         Align = alClient
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
@@ -164,6 +175,7 @@ object LogForm: TLogForm
         ItemHeight = 18
         ParentFont = False
         TabOrder = 0
+        OnDrawItem = FullOutputListDrawItem
         BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = clWindowText
