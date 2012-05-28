@@ -118,74 +118,54 @@ object LogForm: TLogForm
     Width = 809
     Height = 528
     ActivePage = TabSheet1
+    Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Normal Log'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
-      object OutputList: TsListBox
+      object OutputList: TMemo
         Left = 0
         Top = 0
         Width = 801
         Height = 500
-        Style = lbOwnerDrawFixed
         Align = alClient
+        BorderStyle = bsNone
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -11
+        Font.Color = clWindowText
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemHeight = 18
         ParentFont = False
+        ReadOnly = True
+        ScrollBars = ssBoth
         TabOrder = 0
-        OnDrawItem = OutputListDrawItem
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
-        SkinData.SkinSection = 'EDIT'
+        WantTabs = True
+        OnChange = OutputListChange
+        ExplicitTop = 4
       end
     end
     object TabSheet2: TTabSheet
       Caption = 'Full Output'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
-      object FullOutputList: TsListBox
+      object FullOutputList: TMemo
         Left = 0
         Top = 0
         Width = 801
         Height = 500
-        Style = lbOwnerDrawFixed
         Align = alClient
+        BorderStyle = bsNone
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -11
+        Font.Color = clWindowText
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemHeight = 18
         ParentFont = False
+        ParentShowHint = False
+        ReadOnly = True
+        ScrollBars = ssBoth
+        ShowHint = False
         TabOrder = 0
-        OnDrawItem = FullOutputListDrawItem
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
-        SkinData.SkinSection = 'EDIT'
+        WantTabs = True
+        OnChange = FullOutputListChange
       end
     end
   end

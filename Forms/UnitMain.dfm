@@ -41,17 +41,23 @@ object MainForm: TMainForm
       601)
     object TotalProgressLabel: TsLabel
       Left = 550
-      Top = 13
+      Top = 5
       Width = 30
       Height = 13
       Alignment = taCenter
       Anchors = [akTop, akRight]
       AutoSize = False
       Caption = '0%'
+      ParentFont = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
     end
     object CurrentProgressLabel: TsLabel
       Left = 550
-      Top = 42
+      Top = 24
       Width = 30
       Height = 13
       Alignment = taCenter
@@ -61,9 +67,9 @@ object MainForm: TMainForm
     end
     object StopBtn: TsBitBtn
       Left = 430
-      Top = 568
+      Top = 563
       Width = 150
-      Height = 25
+      Height = 30
       Hint = 'Stop encoding'
       Anchors = [akRight, akBottom]
       Caption = 'Stop'
@@ -107,13 +113,12 @@ object MainForm: TMainForm
       SkinData.SkinSection = 'BUTTON'
     end
     object Log2Btn: TsBitBtn
-      Left = 8
-      Top = 568
-      Width = 100
-      Height = 25
+      Left = 9
+      Top = 563
+      Width = 30
+      Height = 30
       Hint = 'Log and outputs of backends'
       Anchors = [akLeft, akBottom]
-      Caption = 'Logs/Outputs'
       Glyph.Data = {
         36040000424D3604000000000000360000002800000010000000100000000100
         2000000000000004000000000000000000000000000000000000FFFFFF008A8F
@@ -153,92 +158,29 @@ object MainForm: TMainForm
       OnClick = LogsBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
-    object SummaryList: TsListBox
-      Left = 8
-      Top = 120
-      Width = 573
-      Height = 442
-      Hint = 'Output of current process'
-      Anchors = [akLeft, akTop, akRight, akBottom]
-      Enabled = False
-      ItemHeight = 18
-      TabOrder = 2
-      BoundLabel.Indent = 0
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      BoundLabel.Layout = sclLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
-      SkinData.SkinSection = 'EDIT'
-    end
-    object CommandEdit: TsEdit
-      Left = 8
-      Top = 93
-      Width = 573
-      Height = 21
-      Hint = 'Command line of current process'
-      Anchors = [akLeft, akTop, akRight]
-      ReadOnly = True
-      TabOrder = 3
-      SkinData.SkinSection = 'EDIT'
-      BoundLabel.Indent = 0
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      BoundLabel.Layout = sclLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
-    end
     object TotalProgressBar: TProgressBar
       Left = 8
-      Top = 8
+      Top = 5
       Width = 536
-      Height = 23
+      Height = 13
       Anchors = [akLeft, akTop, akRight]
-      TabOrder = 4
+      TabOrder = 2
     end
     object CurrentProgressBar: TProgressBar
       Left = 8
-      Top = 37
+      Top = 24
       Width = 536
-      Height = 23
+      Height = 13
       Anchors = [akLeft, akTop, akRight]
-      TabOrder = 5
-    end
-    object SummaryEdit: TsEdit
-      Left = 8
-      Top = 66
-      Width = 573
-      Height = 21
-      Hint = 'Summary of current process'
-      Alignment = taCenter
-      Anchors = [akLeft, akTop, akRight]
-      Enabled = False
-      ReadOnly = True
-      TabOrder = 6
-      SkinData.SkinSection = 'EDIT'
-      BoundLabel.Indent = 0
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      BoundLabel.Layout = sclLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
+      TabOrder = 3
     end
     object AddMoreBtn: TsBitBtn
-      Left = 114
-      Top = 568
-      Width = 125
-      Height = 25
+      Left = 45
+      Top = 563
+      Width = 30
+      Height = 30
+      Hint = 'Add more files'
       Anchors = [akLeft, akBottom]
-      Caption = 'Add more files'
       Glyph.Data = {
         C6070000424DC607000000000000360000002800000016000000160000000100
         2000000000009007000000000000000000000000000000000000000000000000
@@ -303,9 +245,157 @@ object MainForm: TMainForm
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000000000000000
         00000000000000000000}
-      TabOrder = 7
+      TabOrder = 4
       OnClick = AddMoreBtnClick
       SkinData.SkinSection = 'BUTTON'
+    end
+    object ConsoleOutputEdit: TsEdit
+      Left = 8
+      Top = 43
+      Width = 573
+      Height = 21
+      Alignment = taCenter
+      Anchors = [akLeft, akTop, akRight]
+      Enabled = False
+      ReadOnly = True
+      TabOrder = 5
+      SkinData.SkinSection = 'EDIT'
+      BoundLabel.Indent = 0
+      BoundLabel.Font.Charset = DEFAULT_CHARSET
+      BoundLabel.Font.Color = clWindowText
+      BoundLabel.Font.Height = -11
+      BoundLabel.Font.Name = 'Tahoma'
+      BoundLabel.Font.Style = []
+      BoundLabel.Layout = sclLeft
+      BoundLabel.MaxWidth = 0
+      BoundLabel.UseSkinColor = True
+    end
+    object OpenOut2Btn: TsBitBtn
+      Left = 81
+      Top = 563
+      Width = 30
+      Height = 30
+      Hint = 'Open output folder'
+      Anchors = [akLeft, akBottom]
+      Glyph.Data = {
+        36040000424D3604000000000000360000002800000010000000100000000100
+        2000000000000004000000000000000000000000000000000000514A459EA465
+        34FFA46534FFA46534FFA46534FFA46534FFA46534FFA46534FFA46534FFA465
+        34FFA46534FFA46534FFA46534FFA46534FFA46535EEA5653247484848E09688
+        7EFFA56839FFBF8855FFC08956FFC08956FFC08956FFC08956FFC08956FFC089
+        56FFC08956FFC08956FFC08956FFC08956FFB77E4BFFA66736D9494949E09999
+        99FFA56839FFDBB594FFD5AA82FFD4A67DFFD4A67DFFD4A67DFFD4A67DFFD4A6
+        7DFFD4A67DFFD4A67DFFD4A67DFFD4A87FFFD5AB85FFA56636F7484848E29B9B
+        9BFFA56838FFE1C1A5FFD9B28EFFD8AF8AFFD7AC85FFD6AA83FFD5A981FFD4A7
+        7EFFD3A379FFD2A277FFD2A277FFD3A57BFFDBB695FFA66735F84C4C4CE4A1A1
+        A1FFA56737FFE9D2BFFFDDBA9BFFDDBA9AFFDDBA9AFFDDBA9AFFDDBA9AFFDDBA
+        9AFFDDBA9AFFDCB796FFDAB28FFFD8B08BFFE4C9B1FFA56635FA515151E5A4A5
+        A5FFA46636FFEBD7C5FFDDB998FFDDB998FFDDB998FFDDB998FFDDB998FFDDB9
+        98FFDDB998FFDDB998FFDDB998FFDCB795FFE7CEB8FFA56635FB565656E7A9A9
+        A9FFA46635FFEAD6C3FFDBB592FFDBB592FFDBB592FFDBB592FFDBB592FFDBB5
+        92FFDBB592FFDBB592FFDBB592FFDCB895FFE7D0B9FFA46634FD5B5B5BE9AEAE
+        AEFFA56635FFEAD5C0FFEAD5C0FFEAD5C0FFEAD5C0FFEAD5C0FFEAD5C0FFEAD5
+        C1FFEAD6C1FFEAD6C1FFEAD6C1FFEAD6C1FFE8D2BBFFA56534FE5F5F5FE9B3B3
+        B3FFA56C40FFA56838FFA56838FFA56837FFA56636FFA56636FFA56635FFA466
+        35FFA46635FFA46635FFA46534FFA46534FFA46534FFA66737E4656565EBB7B7
+        B7FFA6A6A6FFA1A1A1FF555957FFEBEBEBFFEAEAEAFFEAEAEAFFE9E9E9FFE9E9
+        E9FFE8E8E8FFE8E8E8FFE7E7E7FFD9D9D9FF595C5BF15B5B5B006A6A6AECBDBD
+        BDFFA9A9A9FFA5A5A5FF545856FFE6E6E6FF9EA09FFF9B9D9CFF9B9D9CFF9B9D
+        9CFFDDDDDDFFE3E3E3FFE3E3E3FFD0D1D0FF595D5BF35B5B5B006E6E6EEEC0C1
+        C1FFACACACFFAAAAAAFF545856FFE2E2E2FFDFDFDFFFDEDEDEFFDEDEDEFFDDDD
+        DDFFE0E0E0FFE9E9E9FFE5E5E5FFD0D0D0FF5B5F5DF15B5B5B00737373EFC5C5
+        C5FFB0B0B0FFACACACFF535755FFDCDCDCFF9C9D9CFF9C9D9CFF9C9D9CFF9C9D
+        9CFFD4D5D5FFFEFEFEFFFDFDFDFF969796FE595D5B9A5B5B5B00787878F0C9C9
+        C9FFC7C7C7FFC4C4C4FF535755FFDADADAFFD3D3D3FFD3D3D3FFD2D2D2FFCFCF
+        CFFFCDCDCDFFFEFEFEFF929393FE5A5E5BD4555555095B5B5B007A7A7A9F7979
+        79EC797979EC797979EC545856FFF7F7F7FFF9F9F9FFFAFAFAFFFBFBFBFFFBFB
+        FBFFFCFCFCFFA2A3A2FF585C5BE15B5B5B0E5B5B5B005B5B5B005B5B5B005B5B
+        5B005B5B5B005B5B5B00545856F8555957FB545856FC555957FC555957FC575B
+        59FD585C5AFD5D615FD6555555155B5B5B005B5B5B005B5B5B00}
+      TabOrder = 6
+      OnClick = OutputBtnClick
+      SkinData.SkinSection = 'BUTTON'
+    end
+    object ProcessPages: TPageControl
+      Left = 9
+      Top = 70
+      Width = 572
+      Height = 487
+      ActivePage = TabSheet15
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      TabOrder = 7
+      object TabSheet15: TTabSheet
+        Caption = 'Progress'
+        ImageIndex = 2
+        object ProgressList: TListView
+          Left = 0
+          Top = 0
+          Width = 564
+          Height = 459
+          Align = alClient
+          BorderStyle = bsNone
+          Columns = <
+            item
+              Width = 30
+            end
+            item
+              AutoSize = True
+              Caption = 'File'
+            end
+            item
+              Alignment = taCenter
+              Caption = 'Status'
+              Width = 140
+            end>
+          ReadOnly = True
+          RowSelect = True
+          ShowWorkAreas = True
+          StateImages = ProgressImages
+          TabOrder = 0
+          ViewStyle = vsReport
+        end
+      end
+      object TabSheet12: TTabSheet
+        Caption = 'Summary'
+        object SummaryView: TTreeView
+          Left = 0
+          Top = 0
+          Width = 564
+          Height = 459
+          Align = alClient
+          BevelInner = bvNone
+          BevelOuter = bvNone
+          BorderStyle = bsNone
+          Indent = 19
+          ReadOnly = True
+          RowSelect = True
+          TabOrder = 0
+        end
+      end
+      object TabSheet14: TTabSheet
+        Caption = 'Console Output'
+        ImageIndex = 1
+        object ConsoleOutputList: TsListBox
+          Left = 0
+          Top = 0
+          Width = 564
+          Height = 459
+          Align = alClient
+          BorderStyle = bsNone
+          Enabled = False
+          TabOrder = 0
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'EDIT'
+        end
+      end
     end
   end
   object AboutBtn: TsBitBtn
@@ -1291,8 +1381,8 @@ object MainForm: TMainForm
     object SameAsSourceBtn: TsCheckBox
       Left = 469
       Top = 290
-      Width = 95
-      Height = 20
+      Width = 100
+      Height = 19
       Hint = 'Make source directory as output directory'
       Caption = 'Same as source'
       Anchors = [akRight, akBottom]
@@ -1321,7 +1411,13 @@ object MainForm: TMainForm
       BoundLabel.UseSkinColor = True
       SkinData.SkinSection = 'COMBOBOX'
       Style = csDropDownList
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
       ItemIndex = -1
+      ParentFont = False
       TabOrder = 10
       OnChange = AudioTrackListChange
     end
@@ -1666,11 +1762,11 @@ object MainForm: TMainForm
         end
         object ConstantFPSBtn: TsCheckBox
           Left = 436
-          Top = 165
-          Width = 110
-          Height = 20
+          Top = 168
+          Width = 115
+          Height = 19
           Caption = 'Force constant fps'
-          Anchors = [akLeft, akBottom]
+          Anchors = [akRight, akBottom]
           Checked = True
           State = cbChecked
           TabOrder = 2
@@ -1680,7 +1776,7 @@ object MainForm: TMainForm
         end
         object ContainerList: TsComboBox
           Left = 481
-          Top = 135
+          Top = 143
           Width = 70
           Height = 21
           Anchors = [akRight, akBottom]
@@ -1713,9 +1809,9 @@ object MainForm: TMainForm
         end
         object SubtitleBtn: TsCheckBox
           Left = 12
-          Top = 138
-          Width = 237
-          Height = 20
+          Top = 141
+          Width = 242
+          Height = 19
           Caption = 'Mux subtitles to output mkv/mp4 from source'
           Anchors = [akLeft, akBottom]
           Checked = True
@@ -1727,9 +1823,9 @@ object MainForm: TMainForm
         end
         object CopyChapertBtn: TsCheckBox
           Left = 12
-          Top = 165
-          Width = 166
-          Height = 20
+          Top = 168
+          Width = 171
+          Height = 19
           Caption = 'Copy chapter info from source'
           Anchors = [akLeft, akBottom]
           TabOrder = 5
@@ -1739,9 +1835,9 @@ object MainForm: TMainForm
         end
         object UseAdvancedBtn: TsCheckBox
           Left = 343
-          Top = 113
-          Width = 106
-          Height = 20
+          Top = 116
+          Width = 111
+          Height = 19
           Hint = 'Use advanced options'
           Caption = 'Advanced options'
           Anchors = [akRight, akBottom]
@@ -1753,9 +1849,9 @@ object MainForm: TMainForm
         end
         object AdvancedBtn: TsBitBtn
           Left = 455
-          Top = 113
+          Top = 114
           Width = 100
-          Height = 20
+          Height = 25
           Hint = 'Edit advanced options'
           Anchors = [akRight, akBottom]
           Caption = 'Advanced Options'
@@ -1767,8 +1863,8 @@ object MainForm: TMainForm
         object BitrateTolBtn: TsCheckBox
           Left = 177
           Top = 54
-          Width = 71
-          Height = 20
+          Width = 76
+          Height = 19
           Hint = 'Bitrate tolerance'
           Caption = 'Tolerance:'
           TabOrder = 8
@@ -1850,8 +1946,8 @@ object MainForm: TMainForm
         object CropBtn: TsCheckBox
           Left = 310
           Top = 24
-          Width = 43
-          Height = 20
+          Width = 48
+          Height = 19
           Caption = 'Crop'
           TabOrder = 1
           OnClick = CropBtnClick
@@ -1910,8 +2006,8 @@ object MainForm: TMainForm
         object ResizeBtn: TsCheckBox
           Left = 12
           Top = 12
-          Width = 51
-          Height = 20
+          Width = 56
+          Height = 19
           Caption = 'Resize'
           Checked = True
           State = cbChecked
@@ -2040,6 +2136,9 @@ object MainForm: TMainForm
         ParentColor = True
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
+        DesignSize = (
+          565
+          201)
         object AudioPages: TPageControl
           Left = 3
           Top = 3
@@ -2408,8 +2507,8 @@ object MainForm: TMainForm
               object QaacHEBtn: TsCheckBox
                 Left = 367
                 Top = 35
-                Width = 86
-                Height = 20
+                Width = 91
+                Height = 19
                 Caption = 'HE AAC mode'
                 TabOrder = 4
                 OnClick = QaacHEBtnClick
@@ -2602,14 +2701,138 @@ object MainForm: TMainForm
               object OggManagedBitrateBtn: TsCheckBox
                 Left = 427
                 Top = 10
-                Width = 99
-                Height = 20
+                Width = 104
+                Height = 19
                 Caption = 'Managed bitrate'
                 TabOrder = 3
                 SkinData.SkinSection = 'CHECKBOX'
                 ImgChecked = 0
                 ImgUnchecked = 0
               end
+            end
+          end
+          object TabSheet11: TTabSheet
+            Caption = 'Lame'
+            ImageIndex = 5
+            object sPanel1: TsPanel
+              Left = 0
+              Top = 0
+              Width = 550
+              Height = 131
+              Align = alClient
+              BevelOuter = bvNone
+              Color = 14870243
+              ParentBackground = False
+              TabOrder = 0
+              SkinData.SkinSection = 'PANEL'
+              object Label7: TLabel
+                Left = 65
+                Top = 39
+                Width = 23
+                Height = 13
+                Caption = 'VBR:'
+              end
+              object Label13: TLabel
+                Left = 52
+                Top = 66
+                Width = 36
+                Height = 13
+                Caption = 'Bitrate:'
+              end
+              object Label14: TLabel
+                Left = 406
+                Top = 12
+                Width = 84
+                Height = 13
+                Caption = 'Algorithm quality:'
+              end
+              object LameEncodeList: TsComboBox
+                Left = 94
+                Top = 8
+                Width = 75
+                Height = 21
+                Alignment = taLeftJustify
+                BoundLabel.Active = True
+                BoundLabel.Caption = 'Encoding Mode:'
+                BoundLabel.Indent = 0
+                BoundLabel.Font.Charset = DEFAULT_CHARSET
+                BoundLabel.Font.Color = clWindowText
+                BoundLabel.Font.Height = -11
+                BoundLabel.Font.Name = 'Tahoma'
+                BoundLabel.Font.Style = []
+                BoundLabel.Layout = sclLeft
+                BoundLabel.MaxWidth = 0
+                BoundLabel.UseSkinColor = True
+                SkinData.SkinSection = 'COMBOBOX'
+                Style = csDropDownList
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -11
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                ItemIndex = 0
+                ParentFont = False
+                TabOrder = 0
+                Text = 'CBR'
+                OnChange = LameEncodeListChange
+                Items.Strings = (
+                  'CBR'
+                  'ABR'
+                  'VBR')
+              end
+              object LameBitrateEdit: TJvSpinEdit
+                Left = 94
+                Top = 62
+                Width = 50
+                Height = 21
+                CheckMinValue = True
+                Alignment = taCenter
+                ButtonKind = bkClassic
+                Value = 128.000000000000000000
+                TabOrder = 1
+              end
+              object LameVBREdit: TJvSpinEdit
+                Left = 94
+                Top = 35
+                Width = 50
+                Height = 21
+                CheckMinValue = True
+                Alignment = taCenter
+                ButtonKind = bkClassic
+                Increment = 0.010000000000000000
+                ValueType = vtFloat
+                Value = 2.000000000000000000
+                Enabled = False
+                TabOrder = 2
+              end
+              object LameQualityEdit: TJvSpinEdit
+                Left = 496
+                Top = 8
+                Width = 50
+                Height = 21
+                Alignment = taCenter
+                ButtonKind = bkClassic
+                MaxValue = 9.000000000000000000
+                Value = 3.000000000000000000
+                TabOrder = 3
+              end
+            end
+          end
+          object TabSheet13: TTabSheet
+            Caption = 'Wav'
+            ImageIndex = 7
+            object sPanel2: TsPanel
+              Left = 0
+              Top = 0
+              Width = 550
+              Height = 131
+              Align = alClient
+              BevelOuter = bvNone
+              Caption = 'No options'
+              Color = 14870243
+              ParentBackground = False
+              TabOrder = 0
+              SkinData.SkinSection = 'PANEL'
             end
           end
         end
@@ -2657,6 +2880,41 @@ object MainForm: TMainForm
           TabOrder = 1
           OnClick = AudioEffectsBtnClick
           SkinData.SkinSection = 'BUTTON'
+        end
+        object AudioMethodList: TsComboBox
+          Left = 50
+          Top = 167
+          Width = 100
+          Height = 21
+          Anchors = [akLeft, akBottom]
+          Alignment = taLeftJustify
+          BoundLabel.Active = True
+          BoundLabel.Caption = 'Method:'
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'COMBOBOX'
+          Style = csDropDownList
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemIndex = 0
+          ParentFont = False
+          TabOrder = 2
+          Text = 'Encode audio'
+          OnChange = AudioMethodListChange
+          Items.Strings = (
+            'Encode audio'
+            'Copy audio'
+            'No audio')
         end
       end
     end
@@ -2792,8 +3050,8 @@ object MainForm: TMainForm
         object SplittingBtn: TsCheckBox
           Left = 17
           Top = 16
-          Width = 92
-          Height = 20
+          Width = 97
+          Height = 19
           Caption = 'Enable splitting'
           TabOrder = 1
           OnClick = SplittingBtnClick
@@ -2853,8 +3111,8 @@ object MainForm: TMainForm
         object CheckUpdateBtn: TsCheckBox
           Left = 11
           Top = 91
-          Width = 132
-          Height = 20
+          Width = 137
+          Height = 19
           Caption = 'Check updates on start'
           Checked = True
           State = cbChecked
@@ -2866,8 +3124,8 @@ object MainForm: TMainForm
         object NoNeroNotifyBtn: TsCheckBox
           Left = 11
           Top = 119
-          Width = 233
-          Height = 20
+          Width = 238
+          Height = 19
           Caption = 'Do not warn me if neroaacenc is not present'
           TabOrder = 1
           SkinData.SkinSection = 'CHECKBOX'
@@ -2877,8 +3135,8 @@ object MainForm: TMainForm
         object FullLogBtn: TsCheckBox
           Left = 11
           Top = 144
-          Width = 199
-          Height = 20
+          Width = 204
+          Height = 19
           Caption = 'Also keep all the outputs of backends'
           TabOrder = 2
           SkinData.SkinSection = 'CHECKBOX'
@@ -2888,8 +3146,8 @@ object MainForm: TMainForm
         object SliceThreadsBtn: TsCheckBox
           Left = 16
           Top = 44
-          Width = 85
-          Height = 20
+          Width = 90
+          Height = 19
           Caption = 'Slice threads:'
           TabOrder = 3
           OnClick = SliceThreadsBtnClick
@@ -2913,8 +3171,8 @@ object MainForm: TMainForm
         object ThreadsBtn: TsCheckBox
           Left = 16
           Top = 17
-          Width = 63
-          Height = 20
+          Width = 68
+          Height = 19
           Caption = 'Threads:'
           TabOrder = 5
           OnClick = ThreadsBtnClick
@@ -3031,12 +3289,12 @@ object MainForm: TMainForm
     SkinData.SkinSection = 'BUTTON'
   end
   object XPManifest1: TXPManifest
-    Left = 248
-    Top = 72
+    Left = 240
+    Top = 40
   end
   object AddMenu: TPopupMenu
-    Left = 136
-    Top = 80
+    Left = 176
+    Top = 16
     object AddFiles1: TMenuItem
       Caption = 'Add Files'
       OnClick = AddFiles1Click
@@ -3055,12 +3313,12 @@ object MainForm: TMainForm
       'Supported|*.mp4;*.mkv;*.avi;*.mov;*.m4v;*.mpeg;*.mpg;*.flv;*.vob' +
       '|AVS Files|*.avs|All Files|*.*'
     Options = [ofHideReadOnly, ofAllowMultiSelect, ofEnableSizing]
-    Left = 392
-    Top = 56
+    Left = 352
+    Top = 152
   end
   object OpenFolderDialog: TJvBrowseForFolderDialog
-    Left = 464
-    Top = 72
+    Left = 424
+    Top = 136
   end
   object Process: TJvCreateProcess
     StartupInfo.DefaultPosition = False
@@ -3070,8 +3328,8 @@ object MainForm: TMainForm
     ConsoleOptions = [coRedirect]
     OnTerminate = ProcessTerminate
     OnRead = ProcessRead
-    Left = 80
-    Top = 72
+    Left = 104
+    Top = 120
   end
   object LogThread: TJvThread
     Exclusive = True
@@ -3079,25 +3337,25 @@ object MainForm: TMainForm
     RunOnCreate = True
     FreeOnTerminate = True
     OnExecute = LogThreadExecute
-    Left = 328
-    Top = 64
+    Left = 304
+    Top = 128
   end
   object PositionTimer: TTimer
     Enabled = False
-    Interval = 200
+    Interval = 500
     OnTimer = PositionTimerTimer
-    Left = 520
-    Top = 72
+    Left = 432
+    Top = 80
   end
   object SystemInfo: TJvComputerInfoEx
-    Left = 272
+    Left = 312
     Top = 232
   end
   object DragDrop: TJvDragDrop
     DropTarget = Owner
     OnDrop = DragDropDrop
-    Left = 440
-    Top = 152
+    Left = 376
+    Top = 208
   end
   object UpdateThread: TJvThread
     Exclusive = True
@@ -3105,8 +3363,8 @@ object MainForm: TMainForm
     RunOnCreate = True
     FreeOnTerminate = True
     OnExecute = UpdateThreadExecute
-    Left = 320
-    Top = 152
+    Left = 496
+    Top = 232
   end
   object UpdateChecker: TJvHttpUrlGrabber
     FileName = 'output.txt'
@@ -3115,8 +3373,8 @@ object MainForm: TMainForm
     ProxyAddresses = 'proxyserver'
     ProxyIgnoreList = '<local>'
     OnDoneFile = UpdateCheckerDoneFile
-    Left = 368
-    Top = 152
+    Left = 448
+    Top = 232
   end
   object sSkinManager1: TsSkinManager
     Effects.AllowGlowing = False
@@ -3162,8 +3420,9 @@ object MainForm: TMainForm
     ThirdParty.ThirdSpeedButton = ' '#13#10
     ThirdParty.ThirdScrollControl = ' '#13#10
     ThirdParty.ThirdUpDown = ' '#13#10
-    Left = 96
-    Top = 232
+    ThirdParty.ThirdScrollBar = ' '
+    Left = 64
+    Top = 56
   end
   object sSkinProvider1: TsSkinProvider
     AddedTitle.Font.Charset = DEFAULT_CHARSET
@@ -3174,8 +3433,8 @@ object MainForm: TMainForm
     SkinData.SkinSection = 'FORM'
     ScreenSnap = True
     TitleButtons = <>
-    Left = 128
-    Top = 168
+    Left = 312
+    Top = 65528
   end
   object MainMenu: TMainMenu
     Left = 504
@@ -3189,6 +3448,10 @@ object MainForm: TMainForm
       object AddFolder2: TMenuItem
         Caption = 'Add Folder'
         OnClick = AddFolder1Click
+      end
+      object AddFolderTree3: TMenuItem
+        Caption = 'Add Folder Tree'
+        OnClick = AddFolderTree1Click
       end
       object Exit1: TMenuItem
         Caption = 'Exit'
@@ -3238,8 +3501,8 @@ object MainForm: TMainForm
     end
   end
   object ListMenu: TPopupMenu
-    Left = 184
-    Top = 120
+    Left = 104
+    Top = 16
     object AddFiles3: TMenuItem
       Caption = 'Add Files'
       OnClick = AddFiles1Click
@@ -3424,8 +3687,8 @@ object MainForm: TMainForm
           E78808668699E1BD0F5CC4C027409665FFDE779BE2288A9E9C73B740B4E7AC4F
           D3F4ED1B64925DEC202A74160000000049454E44AE426082}
       end>
-    Left = 224
-    Top = 224
+    Left = 296
+    Top = 48
     Bitmap = {}
   end
   object FileSearch: TJvSearchFiles
@@ -3449,7 +3712,141 @@ object MainForm: TMainForm
       '*.m2ts')
     OnFindFile = FileSearchFindFile
     OnProgress = FileSearchProgress
-    Left = 240
-    Top = 152
+    Left = 256
+    Top = 200
+  end
+  object ProgressImages: TsAlphaImageList
+    Height = 22
+    Width = 22
+    Items = <
+      item
+        ImageFormat = ifPNG
+        ImgData = {
+          89504E470D0A1A0A0000000D4948445200000016000000160806000000C4B46C
+          3B0000000473424954080808087C0864880000001974455874536F6674776172
+          65007777772E696E6B73636170652E6F72679BEE3C1A000004E649444154388D
+          B595694C146718C7FFEF3B333BBBB34B39965BE4106B91A01645A8681B8F9A26
+          AD3169DA10829A98A602D64FB64D139326FDD234313569D25A142435B680A434
+          69B5B147623C4AAD0A04415B05423D1016017181BDE7789F7E60211C7EF04B27
+          F9679299677EF39B679E99971111FE8F8D3F4B5159598BF42C751BF6376797BE
+          DB920000EC69C62595DFAE5014F523306C354D2B4D101489333FE76CD4127441
+          90681114F8A3A3B6D298B9E6A57DA75304A7BF4C0B5B3BEB2B1ECC03330656FA
+          5E733DC0CA5F7E71A96D654EB2EC72AAE09C41D70D0442061E3C9AB46EF47A02
+          23E30189311CF673E50B97A473E8BCDD1262053191D551BB67601E78E381E693
+          D96971657B5E5FAD450C0B13FE306234159AAA40E200E30CA069037F30824B9D
+          F7C3D7FF1ED249C0B3A9306BD9ADFE116372229877EDC4AE4179065A54F55D49
+          824B7B7B7BF132EDEB967631E60D72CE016111118399EA76854A0A329C852FA4
+          4A4440C8206C5D9F6B2FCACFB0F73F7C12F36A5116EBEA1D36752189792FCF2E
+          2BD5CFB95467FD994E9A0A18CC6157C29610DF5FABADE0218E14CF887FFBB9D6
+          BE1F3EFDA635D8D6334C4E55C2D078084F0226D6E7A73345E6B02C01D91E9E0F
+          06C36B03C393CC1D17E35D9E9D7A43D74D2F203E07809B3515DEF6FA8AB62B35
+          E5E5866E6DFCFD4A5FFB891F3B82F10E8ECC240D976E8D4291382C215864A131
+          09A89A431DCACC48AE8DD5EC0D60BCCF229B77E1C4B4D55574E98679682AA04B
+          310E0543E32108007685C3B2882942160030DB634B8860A2CBF1658CC3FEB3AE
+          AB8F29C24EC52C4D9E5A082EAA6A5CA5C8D2D9EAB78AD4A4780D69894E6C2E48
+          86AA483005319BB500EC484BCF398BCBE2CCDE370400A072C5A2F92EAA6A4863
+          C47FB32CD28EB6B44748108800C2F45E08B2E9564000733E90E2AAA63106B816
+          D10010C1C7B8D8FEC4E6EE71F9461C4FAB010085A0B69FDA3B4A0492E71C8F6B
+          F864876C93390006C680B06EE2E3BAD6C8FD91C9F7AF1FDFDD1DAD8B4CDBD729
+          40BC565A501876C7E8F1DDFF3E2C1D1C7D5C4784C479AD0011B3DB645CB83502
+          0642695E129ACEDF890C8CFA8EB61DDFD5B0D04E16CE144915C75487EFA7C9B0
+          489AF0FBAB6CB26CCD9C9F336ED39686299091E80403D0DD3F469CB155C5EF34
+          2F5DF4DC129EB32CB161D217DC7DFBDEE087BE40389B71DC9DBDF1AC30883100
+          6B72E230381EC49097E3C8812DF6A6F33DDBCE5DE9EF29A96EFA4A58D4016203
+          5CB16422E9884355E27AEE0E6DB62912B96335C33B11AA5F049E9666088674E4
+          2F8945C4B4D079CF8B570A33A5E2FC74ADE3CEF0079EC7BEB067CCC7C627824E
+          C9C690E2D69097938CC438276BFCA52BAC997AE32230678CDD7F348543359726
+          3803DFB169B96DCBBA2CBB3760C222A0302F4D2EB0525D8C4DF7CF1004D31498
+          F047D0F8EB0DBF6518072F9EDC1B9E95242230C6A4F5950D46ACD316E8EFBAB8
+          C3D371E651EE96CA9DEE25B9D5AB9F4FCBC8CF4D5132536399D36143C410304C
+          0B93011D5DBD1E71F5E6433D383172B8FBF4C11A0061006122D267C0F675FB1A
+          BC7ECFEDB2DE739FFD03C0118D3D7DEDCE35292BB7952B5AFC5A70A63A55C508
+          464C89081011DF9FA37DADC706AE36750308451324A2E00C98ADDE7DECCD9B0D
+          FB2F03B00350E7448946929C6E2521A32021E81DF60646FBBC00F4E85C47A250
+          1F800811D1A2A5893126CD81CD44062061FA376F456344A3033089C89ACBF90F
+          29695C9A72DCDF600000000049454E44AE426082}
+      end
+      item
+        ImageFormat = ifPNG
+        ImgData = {
+          89504E470D0A1A0A0000000D4948445200000016000000160806000000C4B46C
+          3B00000006624B474400FF00FF00FFA0BDA793000000097048597300000DD700
+          000DD70142289B780000000774494D4507D5090F091322600A6EE20000051049
+          44415438CB7D955D6C5C4715C77F33F7EEDDB5D7BBFE587B6337713E9C38D888
+          C4C6759BB8A5A820E1222A24922AED032F547DE803AA500109C9F0CC4345551E
+          902A24544291A02015A240708A44A8684803A9D3C471E3366E6C2776365EEFDA
+          DE8F7BF7EEEEBD33C343EC552DD28E7434D2CCFC7F3AE7CC9C3982CF183FFCD6
+          C473DA122F4ACD1E618803460B3C839991865FFDECD44F5FFB34ADF8342042FC
+          7CF4D1A196FEC13EE2C93852DE3BAAB5C12B79CCCDCE73E9FC95B5AE9EF2777F
+          F4D25F5690A215A1D6686A9912E27AF5FFC0DF3FFEE337FB0FEE3DFED8F81156
+          5D8F6C690DCB8164B299200829973CAA6E40776B8A64DC36B9C26F738F7FE5FC
+          FB6DEDBE83E12E42FC8B66E7F56DE0178F4F9C3DF2C8F013236387B9BABCC8E8
+          C303EC7CA08BF5A553844A22A54547EF37715D97996B1F5129FE9583072ED395
+          4E9858536FC9B13FF0D1372E817CD96E787A6CE285FE83FB9E18193BCC07D979
+          BEFE8D47D1FE0DEECC9C445831568B36B1DA45E2E9AF21A56068B81F11EEC7E6
+          EF58CE3181FDD5A432A790DC18145A1F905B604BCA971E1B3FC24C6681F1F131
+          1289567CF736D27230CAA52DB2886D5B08211042A09421126D261A3B04A2007A
+          5154CAA5983054916245027CEFC4C4AB0F8E1D8EADBA6586463E87563E958A4B
+          77DF5308012A28608202423A0DB01016F57A132107B0C4C7F8A55F53C84F39FF
+          7DA72F8714FF960011CB3ED63FD8876F2AA4D329A49D20A815F9E8FA45760F4D
+          10D63608EA05406FBBE8401FC5AFEEA75AEFA5EC1D6279E1DBE2CDD7477B45D3
+          42C106B014A978324EB4E6628C412985ED24D9BD7780F9B929FAFA1FE4EA992F
+          618C69408D311823A8865F46EB51D64A6592F128BAF6612F80FCCE333FB075A8
+          6C29057B76EF6469F9164110A0B5C660D3B36B80ABFF7983A127CF7368FC0C67
+          CFBE756FCF188C31F87E8562A98AE3C4711C1B340E80045AB6BC88C61CEE6496
+          F12A1E5A6B945228A5E8D9F73800B3B3B39C38F1F43670A1B8C146619D446BCB
+          B68AB381A2B02DA5B5B13CCF6764F8210094528DD033990C008383839C3E7D0A
+          AD75C3BA3A77A094226247F0B4C1481102C8937F78D99888AC78258FF57CB121
+          504A118621AEEB323C3C02402E97E5E8D1A3DBC05A6B62B1262AAE8F57F25042
+          17B6524155D5A7E766E791158310725B1A76EDDA0D40367BB7B1B6655B602925
+          B7AF2F31373B4FDD84E71A605706CF4D5DBCA6139166324BD9CD02B8279E9C3C
+          4326B37C5FA8528A8E8E14AB99753A13ADBCF7EEB4F222EA79000BE0CACC85B5
+          2F7E7E6CACBAE11F38D8B70F3BE1202D81D69A743A8D31866AADDA78665B9E76
+          74A4A8947D74BECEDB931758BCBBFCBBD7FEFCCA1B0D302066E6AFFC734F7AE0
+          59DB88A6CE443BC691B4B5B7118601C6C0ADA5059452245A5A89461D92C956B2
+          77F204D92A97DF9DE6D2E5E9955F9E7EE5794001FE16381A86416BB1569E8A9A
+          E493E5D592D3D3D985EF57B12236F19638DD3B7A48B5A788441CF27737C8CEE7
+          10AEE2EDC90BBC77E55AF1F7E74EBE50AD554A800F94B7C00668CEAFAF84D337
+          2FFFA3ADA57B74EEFD8576111811C3212805F8F90A5ECEC3CDBA54722E73D337
+          F9DB9FCE996B0BB31FFE66F2D59FF8552F07148115A0FEC9FFD8011E00D240FA
+          0B030F8D3D3CF0C8B3A978C70E530B25E1E63F6109B42DD49AB79E3BFDCE1F7F
+          B151CC2D02796015B80994EED79A04D0067403ED4032D1D2D6B9B37BEFFEAE54
+          4F7FB5E6BBABF9CCD2ED3B73B78C3115A00C1480652007849FD9F33E1141D3A6
+          C53667803A50DDCCA507D4EE27FE1F3113B43A7726BE060000000049454E44AE
+          426082}
+      end
+      item
+        ImageFormat = ifPNG
+        ImgData = {
+          89504E470D0A1A0A0000000D4948445200000016000000160806000000C4B46C
+          3B0000000473424954080808087C086488000000097048597300000261000002
+          6101C13055FA0000001974455874536F667477617265007777772E696E6B7363
+          6170652E6F72679BEE3C1A000002A549444154388DE5D45D4853611807F0FF39
+          CE33CFBEDC87A96CCE4D70AC8CC252118D544CCB0D514A1485A6DD0C32B2EC26
+          D26EF222EAA210A2AB40A222FA802508291A54461FA050286539CB311284601E
+          F7FD753C6F5786A6B3C0A4A0079EBBE7FDF1BCEFC3FB5084106C45D05BA2FE7F
+          3065A514CA6E85EBF0ADFA05CA4699FF084CB55252759172A6B7A9CBD85A5AA3
+          529B95EF281B95BB2998AAA3241939E99F2F5A4FA533AA2C8418197A6BCFB252
+          3D3B9610969D90F59ACE997A12A24D14ABDBAD759E3F68CB145234F07838783C
+          1C22B11076CAB7B3CB75A29587E41DF2D7764B5D89389981EAA4CAC05DE78EAD
+          427B28466FD27FEAACA9D345929488FBBC100402251DC4D5E17BBC73E66BD59A
+          8ED976F6594B7965894E9D058D4C83E6CAFD6D9A76CD8D1F6821956C081BA63B
+          2C35D97E81C56280833FC42195F2E1E660FFD2AC73DE4A1E90576B3A2E30EDD8
+          674ED7C2EDF1801601D9DB7468A828B6A71D4F8B7BA63DA70DE5D91FDB2D15C6
+          C538108A711078825C452AEE0E0D0913CED97ADEC13F5975BBE52F2D6E15DF6E
+          282BB06566E8111096402703DA54315CB3DFF074DCB960AF2F567B691AC1180F
+          810776A9F478F4F805199D9A68E4FB79C79A59ACDC15292D298E96034547A45A
+          3902248E241190A590400D16F3E0E10F46108DC690C3AAF0E6E91C19991C6F8B
+          0DC4EEAC3BE49F9790B4493A78B4BAC012CE5884570840C4D020B4007F94031F
+          5F421E6BC4FB119E8CCDB9EC6147B86F3D745D180024B592515B6D7E9937D70D
+          1F15042D020800336DC4E4C33879E9FED21919885C4B84268401406A918EDB1B
+          F714FAF6BAE1A383301103DEF6C5F17C7AA62B3A1CBDBC110A002084244CD521
+          D954F7FD3272C5554AAC67F20853CDF46C54BF327F5170819655493FE437EBE3
+          4C1573E977514248E2A7D86CFC9BFBF8AFC0DF01995968660C14D30800000000
+          49454E44AE426082}
+      end>
+    Left = 144
+    Top = 160
+    Bitmap = {}
   end
 end

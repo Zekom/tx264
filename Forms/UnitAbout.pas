@@ -62,7 +62,7 @@ end;
 procedure TAboutForm.FormShow(Sender: TObject);
 begin
 
-  Label1.Caption := 'TX264 0.7.2 Beta Build: ' + Build;
+  Label1.Caption := 'TX264 0.7.3 Beta Build: ' + Build;
 
 end;
 

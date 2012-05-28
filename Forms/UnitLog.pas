@@ -5,11 +5,11 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, JvExStdCtrls, JvListBox, Vcl.ComCtrls, sSkinProvider,
-  Vcl.ExtCtrls, sPanel, sListBox, Vcl.Buttons, sBitBtn;
+  Vcl.ExtCtrls, sPanel, sListBox, Vcl.Buttons, sBitBtn, JvExControls,
+  JvEditorCommon, JvUnicodeEditor, JvUnicodeHLEditor;
 
 type
   TLogForm = class(TForm)
-    OutputList: TsListBox;
     SaveBtn: TsBitBtn;
     ClearBtn: TsBitBtn;
     SaveDialog1: TSaveDialog;
@@ -17,8 +17,9 @@ type
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
-    FullOutputList: TsListBox;
     sSkinProvider1: TsSkinProvider;
+    OutputList: TMemo;
+    FullOutputList: TMemo;
     procedure ClearBtnClick(Sender: TObject);
     procedure SaveBtnClick(Sender: TObject);
     procedure CloseBtnClick(Sender: TObject);
@@ -29,6 +30,7 @@ type
       Rect: TRect; State: TOwnerDrawState);
     procedure FullOutputListDrawItem(Control: TWinControl; Index: Integer;
       Rect: TRect; State: TOwnerDrawState);
+    procedure OutputListChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -50,28 +52,18 @@ begin
   case PageControl1.ActivePageIndex of
     0:
       begin
-        if OutputList.Items.Count > 0 then
+        if OutputList.Lines.Count > 0 then
         begin
-          OutputList.Items.Clear;
-          MainForm.UpdateListboxScrollBox(OutputList);
+          OutputList.Lines.Clear;
         end;
       end;
     1:
       begin
-        if FullOutputList.Items.Count > 0 then
+        if FullOutputList.Lines.Count > 0 then
         begin
-          FullOutputList.Items.Clear;
-          MainForm.UpdateListboxScrollBox(FullOutputList)
+          FullOutputList.Lines.Clear;
         end;
       end;
-    // 2:
-    // begin
-    // if MplayerOutputList.Items.Count > 0 then
-    // begin
-    // MplayerOutputList.Items.Clear;
-    // MainForm.UpdateListboxScrollBox(MplayerOutputList)
-    // end;
-    // end;
   end;
 
 end;
@@ -97,7 +89,7 @@ end;
 procedure TLogForm.FullOutputListChange(Sender: TObject);
 begin
 
-  FullOutputList.TopIndex := FullOutputList.Items.Count - 1;
+  SendMessage(FullOutputList.Handle, WM_VSCROLL, SB_BOTTOM, 0);
 
 end;
 
@@ -137,7 +129,14 @@ end;
 procedure TLogForm.OutputListAddString(Sender: TObject; Item: string);
 begin
 
-  OutputList.TopIndex := OutputList.Items.Count - 1;
+//  OutputList.TopIndex := OutputList.Items.Count - 1;
+
+end;
+
+procedure TLogForm.OutputListChange(Sender: TObject);
+begin
+
+  SendMessage(OutputList.Handle, WM_VSCROLL, SB_BOTTOM, 0);
 
 end;
 
@@ -180,21 +179,21 @@ begin
   case PageControl1.ActivePageIndex of
     0:
       begin
-        if OutputList.Items.Count > 0 then
+        if OutputList.Lines.Count > 0 then
         begin
           if SaveDialog1.Execute then
           begin
-            OutputList.Items.SaveToFile(SaveDialog1.FileName);
+            OutputList.Lines.SaveToFile(SaveDialog1.FileName);
           end;
         end;
       end;
     1:
       begin
-        if FullOutputList.Items.Count > 0 then
+        if FullOutputList.Lines.Count > 0 then
         begin
           if SaveDialog1.Execute then
           begin
-            FullOutputList.Items.SaveToFile(SaveDialog1.FileName);
+            FullOutputList.Lines.SaveToFile(SaveDialog1.FileName);
           end;
         end;
       end;
