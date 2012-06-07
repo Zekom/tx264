@@ -122,6 +122,10 @@ object LogForm: TLogForm
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Normal Log'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object OutputList: TMemo
         Left = 0
         Top = 0
@@ -146,6 +150,10 @@ object LogForm: TLogForm
     object TabSheet2: TTabSheet
       Caption = 'Full Output'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object FullOutputList: TMemo
         Left = 0
         Top = 0

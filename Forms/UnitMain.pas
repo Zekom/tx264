@@ -14,7 +14,8 @@ uses
   JvUrlListGrabber, JvUrlGrabbers, CommCtrl, sSkinProvider, sSkinManager,
   sPanel,
   sButton, sLabel, sListBox, sCheckBox, sComboBox, sEdit, sGauge, sBitBtn,
-  Vcl.ImgList, acAlphaImageList, JvSearchFiles, Vcl.Samples.Spin;
+  Vcl.ImgList, acAlphaImageList, JvSearchFiles, Vcl.Samples.Spin, JvBackgrounds,
+  JvListView;
 
 type
   TMainForm = class(TForm)
@@ -35,7 +36,6 @@ type
     AddFolder1: TMenuItem;
     OpenDialog: TOpenDialog;
     OpenFolderDialog: TJvBrowseForFolderDialog;
-    FileList: TsListBox;
     DirectoryEdit: TJvDirectoryEdit;
     Label1: TLabel;
     Process: TJvCreateProcess;
@@ -228,6 +228,8 @@ type
     TabSheet15: TTabSheet;
     ProgressList: TListView;
     ProgressImages: TsAlphaImageList;
+    FileList: TListView;
+    ListImage: TsAlphaImageList;
     procedure AddFiles1Click(Sender: TObject);
     procedure AddFolder1Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
@@ -294,6 +296,11 @@ type
     procedure AddMoreBtnClick(Sender: TObject);
     procedure AudioMethodListChange(Sender: TObject);
     procedure LameEncodeListChange(Sender: TObject);
+    procedure ProgressListResize(Sender: TObject);
+    procedure FileListResize(Sender: TObject);
+    procedure FileListAdvancedCustomDrawItem(Sender: TCustomListView;
+      Item: TListItem; State: TCustomDrawState; Stage: TCustomDrawStage;
+      var DefaultDraw: Boolean);
   private
     { Private declarations }
     CommandLines: TStringList;
@@ -308,6 +315,7 @@ type
     AudioIndexes: TStringList;
     AudioTracks: TStringList;
     CurrentFileIndexes: TStringList;
+    Files: TStringList;
 
     x264Path, FFMpegPath, Mp4BoxPath, MkvMergePath, MkvExtractPath, QaacPath,
       AftenPath, OggEncPath, SoxPath, LamePath: string;
@@ -342,6 +350,7 @@ type
 
     // gets duration of a file in seconds
     function GetDuration(Index: integer): string;
+    function GetDurationEx(const FileName: string): integer;
 
     // gets frame per second info of a file
     function GetFPS(Index: Integer): string;
@@ -362,8 +371,11 @@ type
 
     // fills summary list
     procedure FillSummaryList();
-
     procedure FillProgressList();
+
+    // gets audio codec
+    function GetAudioKind(const FileName: string;
+      const AudioID: Integer): string;
 
     // creates avs file
     procedure CreateAVSFile(const Index: Integer);
@@ -402,7 +414,7 @@ type
   end;
 
 const
-  BuildInt = 1214;
+  BuildInt = 1462;
 
 var
   MainForm: TMainForm;
@@ -453,7 +465,7 @@ var
 begin
 
   // paths and files
-  FileName := FileList.Items.Strings[Index];
+  FileName := Files[Index];
   case ContainerList.ItemIndex of
     0:
       OutFileName := ChangeFileExt(FileName, '.mkv');
@@ -648,8 +660,8 @@ begin
     CurrentFileIndexes.Add(FloatToStr(Index));
     CurrentFileIndexes.Add(FloatToStr(Index));
 
-    Infos.Add('Encoding video');
-    Infos.Add('Encoding video');
+    Infos.Add('Encoding video (1/2)');
+    Infos.Add('Encoding video (2/2)');
 
     ProcessTypeList.Add('1');
     ProcessTypeList.Add('1');
@@ -672,8 +684,22 @@ begin
       begin
 
         // audio decoding
-        AudioStr := ' -y -i "' + FileName + '" -f wav -map 0:' + AudioIndexes
-          [Index] + ' ';
+        AudioStr := ' -y -i "' + FileName + '" -vn  -f wav -map 0:' +
+          AudioIndexes[Index] + ' ';
+
+
+        // audio channels carried here because sox caused problems
+        if SoXForm.EnableBtn.Checked then
+        begin
+          case SoXForm.ChannelList.ItemIndex of
+            1:
+              AudioStr := AudioStr + ' -ac 1';
+            2:
+              AudioStr := AudioStr + ' -ac 2';
+            3:
+              AudioStr := AudioStr + ' -ac 6';
+          end;
+        end;
 
         TempAudioFile := ChangeFileExt(FileName, '.wav');
         TempAudioFile := TempFolder + '\' + ExtractFileName(TempAudioFile);
@@ -681,28 +707,28 @@ begin
         CommandLines.Add(AudioStr);
         CurrentFileIndexes.Add(FloatToStr(Index));
         Durations.Add(GetDuration(index));
-        Infos.Add('Decoding audio');
+        Infos.Add('Extracting audio');
 
         ProcessTypeList.Add('2');
 
         // audio filters
         AudioStr := '';
 
-        with SoxForm do
+        with SoXForm do
         begin
 
           if EnableBtn.Checked then
           begin
 
             // channels
-            case ChannelList.ItemIndex of
-              1:
-                AudioStr := AudioStr + ' -c 1';
-              2:
-                AudioStr := AudioStr + ' -c 2';
-              3:
-                AudioStr := AudioStr + ' -c 6';
-            end;
+            // case ChannelList.ItemIndex of
+            // 1:
+            // AudioStr := AudioStr + ' --channels 1';
+            // 2:
+            // AudioStr := AudioStr + ' -c 2';
+            // 3:
+            // AudioStr := AudioStr + ' -c 6';
+            // end;
 
             // sample rate
             if SampleList.ItemIndex > 0 then
@@ -967,7 +993,7 @@ begin
               ProcessTypeList.Add('16');
 
             end;
-          6: // ac3-ffmpeg
+          6: // wav
             begin
               OutAudioFile := TempAudioFile;
             end;
@@ -976,16 +1002,18 @@ begin
       end;
     1: // copy audio
       begin
-        AudioStr := ' -y -i "' + FileName + '" -f wav -map 0:' + AudioIndexes
-          [Index] + ' ';
+        AudioStr := ' -y -i "' + FileName + '" -vn -acodec copy -map 0:' +
+          AudioIndexes[Index] + ' ';
 
-        TempAudioFile := ChangeFileExt(FileName, '.wav');
+        TempAudioFile := ChangeFileExt(FileName, '.' + GetAudioKind(FileName,
+          StrToInt(AudioIndexes[Index]) - 1));
         TempAudioFile := TempFolder + '\' + ExtractFileName(TempAudioFile);
         AudioStr := AudioStr + ' "' + TempAudioFile + '"';
         CommandLines.Add(AudioStr);
         CurrentFileIndexes.Add(FloatToStr(Index));
         Durations.Add(GetDuration(index));
-        Infos.Add('Decoding audio');
+        Infos.Add('Copying audio');
+        OutAudioFile := TempAudioFile;
 
         ProcessTypeList.Add('2');
       end;
@@ -1080,7 +1108,7 @@ begin
             // this requires to extract each subtitle stream seperately
             CommandLines.Add(' -srt ' + FloatToStr(StrToInt(SubtitleID) + 1) +
               ' "' + FileName + '"' + ' ' + CustomMP4Edit.Text);
-              CurrentFileIndexes.Add(FloatToStr(Index));
+            CurrentFileIndexes.Add(FloatToStr(Index));
             Infos.Add('Extracting subtitle');
             ProcessTypeList.Add('9'); // mp4box-extract
           end;
@@ -1178,7 +1206,7 @@ begin
       begin
         CommandLines.Add(' tracks "' + FileName + '" ' + SubtitleStr + ' ' +
           CustomMKVExtractEdit.Text);
-          CurrentFileIndexes.Add(FloatToStr(Index));
+        CurrentFileIndexes.Add(FloatToStr(Index));
         Infos.Add('Extracting subtitle');
         ProcessTypeList.Add('5'); // mkvextract
       end
@@ -1350,6 +1378,7 @@ var
   VideoCount: string;
   i: Integer;
   NewItemStr: string;
+  NewItem: TListItem;
 begin
 
   if (FileExists(FileName)) then
@@ -1455,7 +1484,13 @@ begin
 
               AudioTracks.Add(NewItemStr);
               AudioIndexes.Add('1');
-              FileList.Items.Add(FileName);
+
+              Files.Add(FileName);
+
+              NewItem := FileList.Items.Add;
+              NewItem.Caption := ExtractFileName(FileName);
+              NewItem.SubItems.Add(IntToTime(GetDurationEx(FileName)));
+
             end;
 
           end;
@@ -1517,7 +1552,6 @@ begin
     end;
     LastDirectory := ExtractFileDir(OpenDialog.FileName);
 
-    UpdateListboxScrollBox(FileList);
   end;
 
 end;
@@ -1551,6 +1585,9 @@ begin
 
           Extension := LowerCase(ExtractFileExt(FileName));
 
+          if AddingStopped then
+            Break;
+
           if (Extension = '.mp4') or (Extension = '.mov') or
             (Extension = '.m4v') or (Extension = '.mkv') or
             (Extension = '.mpeg') or (Extension = '.mpg') or
@@ -1569,7 +1606,6 @@ begin
     finally
       FileList.Items.EndUpdate;
       LastDirectory := OpenFolderDialog.Directory;
-      UpdateListboxScrollBox(FileList);
 
       Self.Enabled := True;
       ProgressForm.Close;
@@ -1606,7 +1642,6 @@ begin
       ProgressForm.Close;
       Self.BringToFront;
 
-      UpdateListboxScrollBox(FileList);
     end;
 
   end;
@@ -1716,7 +1751,7 @@ end;
 procedure TMainForm.AudioEffectsBtnClick(Sender: TObject);
 begin
 
-  SoxForm.show;
+  SoXForm.show;
 
 end;
 
@@ -1996,7 +2031,7 @@ var
 begin
 
   AVSFile := TStringList.Create;
-  FileName := FileList.Items.Strings[Index];
+  FileName := Files[Index];
   try
 
     with AvisForm do
@@ -2167,8 +2202,8 @@ begin
   LogForm.OutputList.Lines.Add('[' + DateTimeToStr(Now) + ']' +
     ' Finished deleting temp files.');
   LogForm.OutputList.Lines.Add('');
-//  UpdateListboxScrollBox(LogForm.OutputList);
-//  LogForm.OutputList.TopIndex := LogForm.OutputList.Items.Count - 1;
+  // UpdateListboxScrollBox(LogForm.OutputList);
+  // LogForm.OutputList.TopIndex := LogForm.OutputList.Items.Count - 1;
 
 end;
 
@@ -2192,6 +2227,7 @@ end;
 procedure TMainForm.DownBtnClick(Sender: TObject);
 var
   i: Integer;
+  lv1, lv2, lv: TListItem;
 begin
 
   for i := FileList.Items.Count - 1 downto 0 do
@@ -2200,10 +2236,16 @@ begin
     if i < FileList.Items.Count then
     begin
 
-      if FileList.Selected[i] then
+      if FileList.Items.Item[i].Selected then
       begin
-        FileList.Items.Exchange(i, i + 1);
-        FileList.Selected[i + 1] := True;
+        lv2 := FileList.Items[i];
+        lv := FileList.Items.Insert(i + 2);
+        lv.Assign(lv2);
+        lv2.Delete;
+        lv.Selected := True;
+        lv.Focused := True;
+
+        Files.Exchange(i, i + 1);
 
         AudioTracks.Exchange(i, i + 1);
         AudioIndexes.Exchange(i, i + 1);
@@ -2428,6 +2470,22 @@ begin
 
 end;
 
+procedure TMainForm.FileListAdvancedCustomDrawItem(Sender: TCustomListView;
+  Item: TListItem; State: TCustomDrawState; Stage: TCustomDrawStage;
+  var DefaultDraw: Boolean);
+begin
+
+  if (Item.Index mod 2) = 0 then
+  begin
+    Sender.Canvas.Font.Color := clBlack;
+  end
+  else
+  begin
+    Sender.Canvas.Font.Color := clGrayText;
+  end;
+
+end;
+
 procedure TMainForm.FileListClick(Sender: TObject);
 var
   index: Integer;
@@ -2487,6 +2545,13 @@ begin
 
 end;
 
+procedure TMainForm.FileListResize(Sender: TObject);
+begin
+
+  FileList.Columns[0].Width := FileList.ClientWidth - 100;
+
+end;
+
 procedure TMainForm.FileSearchFindFile(Sender: TObject; const AName: string);
 begin
 
@@ -2521,7 +2586,7 @@ begin
       with NewItem do
       begin
         Caption := '';
-        SubItems.Add(ExtractFileName(FileList.Items[i]));
+        SubItems.Add(ExtractFileName(Files[i]));
         SubItems.Add('Waiting');
         StateIndex := 1;
       end;
@@ -2532,6 +2597,7 @@ begin
   // for first item
   ProgressList.Items[0].SubItems[1] := Infos[0];
   ProgressList.Items[0].StateIndex := 0;
+  ProgressList.ItemIndex := 0;
 
 end;
 
@@ -2708,7 +2774,7 @@ begin
           end;
           NewNode.Expand(True);
           // effects
-          with SoxForm do
+          with SoXForm do
           begin
             NewNode := AddChild(NewNode, 'Effects');
             if EnableBtn.Checked then
@@ -2798,6 +2864,7 @@ begin
   end;
 
   SaveOptions();
+  DeleteTempFiles();
 
 end;
 
@@ -2982,6 +3049,7 @@ begin
   AudioIndexes := TStringList.Create;
   AudioTracks := TStringList.Create;
   CurrentFileIndexes := TStringList.Create;
+  Files := TStringList.Create;
 
   // windows 7 taskbar
   if CheckWin32Version(6, 1) then
@@ -3016,6 +3084,7 @@ begin
   FreeAndNil(AudioTracks);
   FreeAndNil(AudioIndexes);
   FreeAndNil(CurrentFileIndexes);
+  FreeAndNil(Files);
 
 end;
 
@@ -3048,6 +3117,75 @@ begin
     UpdateThread.Execute(nil);
   end;
 
+  // to make sure filelist's columns resize correctly
+  Self.Width := Self.Width + 1;
+  Self.Width := Self.Width - 1;
+
+end;
+
+function TMainForm.GetAudioKind(const FileName: string;
+  const AudioID: Integer): string;
+var
+  MediaInfoHandle: Cardinal;
+  TmpStr: string;
+begin
+
+  Result := ExtractFileExt(FileName);
+
+  if (FileExists(FileName)) then
+  begin
+
+    // New handle for mediainfo
+    MediaInfoHandle := MediaInfo_New();
+
+    if MediaInfoHandle <> 0 then
+    begin
+
+      try
+        // Open a file in complete mode
+        MediaInfo_Open(MediaInfoHandle, PWideChar(FileName));
+        MediaInfo_Option(0, 'Complete', '1');
+
+        TmpStr := Trim(ReplaceStr(MediaInfo_Get(MediaInfoHandle, Stream_Audio,
+          AudioID - 1, 'Codec', Info_Text, Info_Name), ' ', ''));
+
+        if ContainsText(TmpStr, 'vorbis') then
+        begin
+          Result := 'ogg';
+        end
+        else if ContainsText(TmpStr, 'mp3') or ContainsText(TmpStr, 'lame') then
+        begin
+          Result := 'mp3';
+        end
+        else if ContainsText(TmpStr, 'aac') then
+        begin
+          Result := 'aac';
+        end
+        else if ContainsText(TmpStr, 'ac3') then
+        begin
+          Result := 'ac3';
+        end
+        else if ContainsText(TmpStr, 'wav') or ContainsText(TmpStr, 'pcm') then
+        begin
+          Result := 'wav';
+        end
+        else if ContainsText(TmpStr, 'mp2') then
+        begin
+          Result := 'mp2';
+        end
+        else
+        begin
+          Result := TmpStr;
+        end;
+
+      finally
+        MediaInfo_Close(MediaInfoHandle);
+      end;
+
+    end;
+
+  end;
+
 end;
 
 function TMainForm.GetDuration(Index: integer): string;
@@ -3057,7 +3195,7 @@ var
   FileName: string;
 begin
 
-  FileName := FileList.Items.Strings[Index];
+  FileName := Files[Index];
 
   if (FileExists(FileName)) then
   begin
@@ -3094,13 +3232,56 @@ begin
 
 end;
 
+function TMainForm.GetDurationEx(const FileName: string): integer;
+var
+  MediaInfoHandle: Cardinal;
+  VDuration: string;
+begin
+
+  Result := 0;
+
+  if (FileExists(FileName)) then
+  begin
+
+    // New handle for mediainfo
+    MediaInfoHandle := MediaInfo_New();
+
+    if MediaInfoHandle <> 0 then
+    begin
+
+      try
+        // Open a file in complete mode
+        MediaInfo_Open(MediaInfoHandle, PWideChar(FileName));
+        MediaInfo_Option(0, 'Complete', '1');
+
+        // get length
+        VDuration := MediaInfo_Get(MediaInfoHandle, Stream_Video, 0, 'Duration',
+          Info_Text, Info_Name);
+
+        if Length(VDuration) < 1 then
+        begin
+          VDuration := '0';
+        end;
+
+        Result := StrToInt64(VDuration) div 1000;
+
+      finally
+        MediaInfo_Close(MediaInfoHandle);
+      end;
+
+    end;
+
+  end;
+
+end;
+
 procedure TMainForm.GetExternalSubtitles(Index: Integer);
 var
   FileName: string;
   SrtFile, AssFile, SubFile: string;
 begin
 
-  FileName := FileList.Items.Strings[Index];
+  FileName := Files[Index];
 
   if FileExists(FileName) then
   begin
@@ -3141,7 +3322,7 @@ var
   FileName: string;
 begin
 
-  FileName := FileList.Items.Strings[Index];
+  FileName := Files[Index];
 
   if (FileExists(FileName)) then
   begin
@@ -3267,7 +3448,7 @@ begin
 
   Result := 0;
 
-  FileName := FileList.Items.Strings[Index];
+  FileName := Files[Index];
 
   if (FileExists(FileName)) then
   begin
@@ -3311,7 +3492,7 @@ var
   FileName: string;
 begin
 
-  FileName := FileList.Items.Strings[Index];
+  FileName := Files[Index];
 
   Result := 0;
 
@@ -3364,7 +3545,7 @@ var
   FileName: string;
 begin
 
-  FileName := FileList.Items.Strings[Index];
+  FileName := Files[Index];
   SubID := '';
   if (FileExists(FileName)) then
   begin
@@ -3415,7 +3596,7 @@ var
   FileName: string;
 begin
 
-  FileName := FileList.Items.Strings[Index];
+  FileName := Files[Index];
   SubKind := 'srt';
   if (FileExists(FileName)) then
   begin
@@ -3462,7 +3643,7 @@ begin
 
   Result := 0;
 
-  FileName := FileList.Items.Strings[Index];
+  FileName := Files[Index];
 
   if (FileExists(FileName)) then
   begin
@@ -3508,7 +3689,7 @@ begin
 
   if index > -1 then
   begin
-    GetFullInfo(FileList.Items.Strings[index]);
+    GetFullInfo(Files[index]);
     InfoForm.show;
   end;
 
@@ -3700,10 +3881,17 @@ begin
       QaacQualityList.ItemIndex := ReadInteger('Settings', 'QaacProfile', 2);
       QaacHEBtn.Checked := ReadBool('Settings', 'QaacHE', False);
 
+      AudioMethodList.ItemIndex := ReadInteger('Settings', 'AudioMethod', 0);
+
       OggencodeList.ItemIndex := ReadInteger('Settings', 'OggEncode', 0);
       OggQualityEdit.Text := ReadString('Settings', 'OggQuality', '6');
       OggBitrateEdit.Text := ReadString('Settings', 'OggBitrate', '80');
       OggManagedBitrateBtn.Checked := ReadBool('Settings', 'OggManaged', False);
+
+      LameEncodeList.ItemIndex := ReadInteger('Settings', 'LAmeEncode', 0);
+      LameVBREdit.Text := ReadString('Settings', 'LameVBR', '2,00');
+      LameBitrateEdit.Text := ReadString('Settings', 'LameBit', '128');
+      LameQualityEdit.Text := ReadString('Settings', 'LameQ', '3');
 
       AftenEncodeList.ItemIndex := ReadInteger('Settings', 'AftenEncode', 0);
       AftenQualityEdit.Text := ReadString('Settings', 'AftenQuality', '240');
@@ -3750,6 +3938,8 @@ begin
     SliceThreadsBtn.OnClick(Self);
     UseAdvancedBtn.OnClick(Self);
     SplittingBtn.OnClick(Self);
+    AudioMethodList.OnChange(Self);
+    LameEncodeList.OnChange(Self);
   end;
 
 end;
@@ -3943,14 +4133,13 @@ begin
 
   if index > -1 then
   begin
-    FileDir := ExtractFileDir(FileList.Items.Strings[index]);
+    FileDir := ExtractFileDir(Files[index]);
 
     if DirectoryExists(FileDir) then
     begin
 
       ShellExecute(Handle, 'open', 'explorer',
-        PChar(' /n,/select, ' + '"' + FileList.Items.Strings[index] + '"'), nil,
-        SW_SHOWNORMAL);
+        PChar(' /n,/select, ' + '"' + Files[index] + '"'), nil, SW_SHOWNORMAL);
 
     end;
 
@@ -3984,8 +4173,8 @@ begin
 
   if index > -1 then
   begin
-    ShellExecute(Application.Handle, 'open', PChar(FileList.Items.Strings[index]
-      ), nil, nil, SW_SHOWNORMAL);
+    ShellExecute(Application.Handle, 'open', PChar(Files[index]), nil, nil,
+      SW_SHOWNORMAL);
   end;
 
 end;
@@ -4002,7 +4191,7 @@ begin
     CMD := CMD + ' -vf scale=' + WidthEdit.Text + ':' + HeightEdit.Text;
   end;
 
-  CMD := CMD + ' "' + FileList.Items.Strings[index] + '"';
+  CMD := CMD + ' "' + Files[index] + '"';
 
   // MplayerProcess.CommandLine := CMD;
   // MplayerProcess.Run;
@@ -4124,7 +4313,7 @@ begin
   AudioTracks.Clear;
   AudioIndexes.Clear;
   AudioTrackList.Items.Clear;
-  UpdateListboxScrollBox(FileList);
+  Files.Clear;
 
 end;
 
@@ -4137,16 +4326,16 @@ begin
   begin
     Application.ProcessMessages;
 
-    if FileList.Selected[i] then
+    if FileList.Items.Item[i].Selected then
     begin
-      FileList.Items.Delete(i);
+      FileList.Items.Item[i].Delete;
       AudioTracks.Delete(i);
       AudioIndexes.Delete(i);
+      Files.Delete(i);
     end;
 
   end;
 
-  UpdateListboxScrollBox(FileList);
   FileList.OnClick(Self);
 
 end;
@@ -4223,9 +4412,16 @@ begin
       WriteString('Settings', 'OggBitrate', OggBitrateEdit.Text);
       WriteBool('Settings', 'OggManaged', OggManagedBitrateBtn.Checked);
 
+      WriteInteger('Settings', 'LAmeEncode', LameEncodeList.ItemIndex);
+      WriteString('Settings', 'LameVBR', LameVBREdit.Text);
+      WriteString('Settings', 'LameBit', LameBitrateEdit.Text);
+      WriteString('Settings', 'LameQ', LameQualityEdit.Text);
+
       WriteInteger('Settings', 'AftenEncode', AftenEncodeList.ItemIndex);
       WriteString('Settings', 'AftenQuality', AftenQualityEdit.Text);
       WriteString('Settings', 'AftenBitrate', AftenBitrateEdit.Text);
+
+      WriteInteger('Settings', 'AudioMethod', AudioMethodList.ItemIndex);
 
       WriteString('Settings', 'CustomVideo', CustomVideoOptionsEdit.Text);
       WriteString('Settings', 'CustomAudio', CustomAudioOptionsEdit.Text);
@@ -4273,22 +4469,18 @@ begin
 
   Result := 0;
 
-  if (Length(SoxOutput) > 0) then
+  if (Length(ConsoleOutputEdit.Text) > 0) then
   begin
     pos1 := 3;
-    pos2 := Pos('%', SoxOutput);
-    prog := Copy(Text, pos1 + 1, (pos2 - pos1 - 1));
-    prog := ReplaceStr(prog, '.', '.');
 
-    if TryStrToFloat(prog, TmpFloat) then
+    if Copy(ConsoleOutputEdit.Text, 3, 3) = '100' then
     begin
-      Result := Round(TmpFloat)
+      Result := 100;
+    end
+    else if IsStringNumeric(Copy(ConsoleOutputEdit.Text, 3, 2)) then
+    begin
+      Result := StrToInt(Copy(ConsoleOutputEdit.Text, 3, 2));
     end;
-
-    // if IsStringNumeric(prog) then
-    // begin
-    // Result := StrToInt(prog);
-    // end;
 
   end;
 
@@ -4329,6 +4521,9 @@ begin
         Infos.Clear;
         Process.ConsoleOutput.Clear;
         CurrentFileIndexes.Clear;
+        SummaryView.Items.Clear;
+        ProgressList.Items.Clear;
+        ConsoleOutputList.Items.Clear;
 
         Self.Caption := 'Encoding [TX264]';
 
@@ -4370,8 +4565,8 @@ begin
           Add('--------------------------------------------');
           Add('');
         end;
-//        UpdateListboxScrollBox(LogForm.OutputList);
-//        LogForm.OutputList.TopIndex := LogForm.OutputList.Items.Count - 1;
+        // UpdateListboxScrollBox(LogForm.OutputList);
+        // LogForm.OutputList.TopIndex := LogForm.OutputList.Items.Count - 1;
 
         FileIndex := 0;
         DurationIndex := 0;
@@ -4388,6 +4583,11 @@ begin
         SetProgressState(Self.Handle, tbpsNormal);
       end;
 
+    end
+    else
+    begin
+      Application.MessageBox('Output folder does not exist!', 'Error',
+        MB_ICONERROR);
     end;
 
   end
@@ -4478,6 +4678,7 @@ end;
 procedure TMainForm.UpBtnClick(Sender: TObject);
 var
   i: Integer;
+  lv1, lv2, lv: TListItem;
 begin
 
   for i := 0 to FileList.Items.Count - 1 do
@@ -4486,10 +4687,16 @@ begin
     if i > 0 then
     begin
 
-      if FileList.Selected[i] then
+      if FileList.Items.Item[i].Selected then
       begin
-        FileList.Items.Exchange(i, i - 1);
-        FileList.Selected[i - 1] := True;
+        lv2 := FileList.Items[i];
+        lv := FileList.Items.Insert(i - 1);
+        lv.Assign(lv2);
+        lv2.Delete;
+        lv.Selected := True;
+        lv.Focused := True;
+
+        Files.Exchange(i, i - 1);
 
         AudioTracks.Exchange(i, i - 1);
         AudioIndexes.Exchange(i, i - 1);
@@ -5092,6 +5299,7 @@ begin
             begin
               Item[i].StateIndex := 0;
               Item[i].SubItems[1] := Infos[FileIndex];
+              ProgressList.ItemIndex := i;
             end;
 
           end;
@@ -5119,6 +5327,13 @@ begin
     end;
 
   end;
+
+end;
+
+procedure TMainForm.ProgressListResize(Sender: TObject);
+begin
+
+  ProgressList.Columns[1].Width := ProgressList.Width - 190;
 
 end;
 

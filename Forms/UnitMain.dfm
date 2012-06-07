@@ -256,6 +256,8 @@ object MainForm: TMainForm
       Height = 21
       Alignment = taCenter
       Anchors = [akLeft, akTop, akRight]
+      BorderStyle = bsNone
+      Color = 14870243
       Enabled = False
       ReadOnly = True
       TabOrder = 5
@@ -334,13 +336,14 @@ object MainForm: TMainForm
           Height = 459
           Align = alClient
           BorderStyle = bsNone
+          Color = 14870243
           Columns = <
             item
               Width = 30
             end
             item
-              AutoSize = True
               Caption = 'File'
+              Width = 360
             end
             item
               Alignment = taCenter
@@ -353,6 +356,7 @@ object MainForm: TMainForm
           StateImages = ProgressImages
           TabOrder = 0
           ViewStyle = vsReport
+          OnResize = ProgressListResize
         end
       end
       object TabSheet12: TTabSheet
@@ -366,6 +370,7 @@ object MainForm: TMainForm
           BevelInner = bvNone
           BevelOuter = bvNone
           BorderStyle = bsNone
+          Color = 14870243
           Indent = 19
           ReadOnly = True
           RowSelect = True
@@ -382,6 +387,7 @@ object MainForm: TMainForm
           Height = 459
           Align = alClient
           BorderStyle = bsNone
+          Color = 14870243
           Enabled = False
           TabOrder = 0
           BoundLabel.Indent = 0
@@ -400,9 +406,9 @@ object MainForm: TMainForm
   end
   object AboutBtn: TsBitBtn
     Left = 8
-    Top = 568
+    Top = 563
     Width = 100
-    Height = 25
+    Height = 30
     Hint = 'About TX264'
     Anchors = [akLeft, akBottom]
     Caption = 'About'
@@ -611,39 +617,6 @@ object MainForm: TMainForm
       OnClick = DownBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
-    object FileList: TsListBox
-      Left = 54
-      Top = 43
-      Width = 507
-      Height = 239
-      Hint = 'File list'
-      Style = lbOwnerDrawFixed
-      Anchors = [akLeft, akTop, akRight, akBottom]
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ItemHeight = 18
-      MultiSelect = True
-      ParentFont = False
-      PopupMenu = ListMenu
-      TabOrder = 2
-      OnClick = FileListClick
-      OnDblClick = Play1Click
-      OnDrawItem = FileListDrawItem
-      BoundLabel.Caption = 'FileList'
-      BoundLabel.Indent = 0
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      BoundLabel.Layout = sclLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
-      SkinData.SkinSection = 'EDIT'
-    end
     object RemoveAllBtn: TsBitBtn
       Left = 8
       Top = 196
@@ -782,7 +755,7 @@ object MainForm: TMainForm
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000}
-      TabOrder = 3
+      TabOrder = 2
       OnClick = RemoveAllBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
@@ -924,13 +897,13 @@ object MainForm: TMainForm
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000}
-      TabOrder = 4
+      TabOrder = 3
       OnClick = RemoveBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
     object UpBtn: TsBitBtn
       Left = 8
-      Top = 58
+      Top = 62
       Width = 40
       Height = 40
       Hint = 'Move selected up'
@@ -1065,7 +1038,7 @@ object MainForm: TMainForm
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000}
-      TabOrder = 5
+      TabOrder = 4
       OnClick = UpBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
@@ -1348,7 +1321,7 @@ object MainForm: TMainForm
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000}
-      TabOrder = 6
+      TabOrder = 5
       OnClick = InfoBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
@@ -1363,7 +1336,7 @@ object MainForm: TMainForm
       ButtonFlat = True
       Color = clWhite
       Anchors = [akLeft, akRight, akBottom]
-      TabOrder = 7
+      TabOrder = 6
       Text = 'C:\'
     end
     object OutputBtn: TsBitBtn
@@ -1374,19 +1347,19 @@ object MainForm: TMainForm
       Hint = 'Open output directory'
       Anchors = [akRight, akBottom]
       Caption = 'Open'
-      TabOrder = 8
+      TabOrder = 7
       OnClick = OutputBtnClick
       SkinData.SkinSection = 'BUTTON'
     end
     object SameAsSourceBtn: TsCheckBox
       Left = 469
       Top = 290
-      Width = 100
-      Height = 19
+      Width = 95
+      Height = 20
       Hint = 'Make source directory as output directory'
       Caption = 'Same as source'
       Anchors = [akRight, akBottom]
-      TabOrder = 9
+      TabOrder = 8
       SkinData.SkinSection = 'CHECKBOX'
       ImgChecked = 0
       ImgUnchecked = 0
@@ -1411,6 +1384,7 @@ object MainForm: TMainForm
       BoundLabel.UseSkinColor = True
       SkinData.SkinSection = 'COMBOBOX'
       Style = csDropDownList
+      Color = clBtnFace
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -1418,15 +1392,45 @@ object MainForm: TMainForm
       Font.Style = []
       ItemIndex = -1
       ParentFont = False
-      TabOrder = 10
+      TabOrder = 9
       OnChange = AudioTrackListChange
+    end
+    object FileList: TListView
+      Left = 54
+      Top = 43
+      Width = 505
+      Height = 239
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      Color = clWhite
+      Columns = <
+        item
+          Caption = 'File Name'
+          Width = 421
+        end
+        item
+          Alignment = taCenter
+          Caption = 'Duration'
+          Width = 80
+        end>
+      MultiSelect = True
+      ReadOnly = True
+      RowSelect = True
+      PopupMenu = ListMenu
+      ShowWorkAreas = True
+      StateImages = ListImage
+      TabOrder = 10
+      ViewStyle = vsReport
+      OnAdvancedCustomDrawItem = FileListAdvancedCustomDrawItem
+      OnClick = FileListClick
+      OnDblClick = Play1Click
+      OnResize = FileListResize
     end
   end
   object LogsBtn: TsBitBtn
     Left = 114
-    Top = 568
+    Top = 563
     Width = 100
-    Height = 25
+    Height = 30
     Hint = 'Log and outputs of backends'
     Anchors = [akLeft, akBottom]
     Caption = 'Logs/Outputs'
@@ -1474,7 +1478,7 @@ object MainForm: TMainForm
     Top = 332
     Width = 573
     Height = 230
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     Anchors = [akLeft, akRight, akBottom]
     Images = PageImages
     MultiLine = True
@@ -1544,6 +1548,7 @@ object MainForm: TMainForm
             Alignment = taCenter
             ButtonKind = bkClassic
             Value = 386.000000000000000000
+            Color = clBtnFace
             TabOrder = 0
           end
           object EncodeModeList: TsComboBox
@@ -1564,6 +1569,7 @@ object MainForm: TMainForm
             BoundLabel.UseSkinColor = True
             SkinData.SkinSection = 'COMBOBOX'
             Style = csDropDownList
+            Color = clBtnFace
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1591,6 +1597,7 @@ object MainForm: TMainForm
             ButtonKind = bkClassic
             MaxValue = 51.000000000000000000
             Value = 21.000000000000000000
+            Color = clBtnFace
             Enabled = False
             TabOrder = 2
           end
@@ -1607,6 +1614,7 @@ object MainForm: TMainForm
             MaxValue = 51.000000000000000000
             ValueType = vtFloat
             Value = 21.000000000000000000
+            Color = clBtnFace
             Enabled = False
             TabOrder = 3
           end
@@ -1623,6 +1631,7 @@ object MainForm: TMainForm
             MaxValue = 1.000000000000000000
             ValueType = vtFloat
             Value = 0.010000000000000000
+            Color = clBtnFace
             Enabled = False
             Anchors = [akRight, akBottom]
             TabOrder = 4
@@ -1660,6 +1669,7 @@ object MainForm: TMainForm
             BoundLabel.UseSkinColor = True
             SkinData.SkinSection = 'COMBOBOX'
             Style = csDropDownList
+            Color = clBtnFace
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1703,6 +1713,7 @@ object MainForm: TMainForm
             BoundLabel.UseSkinColor = True
             SkinData.SkinSection = 'COMBOBOX'
             Style = csDropDownList
+            Color = clBtnFace
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1739,6 +1750,7 @@ object MainForm: TMainForm
             BoundLabel.UseSkinColor = True
             SkinData.SkinSection = 'COMBOBOX'
             Style = csDropDownList
+            Color = clBtnFace
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1762,9 +1774,9 @@ object MainForm: TMainForm
         end
         object ConstantFPSBtn: TsCheckBox
           Left = 436
-          Top = 168
-          Width = 115
-          Height = 19
+          Top = 159
+          Width = 110
+          Height = 20
           Caption = 'Force constant fps'
           Anchors = [akRight, akBottom]
           Checked = True
@@ -1776,7 +1788,7 @@ object MainForm: TMainForm
         end
         object ContainerList: TsComboBox
           Left = 481
-          Top = 143
+          Top = 134
           Width = 70
           Height = 21
           Anchors = [akRight, akBottom]
@@ -1794,6 +1806,7 @@ object MainForm: TMainForm
           BoundLabel.UseSkinColor = True
           SkinData.SkinSection = 'COMBOBOX'
           Style = csDropDownList
+          Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -11
@@ -1809,9 +1822,9 @@ object MainForm: TMainForm
         end
         object SubtitleBtn: TsCheckBox
           Left = 12
-          Top = 141
-          Width = 242
-          Height = 19
+          Top = 132
+          Width = 237
+          Height = 20
           Caption = 'Mux subtitles to output mkv/mp4 from source'
           Anchors = [akLeft, akBottom]
           Checked = True
@@ -1823,9 +1836,9 @@ object MainForm: TMainForm
         end
         object CopyChapertBtn: TsCheckBox
           Left = 12
-          Top = 168
-          Width = 171
-          Height = 19
+          Top = 159
+          Width = 166
+          Height = 20
           Caption = 'Copy chapter info from source'
           Anchors = [akLeft, akBottom]
           TabOrder = 5
@@ -1835,9 +1848,9 @@ object MainForm: TMainForm
         end
         object UseAdvancedBtn: TsCheckBox
           Left = 343
-          Top = 116
-          Width = 111
-          Height = 19
+          Top = 107
+          Width = 106
+          Height = 20
           Hint = 'Use advanced options'
           Caption = 'Advanced options'
           Anchors = [akRight, akBottom]
@@ -1849,7 +1862,7 @@ object MainForm: TMainForm
         end
         object AdvancedBtn: TsBitBtn
           Left = 455
-          Top = 114
+          Top = 105
           Width = 100
           Height = 25
           Hint = 'Edit advanced options'
@@ -1863,8 +1876,8 @@ object MainForm: TMainForm
         object BitrateTolBtn: TsCheckBox
           Left = 177
           Top = 54
-          Width = 76
-          Height = 19
+          Width = 71
+          Height = 20
           Hint = 'Bitrate tolerance'
           Caption = 'Tolerance:'
           TabOrder = 8
@@ -1940,15 +1953,18 @@ object MainForm: TMainForm
           CheckMinValue = True
           Alignment = taCenter
           ButtonKind = bkClassic
+          Color = clBtnFace
           Enabled = False
           TabOrder = 0
         end
         object CropBtn: TsCheckBox
           Left = 310
           Top = 24
-          Width = 48
-          Height = 19
+          Width = 43
+          Height = 20
           Caption = 'Crop'
+          Color = clBtnFace
+          ParentColor = False
           TabOrder = 1
           OnClick = CropBtnClick
           SkinData.SkinSection = 'CHECKBOX'
@@ -1964,6 +1980,7 @@ object MainForm: TMainForm
           CheckMinValue = True
           Alignment = taCenter
           ButtonKind = bkClassic
+          Color = clBtnFace
           Enabled = False
           TabOrder = 2
         end
@@ -1976,6 +1993,7 @@ object MainForm: TMainForm
           CheckMinValue = True
           Alignment = taCenter
           ButtonKind = bkClassic
+          Color = clBtnFace
           Enabled = False
           TabOrder = 3
         end
@@ -1988,6 +2006,7 @@ object MainForm: TMainForm
           CheckMinValue = True
           Alignment = taCenter
           ButtonKind = bkClassic
+          Color = clBtnFace
           Enabled = False
           TabOrder = 4
         end
@@ -2001,13 +2020,14 @@ object MainForm: TMainForm
           Alignment = taCenter
           ButtonKind = bkClassic
           Value = 240.000000000000000000
+          Color = clBtnFace
           TabOrder = 5
         end
         object ResizeBtn: TsCheckBox
           Left = 12
           Top = 12
-          Width = 56
-          Height = 19
+          Width = 51
+          Height = 20
           Caption = 'Resize'
           Checked = True
           State = cbChecked
@@ -2036,6 +2056,7 @@ object MainForm: TMainForm
           BoundLabel.UseSkinColor = True
           SkinData.SkinSection = 'COMBOBOX'
           Style = csDropDownList
+          Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -11
@@ -2077,6 +2098,7 @@ object MainForm: TMainForm
           BoundLabel.UseSkinColor = True
           SkinData.SkinSection = 'COMBOBOX'
           Style = csDropDownList
+          Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -11
@@ -2118,6 +2140,7 @@ object MainForm: TMainForm
           Alignment = taCenter
           ButtonKind = bkClassic
           Value = 320.000000000000000000
+          Color = clBtnFace
           TabOrder = 9
         end
       end
@@ -2198,6 +2221,7 @@ object MainForm: TMainForm
                 BoundLabel.UseSkinColor = True
                 SkinData.SkinSection = 'COMBOBOX'
                 Style = csDropDownList
+                Color = clBtnFace
                 Font.Charset = DEFAULT_CHARSET
                 Font.Color = clWindowText
                 Font.Height = -11
@@ -2223,6 +2247,7 @@ object MainForm: TMainForm
                 MaxValue = 500.000000000000000000
                 MinValue = 10.000000000000000000
                 Value = 10.000000000000000000
+                Color = clBtnFace
                 TabOrder = 1
               end
               object FAACBitrateEdit: TJvSpinEdit
@@ -2236,6 +2261,7 @@ object MainForm: TMainForm
                 MaxValue = 600.000000000000000000
                 MinValue = 24.000000000000000000
                 Value = 24.000000000000000000
+                Color = clBtnFace
                 TabOrder = 2
               end
             end
@@ -2507,8 +2533,8 @@ object MainForm: TMainForm
               object QaacHEBtn: TsCheckBox
                 Left = 367
                 Top = 35
-                Width = 91
-                Height = 19
+                Width = 86
+                Height = 20
                 Caption = 'HE AAC mode'
                 TabOrder = 4
                 OnClick = QaacHEBtnClick
@@ -2701,8 +2727,8 @@ object MainForm: TMainForm
               object OggManagedBitrateBtn: TsCheckBox
                 Left = 427
                 Top = 10
-                Width = 104
-                Height = 19
+                Width = 99
+                Height = 20
                 Caption = 'Managed bitrate'
                 TabOrder = 3
                 SkinData.SkinSection = 'CHECKBOX'
@@ -2883,7 +2909,7 @@ object MainForm: TMainForm
         end
         object AudioMethodList: TsComboBox
           Left = 50
-          Top = 167
+          Top = 168
           Width = 100
           Height = 21
           Anchors = [akLeft, akBottom]
@@ -3050,8 +3076,8 @@ object MainForm: TMainForm
         object SplittingBtn: TsCheckBox
           Left = 17
           Top = 16
-          Width = 97
-          Height = 19
+          Width = 92
+          Height = 20
           Caption = 'Enable splitting'
           TabOrder = 1
           OnClick = SplittingBtnClick
@@ -3111,8 +3137,8 @@ object MainForm: TMainForm
         object CheckUpdateBtn: TsCheckBox
           Left = 11
           Top = 91
-          Width = 137
-          Height = 19
+          Width = 132
+          Height = 20
           Caption = 'Check updates on start'
           Checked = True
           State = cbChecked
@@ -3124,8 +3150,8 @@ object MainForm: TMainForm
         object NoNeroNotifyBtn: TsCheckBox
           Left = 11
           Top = 119
-          Width = 238
-          Height = 19
+          Width = 233
+          Height = 20
           Caption = 'Do not warn me if neroaacenc is not present'
           TabOrder = 1
           SkinData.SkinSection = 'CHECKBOX'
@@ -3135,8 +3161,8 @@ object MainForm: TMainForm
         object FullLogBtn: TsCheckBox
           Left = 11
           Top = 144
-          Width = 204
-          Height = 19
+          Width = 199
+          Height = 20
           Caption = 'Also keep all the outputs of backends'
           TabOrder = 2
           SkinData.SkinSection = 'CHECKBOX'
@@ -3146,8 +3172,8 @@ object MainForm: TMainForm
         object SliceThreadsBtn: TsCheckBox
           Left = 16
           Top = 44
-          Width = 90
-          Height = 19
+          Width = 85
+          Height = 20
           Caption = 'Slice threads:'
           TabOrder = 3
           OnClick = SliceThreadsBtnClick
@@ -3171,8 +3197,8 @@ object MainForm: TMainForm
         object ThreadsBtn: TsCheckBox
           Left = 16
           Top = 17
-          Width = 68
-          Height = 19
+          Width = 63
+          Height = 20
           Caption = 'Threads:'
           TabOrder = 5
           OnClick = ThreadsBtnClick
@@ -3243,9 +3269,9 @@ object MainForm: TMainForm
   end
   object StartBtn: TsBitBtn
     Left = 430
-    Top = 568
+    Top = 563
     Width = 150
-    Height = 25
+    Height = 30
     Hint = 'Start encoding'
     Anchors = [akRight, akBottom]
     Caption = 'Start'
@@ -3293,8 +3319,8 @@ object MainForm: TMainForm
     Top = 40
   end
   object AddMenu: TPopupMenu
-    Left = 176
-    Top = 16
+    Left = 184
+    Top = 112
     object AddFiles1: TMenuItem
       Caption = 'Add Files'
       OnClick = AddFiles1Click
@@ -3395,7 +3421,7 @@ object MainForm: TMainForm
     MenuSupport.ExtraLineFont.Name = 'Tahoma'
     MenuSupport.ExtraLineFont.Style = []
     SkinDirectory = 'c:\Skins'
-    SkinName = 'Beijing Ext (internal)'
+    SkinName = 'Calcium (internal)'
     SkinInfo = 'N/A'
     ThirdParty.ThirdEdits = 
       'TEdit'#13#10'TMemo'#13#10'TMaskEdit'#13#10'TSpinEdit'#13#10'TLabeledEdit'#13#10'THotKey'#13#10'TList' +
@@ -3421,8 +3447,8 @@ object MainForm: TMainForm
     ThirdParty.ThirdScrollControl = ' '#13#10
     ThirdParty.ThirdUpDown = ' '#13#10
     ThirdParty.ThirdScrollBar = ' '
-    Left = 64
-    Top = 56
+    Left = 80
+    Top = 64
   end
   object sSkinProvider1: TsSkinProvider
     AddedTitle.Font.Charset = DEFAULT_CHARSET
@@ -3501,8 +3527,8 @@ object MainForm: TMainForm
     end
   end
   object ListMenu: TPopupMenu
-    Left = 104
-    Top = 16
+    Left = 136
+    Top = 152
     object AddFiles3: TMenuItem
       Caption = 'Add Files'
       OnClick = AddFiles1Click
@@ -3845,8 +3871,15 @@ object MainForm: TMainForm
           4C1573E977514248E2A7D86CFC9BFBF8AFC0DF01995968660C14D30800000000
           49454E44AE426082}
       end>
-    Left = 144
-    Top = 160
+    Left = 152
+    Top = 216
     Bitmap = {}
+  end
+  object ListImage: TsAlphaImageList
+    Height = 18
+    Width = 1
+    Items = <>
+    Left = 240
+    Top = 128
   end
 end

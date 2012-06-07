@@ -37,7 +37,7 @@ var
   AboutForm: TAboutForm;
 
 const
-  Build = '1214';
+  Build = '1462';
 
 implementation
 

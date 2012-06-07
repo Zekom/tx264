@@ -129,7 +129,7 @@ end;
 procedure TLogForm.OutputListAddString(Sender: TObject; Item: string);
 begin
 
-//  OutputList.TopIndex := OutputList.Items.Count - 1;
+  // OutputList.TopIndex := OutputList.Items.Count - 1;
 
 end;
 
