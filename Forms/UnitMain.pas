@@ -158,8 +158,6 @@ type
     UseAdvancedBtn: TsCheckBox;
     AdvancedBtn: TsBitBtn;
     FullLogBtn: TsCheckBox;
-    TabSheet10: TTabSheet;
-    Panel11: TsPanel;
     SplittingMethodList: TsComboBox;
     SplitEdit: TJvSpinEdit;
     SplittingBtn: TsCheckBox;
@@ -246,6 +244,10 @@ type
     FLACCompList: TsComboBox;
     FLACEMSBtn: TsCheckBox;
     LevelList: TsComboBox;
+    AudioEncoderList: TsComboBox;
+    PredefList: TsComboBox;
+    ApplyBtn: TsBitBtn;
+    SaveCurrentAsBtn: TsBitBtn;
     procedure AddFiles1Click(Sender: TObject);
     procedure AddFolder1Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
@@ -320,6 +322,10 @@ type
     procedure FileSizeBtnClick(Sender: TObject);
     procedure SARBtnClick(Sender: TObject);
     procedure SARListChange(Sender: TObject);
+    procedure AudioEncoderListChange(Sender: TObject);
+    procedure SaveCurrentAsBtnClick(Sender: TObject);
+    procedure PredefListChange(Sender: TObject);
+    procedure ApplyBtnClick(Sender: TObject);
   private
     { Private declarations }
     CommandLines: TStringList;
@@ -439,6 +445,15 @@ type
 
     // checks if source has chapters
     function HasChapters(const FileName: string): Boolean;
+
+    // loads predefines
+    procedure LoadPreDefines();
+
+    // applies selected predef
+    procedure ApplyPreDef(const PreDefName: string);
+
+    // saves current state into a predef file
+    procedure SavePreDef(const PreDefName: string);
   public
     { Public declarations }
     AppFolder: string;
@@ -513,8 +528,6 @@ begin
   case ContainerList.ItemIndex of
     0:
       begin
-        OutMuxerFile := ChangeFileExt(FileName, '.mkv');
-
         // same as source
         if not SameAsSourceBtn.Checked then
         begin
@@ -522,37 +535,39 @@ begin
             ExtractFileName(TmpFileName);
         end;
 
+        OutMuxerFile := ChangeFileExt(TmpFileName, '.mkv');
+
         FileIndex := 0;
         if FileExists(OutMuxerFile) then
         begin
           while FileExists(OutMuxerFile) do
           begin
-          Inc(FileIndex);
-            OutMuxerFile := ChangeFileExt(TmpFileName, '_' + FloatToStr(FileIndex)
-              + '.mkv');
+            Inc(FileIndex);
+            OutMuxerFile := ChangeFileExt(TmpFileName,
+              '_' + FloatToStr(FileIndex) + '.mkv');
 
           end;
         end;
+
       end;
     1:
       begin
-        OutMuxerFile := ChangeFileExt(FileName, '.mp4');
-
         // same as source
         if not SameAsSourceBtn.Checked then
         begin
           TmpFileName := DirectoryEdit.Text + '\' +
             ExtractFileName(TmpFileName);
         end;
+        OutMuxerFile := ChangeFileExt(TmpFileName, '.mp4');
 
         FileIndex := 0;
         if FileExists(OutMuxerFile) then
         begin
           while FileExists(OutMuxerFile) do
           begin
-          Inc(FileIndex);
-            OutMuxerFile := ChangeFileExt(TmpFileName, '_' + FloatToStr(FileIndex)
-              + '.mp4');
+            Inc(FileIndex);
+            OutMuxerFile := ChangeFileExt(TmpFileName,
+              '_' + FloatToStr(FileIndex) + '.mp4');
 
           end;
         end;
@@ -1927,10 +1942,228 @@ begin
 
 end;
 
+procedure TMainForm.ApplyBtnClick(Sender: TObject);
+begin
+
+  if PresetsList.ItemIndex > -1 then
+  ApplyPreDef(PredefList.Text);
+
+end;
+
+procedure TMainForm.ApplyPreDef(const PreDefName: string);
+var
+  PreDefFile: TIniFile;
+begin
+
+  PreDefFile := TIniFile.Create(AppFolder + '\PreDefs\' + PreDefName + '.pdo');
+  try
+
+    with PreDefFile do
+    begin
+      EncodeModeList.ItemIndex := ReadInteger('Settings', 'EncodeMode', 3);
+      ProfileList.ItemIndex := ReadInteger('Settings', 'Profile', 0);
+      PresetsList.ItemIndex := ReadInteger('Settings', 'Preset', 6);
+      TuneList.ItemIndex := ReadInteger('Settings', 'Tune', 0);
+      BitrateEdit.Text := ReadString('Settings', 'Bitrate', '512');
+      QuantEdit.Text := ReadString('Settings', 'Quant', '21');
+      CRFEdit.Text := ReadString('Settings', 'CRF', '21');
+
+      ConstantFPSBtn.Checked := ReadBool('Settings', 'CFR', False);
+      SubtitleBtn.Checked := ReadBool('Settings', 'Subtitle', False);
+      BitrateTolBtn.Checked := ReadBool('Settings', 'BitrateTol', False);
+      BitrateTolEdit.Text := ReadString('Settings', 'BitrateTolValue', '0,01');
+      ContainerList.ItemIndex := ReadInteger('Settings', 'Container', 1);
+      CopyChapertBtn.Checked := ReadBool('Settings', 'Chapters', False);
+
+      ResizeBtn.Checked := ReadBool('Settings', 'Resize', False);
+      WidthEdit.Text := ReadString('Settings', 'Width', '320');
+      HeightEdit.Text := ReadString('Settings', 'Height', '240');
+      VideoSizeList.ItemIndex := ReadInteger('Settings', 'SizeList', 3);
+      ResizeMethodList.ItemIndex := ReadInteger('Settings', 'ResizeMethod', 0);
+
+      CropBtn.Checked := ReadBool('Settings', 'Crop', False);
+      CropLeftEdit.Text := ReadString('Settings', 'CropLeft', '0');
+      CropTopEdit.Text := ReadString('Settings', 'CropTop', '0');
+      CropBottomEdit.Text := ReadString('Settings', 'CropBottom', '0');
+      CropRightEdit.Text := ReadString('Settings', 'CropRight', '0');
+
+      AudioPages.ActivePageIndex := ReadInteger('Settings', 'AudioPage', 0);
+
+      FAACEncodeList.ItemIndex := ReadInteger('Settings', 'FAACEncode', 0);
+      FAACQualityEdit.Text := ReadString('Settings', 'FAACQuality', '10');
+      FAACBitrateEdit.Text := ReadString('Settings', 'FAACBitrate', '80');
+
+      NeroEncodingList.ItemIndex := ReadInteger('Settings', 'NeroEncode', 0);
+      NeroQualityEdit.Text := ReadString('Settings', 'NeroQuality', '0,50');
+      NeroBitrateEdit.Text := ReadString('Settings', 'NeroBitrate', '80');
+      NeroProfileList.ItemIndex := ReadInteger('Settings', 'NeroProfile', 0);
+
+      QaacEncodeMethodList.ItemIndex := ReadInteger('Settings',
+        'QaacEncode', 0);
+      QaacvQualityEdit.Text := ReadString('Settings', 'QaacQuality', '64');
+      QaacBitrateEdit.Text := ReadString('Settings', 'QaacBitrate', '80');
+      QaacQualityList.ItemIndex := ReadInteger('Settings', 'QaacProfile', 2);
+      QaacHEBtn.Checked := ReadBool('Settings', 'QaacHE', False);
+
+      AudioMethodList.ItemIndex := ReadInteger('Settings', 'AudioMethod', 0);
+
+      OggencodeList.ItemIndex := ReadInteger('Settings', 'OggEncode', 0);
+      OggQualityEdit.Text := ReadString('Settings', 'OggQuality', '6');
+      OggBitrateEdit.Text := ReadString('Settings', 'OggBitrate', '80');
+      OggManagedBitrateBtn.Checked := ReadBool('Settings', 'OggManaged', False);
+
+      LameEncodeList.ItemIndex := ReadInteger('Settings', 'LAmeEncode', 0);
+      LameVBREdit.Text := ReadString('Settings', 'LameVBR', '2,00');
+      LameBitrateEdit.Text := ReadString('Settings', 'LameBit', '128');
+      LameQualityEdit.Text := ReadString('Settings', 'LameQ', '3');
+
+      AftenEncodeList.ItemIndex := ReadInteger('Settings', 'AftenEncode', 0);
+      AftenQualityEdit.Text := ReadString('Settings', 'AftenQuality', '240');
+      AftenBitrateEdit.Text := ReadString('Settings', 'AftenBitrate', '320');
+
+      CustomVideoOptionsEdit.Text := ReadString('Settings', 'CustomVideo', '');
+      CustomAudioOptionsEdit.Text := ReadString('Settings', 'CustomAudio', '');
+      CustomMKVEdit.Text := ReadString('Settings', 'CustomMKV', '');
+      CustomMP4Edit.Text := ReadString('Settings', 'CustomMP4', '');
+      CustomMKVExtractEdit.Text := ReadString('Settings', 'CustomSub', '');
+
+      ThreadsBtn.Checked := ReadBool('Settings', 'thread', False);
+      ThreadsEdit.Text := ReadString('Settings', 'ThreadStr',
+        FloatToStr(Round(SystemInfo.CPU.LogicalCore * 1.5)));
+      SliceThreadsBtn.Checked := ReadBool('Settings', 'Slice', False);
+      SliceThreadsEdit.Text := ReadString('Settings', 'SliceThreadStr',
+        FloatToStr(SystemInfo.CPU.LogicalCore));
+      UseAdvancedBtn.Checked := ReadBool('Settings', 'Advanced', False);
+
+      SplittingMethodList.ItemIndex := ReadInteger('Settings', 'SplitM', 1);
+      SplitEdit.Text := ReadString('Settings', 'SplitE', '1');
+      SplittingBtn.Checked := ReadBool('Settings', 'SplitB', False);
+
+      FileSizeEdit.Text := ReadString('Settings', 'FileSize1', '1');
+      FileSizeBtn.Checked := ReadBool('Settings', 'FileSize2', False);
+
+      FLACCompList.ItemIndex := ReadInteger('Settings', 'FlacComp', 5);
+      FLACEMSBtn.Checked := ReadBool('Settings', 'FlacEMS', False);
+
+      SARBtn.Checked := ReadBool('Settings', 'SAR', False);
+      SARList.ItemIndex := ReadInteger('Settings', 'SarIndex', 0);
+      SAR1Edit.Text := ReadString('Settings', 'SAR1', '1');
+      SAR2Edit.Text := ReadString('Settings', 'SAR2', '1');
+
+      // advanced options
+      with AdvancedOptionsForm do
+      begin
+        FastFirstPassBtn.Checked := ReadBool('RC', 'FastFirst', True);
+        MBTreeRCBtn.Checked := ReadBool('RC', 'MBTree', True);
+        FrameLookEdit.Text := ReadString('RC', 'Lookahead', '40');
+
+        MEMethodList.ItemIndex := ReadInteger('ME', 'MeMethod', 1);
+        MESubpixelEdit.Text := ReadString('ME', 'Subpixel', '7');
+        MEMaxsearhcRangeEdit.Text := ReadString('ME', 'MeRange', '16');
+        MEPredictModeList.ItemIndex := ReadInteger('ME', 'MePredict', 1);
+        MeWeightPList.ItemIndex := ReadInteger('ME', 'MeWP', 1);
+        MeWeightBBtn.Checked := ReadBool('ME', 'MEWeP', True);
+        MEConstrainedBtn.Checked := ReadBool('ME', 'MeCons', False);
+
+        Prediction1Btn.Checked := ReadBool('Partition', '1', True);
+        Prediction2Btn.Checked := ReadBool('Partition', '2', True);
+        Prediction3Btn.Checked := ReadBool('Partition', '3', True);
+        Prediction4Btn.Checked := ReadBool('Partition', '4', False);
+        Prediction5Btn.Checked := ReadBool('Partition', '5', True);
+        Prediction6Btn.Checked := ReadBool('Partition', '6', True);
+
+        FrameCABACBtn.Checked := ReadBool('Frame', 'Cabac', True);
+        FrameLoopBtn.Checked := ReadBool('Frame', 'loop', True);
+        FrameOpenGOPBtn.Checked := ReadBool('Frame', 'gop', True);
+        FrameGopList.ItemIndex := ReadInteger('Frame', 'gop2', 0);
+        FrameInterlacedBtn.Checked := ReadBool('Frame', 'interlaced', True);
+        FrameInterlacedList.ItemIndex := ReadInteger('Frame', 'interlaced2', 0);
+        FrameMaxRefEdit.Text := ReadString('Frame', 'MaxRef', '3');
+        FrameMaxConBEdit.Text := ReadString('Frame', 'MaxConB', '3');
+        FrameBBiasEdit.Text := ReadString('Frame', 'BBias', '0');
+        FrameAdaptiveBList.ItemIndex := ReadInteger('Frame', 'AdaptiveB', 1);
+        FrameRefList.ItemIndex := ReadInteger('Frame', 'Ref', 1);
+        // todo: I frame stuff!!!!
+
+        AnalysisMixedRefBtn.Checked := ReadBool('Analysis', 'MixedRef', True);
+        AnalysisChromaBtn.Checked := ReadBool('Analysis', 'Chroma', True);
+        AnalysisTrellisBtn.Checked := ReadBool('Analysis', 'trellis', True);
+        AnalysisFastSkipBtn.Checked := ReadBool('Analysis', 'skip', True);
+        AnalysisDCTBtn.Checked := ReadBool('Analysis', 'dct', True);
+        AnalysisTrellisList.ItemIndex := ReadInteger('Analysis', 'trellis2', 0);
+        AnalysisMatrixList.ItemIndex := ReadInteger('Analysis', 'matrix', 0);
+        AnalysisPTrellistEdit.Text := ReadString('Analysis',
+          'ptrellis1', '0,00');
+        AnalysisPRateEdit.Text := ReadString('Analysis', 'ptrellis2', '1,00');
+        AnalysisNoiseEdit.Text := ReadString('Analysis', 'noise', '0');
+        AnalysisLuma1Edit.Text := ReadString('Analysis', 'luma1', '11');
+        AnalysisLuma2Edit.Text := ReadString('Analysis', 'luma2', '21');
+
+        MinQuantEdit.Text := ReadString('Quant', 'minquant', '0');
+        MaxQuantEdit.Text := ReadString('Quant', 'maxquant', '51');
+        QauntStepEdit.Text := ReadString('Quant', 'step', '4');
+        IPQuantEdit.Text := ReadString('Quant', 'ip', '1,40');
+        PBQuantEdit.Text := ReadString('Quant', 'pb', '1');
+        CLQuantEdit.Text := ReadString('Quant', 'cl', '0');
+        QuantCurve1Edit.Text := ReadString('Quant', 'curve1', '60');
+        QuantCurve2Edit.Text := ReadString('Quant', 'curve2', '22,00');
+        QuantCurve3Edit.Text := ReadString('Quant', 'curve3', '0,50');
+        AdaptiveEdit.Text := ReadString('Quant', 'adap', '0,50');
+        VarianceAQList.ItemIndex := ReadInteger('Quant', 'var', 0);
+
+        VBFMaxBitrateEdit.Text := ReadString('Advanced', 'vbf1', '0');
+        VBFBufferSizeEdit.Text := ReadString('Advanced', 'vbf2', '0');
+        VBFInitialEdit.Text := ReadString('Advanced', 'vbf3', '0,90');
+        Slice1Edit.Text := ReadString('Advanced', 'slice1', '0');
+        Slice2Edit.Text := ReadString('Advanced', 'slice2', '0');
+        Slice3Edit.Text := ReadString('Advanced', 'slice3', '0');
+      end;
+
+    end;
+
+  finally
+    PreDefFile.Free;
+
+    BitrateTolBtn.OnClick(Self);
+    EncodeModeList.OnChange(Self);
+    ResizeBtn.OnClick(Self);
+    CropBtn.OnClick(Self);
+    FAACEncodeList.OnChange(Self);
+    NeroEncodingList.OnChange(Self);
+    QaacEncodeMethodList.OnChange(Self);
+    OggencodeList.OnChange(Self);
+    AftenEncodeList.OnChange(Self);
+    ThreadsBtn.OnClick(Self);
+    SliceThreadsBtn.OnClick(Self);
+    UseAdvancedBtn.OnClick(Self);
+    SplittingBtn.OnClick(Self);
+    AudioMethodList.OnChange(Self);
+    LameEncodeList.OnChange(Self);
+    FileSizeBtn.OnClick(Self);
+    SARBtn.OnClick(Self);
+    AudioEncoderList.ItemIndex := AudioPages.ActivePageIndex;
+
+    with AdvancedOptionsForm do
+    begin
+      FrameOpenGOPBtn.OnClick(Self);
+      FrameInterlacedBtn.OnClick(Self);
+      AnalysisTrellisBtn.OnClick(Self);
+    end;
+  end;
+
+end;
+
 procedure TMainForm.AudioEffectsBtnClick(Sender: TObject);
 begin
 
   SoXForm.show;
+
+end;
+
+procedure TMainForm.AudioEncoderListChange(Sender: TObject);
+begin
+
+  AudioPages.ActivePageIndex := AudioEncoderList.ItemIndex;
 
 end;
 
@@ -3093,6 +3326,8 @@ begin
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
+var
+  i: integer;
 begin
 
   if SystemInfo.CPU.Is64Bits then
@@ -3386,6 +3621,12 @@ begin
   AudioTrackList.Items.Delimiter := '|';
   AudioTrackList.Items.StrictDelimiter := True;
 
+  for I := 0 to AudioPages.PageCount - 1 do
+  begin
+    AudioPages.Pages[i].TabVisible := False;
+  end;
+  AudioPages.ActivePageIndex := 0;
+
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -3409,8 +3650,10 @@ end;
 procedure TMainForm.FormShow(Sender: TObject);
 begin
 
+  LoadPreDefines();
   LoadOptions();
   DeleteTempFiles();
+
 
   if not FileExists(ExtractFileDir(Application.ExeName) +
     '\tools\neroAacEnc.exe') then
@@ -3418,8 +3661,11 @@ begin
 
     if not NoNeroNotifyBtn.Checked then
     begin
-      Application.MessageBox('Can''t find neroaacenc.exe.', 'Error',
-        MB_ICONERROR);
+      Application.MessageBox
+        ('Due to copyright issues NeroAacEnc.exe is not included. Please, download it and place it in "Tools" folder. You can disable this warning under "Other Options" tab.',
+        'Missing Component', MB_ICONERROR);
+
+      PageControl.ActivePageIndex := 4;
     end;
 
     NeroAACPath := ''; // will be checked
@@ -4218,6 +4464,8 @@ begin
       SARList.ItemIndex := ReadInteger('Settings', 'SarIndex', 0);
       SAR1Edit.Text := ReadString('Settings', 'SAR1', '1');
       SAR2Edit.Text := ReadString('Settings', 'SAR2', '1');
+
+      PredefList.ItemIndex := ReadInteger('Settings', 'PreDefIndex', -1);
     end;
 
   finally
@@ -4240,6 +4488,41 @@ begin
     LameEncodeList.OnChange(Self);
     FileSizeBtn.OnClick(Self);
     SARBtn.OnClick(Self);
+    AudioEncoderList.ItemIndex := AudioPages.ActivePageIndex;
+  end;
+
+end;
+
+procedure TMainForm.LoadPreDefines;
+var
+  Search: TSearchRec;
+begin
+
+  if not DirectoryExists(AppFolder + '\Predefs') then
+  begin
+
+    if not CreateDir(AppFolder + '\Predefs') then
+    begin
+      Application.MessageBox
+        ('Cannot find and create "Predefs" fodler in program folder.', 'Error',
+        MB_ICONERROR);
+      Exit;
+    end;
+
+  end;
+
+  PredefList.Items.Clear;
+
+  SetCurrentDir(AppFolder + '\Predefs');
+  // search for files
+  if (FindFirst('*.pdo', faAnyFile, Search) = 0) then
+  Begin
+    repeat
+      Application.ProcessMessages;
+
+      PredefList.Items.Add(ChangeFileExt(Search.Name, ''));
+    until (FindNext(Search) <> 0) and (not AddingStopped);
+    FindClose(Search);
   end;
 
 end;
@@ -4708,6 +4991,28 @@ begin
 
 end;
 
+procedure TMainForm.SaveCurrentAsBtnClick(Sender: TObject);
+var
+  StateName: string;
+begin
+
+  if IDYES = Application.MessageBox('Are you sure you want to save current state as a new predef?', 'Save', MB_ICONQUESTION or MB_YESNO) then
+  begin
+
+    StateName := InputBox('Predef name', 'Enter predef name:', '');
+
+    while Length(Trim(StateName)) < 1 do
+    begin
+      StateName := InputBox('Predef name', 'Enter predef name:', '');
+    end;
+
+    SavePreDef(StateName);
+    LoadPreDefines;
+
+  end;
+
+end;
+
 procedure TMainForm.SaveOptions;
 var
   SettingsFile: TIniFile;
@@ -4815,10 +5120,183 @@ begin
       WriteInteger('Settings', 'SarIndex', SARList.ItemIndex);
       WriteString('Settings', 'SAR1', SAR1Edit.Text);
       WriteString('Settings', 'SAR2', SAR2Edit.Text);
+
+      WriteInteger('Settings', 'PreDefIndex', PredefList.ItemIndex);
     end;
 
   finally
     SettingsFile.Free;
+  end;
+
+end;
+
+procedure TMainForm.SavePreDef(const PreDefName: string);
+var
+  PreDefFile: TIniFile;
+begin
+
+  PreDefFile := TIniFile.Create(AppFolder + '\PreDefs\' + PreDefName + '.pdo');
+  try
+
+    with PreDefFile do
+    begin
+      WriteInteger('Settings', 'EncodeMode', EncodeModeList.ItemIndex);
+      WriteInteger('Settings', 'Profile', ProfileList.ItemIndex);
+      WriteInteger('Settings', 'Preset', PresetsList.ItemIndex);
+      WriteInteger('Settings', 'Tune', TuneList.ItemIndex);
+      WriteString('Settings', 'Bitrate', BitrateEdit.Text);
+      WriteString('Settings', 'Quant', QuantEdit.Text);
+      WriteString('Settings', 'CRF', CRFEdit.Text);
+
+      WriteBool('Settings', 'CFR', ConstantFPSBtn.Checked);
+      WriteBool('Settings', 'Subtitle', SubtitleBtn.Checked);
+      WriteBool('Settings', 'BitrateTol', BitrateTolBtn.Checked);
+      WriteString('Settings', 'BitrateTolValue', BitrateTolEdit.Text);
+      WriteInteger('Settings', 'Container', ContainerList.ItemIndex);
+      WriteBool('Settings', 'Chapters', CopyChapertBtn.Checked);
+
+      WriteBool('Settings', 'Resize', ResizeBtn.Checked);
+      WriteString('Settings', 'Width', WidthEdit.Text);
+      WriteString('Settings', 'Height', HeightEdit.Text);
+      WriteInteger('Settings', 'SizeList', VideoSizeList.ItemIndex);
+      WriteInteger('Settings', 'ResizeMethod', ResizeMethodList.ItemIndex);
+
+      WriteBool('Settings', 'Crop', CropBtn.Checked);
+      WriteString('Settings', 'CropLeft', CropLeftEdit.Text);
+      WriteString('Settings', 'CropTop', CropTopEdit.Text);
+      WriteString('Settings', 'CropBottom', CropBottomEdit.Text);
+      WriteString('Settings', 'CropRight', CropRightEdit.Text);
+
+      WriteInteger('Settings', 'AudioPage', AudioPages.ActivePageIndex);
+
+      WriteInteger('Settings', 'FAACEncode', FAACEncodeList.ItemIndex);
+      WriteString('Settings', 'FAACQuality', FAACQualityEdit.Text);
+      WriteString('Settings', 'FAACBitrate', FAACBitrateEdit.Text);
+
+      WriteInteger('Settings', 'NeroEncode', NeroEncodingList.ItemIndex);
+      WriteString('Settings', 'NeroQuality', NeroQualityEdit.Text);
+      WriteString('Settings', 'NeroBitrate', NeroBitrateEdit.Text);
+      WriteInteger('Settings', 'NeroProfile', NeroProfileList.ItemIndex);
+
+      WriteInteger('Settings', 'QaacEncode', QaacEncodeMethodList.ItemIndex);
+      WriteString('Settings', 'QaacQuality', QaacvQualityEdit.Text);
+      WriteString('Settings', 'QaacBitrate', QaacBitrateEdit.Text);
+      WriteInteger('Settings', 'QaacProfile', QaacQualityList.ItemIndex);
+      WriteBool('Settings', 'QaacHE', QaacHEBtn.Checked);
+
+      WriteInteger('Settings', 'OggEncode', OggencodeList.ItemIndex);
+      WriteString('Settings', 'OggQuality', OggQualityEdit.Text);
+      WriteString('Settings', 'OggBitrate', OggBitrateEdit.Text);
+      WriteBool('Settings', 'OggManaged', OggManagedBitrateBtn.Checked);
+
+      WriteInteger('Settings', 'LAmeEncode', LameEncodeList.ItemIndex);
+      WriteString('Settings', 'LameVBR', LameVBREdit.Text);
+      WriteString('Settings', 'LameBit', LameBitrateEdit.Text);
+      WriteString('Settings', 'LameQ', LameQualityEdit.Text);
+
+      WriteInteger('Settings', 'AftenEncode', AftenEncodeList.ItemIndex);
+      WriteString('Settings', 'AftenQuality', AftenQualityEdit.Text);
+      WriteString('Settings', 'AftenBitrate', AftenBitrateEdit.Text);
+
+      WriteInteger('Settings', 'AudioMethod', AudioMethodList.ItemIndex);
+
+      WriteString('Settings', 'CustomVideo', CustomVideoOptionsEdit.Text);
+      WriteString('Settings', 'CustomAudio', CustomAudioOptionsEdit.Text);
+      WriteString('Settings', 'CustomMKV', CustomMKVEdit.Text);
+      WriteString('Settings', 'CustomMP4', CustomMP4Edit.Text);
+      WriteString('Settings', 'CustomSub', CustomMKVExtractEdit.Text);
+
+      WriteBool('Settings', 'thread', ThreadsBtn.Checked);
+      WriteString('Settings', 'ThreadStr', ThreadsEdit.Text);
+      WriteBool('Settings', 'Slice', SliceThreadsBtn.Checked);
+      WriteString('Settings', 'SliceThreadStr', SliceThreadsEdit.Text);
+      WriteBool('Settings', 'Advanced', UseAdvancedBtn.Checked);
+
+      WriteInteger('Settings', 'SplitM', SplittingMethodList.ItemIndex);
+      WriteString('Settings', 'SplitE', SplitEdit.Text);
+      WriteBool('Settings', 'SplitB', SplittingBtn.Checked);
+
+      WriteString('Settings', 'FileSize1', FileSizeEdit.Text);
+      WriteBool('Settings', 'FileSize2', FileSizeBtn.Checked);
+
+      WriteInteger('Settings', 'FlacComp', FLACCompList.ItemIndex);
+      WriteBool('Settings', 'FlacEMS', FLACEMSBtn.Checked);
+
+      WriteBool('Settings', 'SAR', SARBtn.Checked);
+      WriteInteger('Settings', 'SarIndex', SARList.ItemIndex);
+      WriteString('Settings', 'SAR1', SAR1Edit.Text);
+      WriteString('Settings', 'SAR2', SAR2Edit.Text);
+
+      with AdvancedOptionsForm do
+      begin
+        WriteBool('RC', 'FastFirst', FastFirstPassBtn.Checked);
+        WriteBool('RC', 'MBTree', MBTreeRCBtn.Checked);
+        WriteString('RC', 'Lookahead', FrameLookEdit.Text);
+
+        WriteInteger('ME', 'MeMethod', MEMethodList.ItemIndex);
+        WriteString('ME', 'Subpixel', MESubpixelEdit.Text);
+        WriteString('ME', 'MeRange', MEMaxsearhcRangeEdit.Text);
+        WriteInteger('ME', 'MePredict', MEPredictModeList.ItemIndex);
+        WriteInteger('ME', 'MeWP', MeWeightPList.ItemIndex);
+        WriteBool('ME', 'MEWeP', MeWeightBBtn.Checked);
+        WriteBool('ME', 'MeCons', MEConstrainedBtn.Checked);
+
+        WriteBool('Partition', '1', Prediction1Btn.Checked);
+        WriteBool('Partition', '2', Prediction2Btn.Checked);
+        WriteBool('Partition', '3', Prediction3Btn.Checked);
+        WriteBool('Partition', '4', Prediction4Btn.Checked);
+        WriteBool('Partition', '5', Prediction5Btn.Checked);
+        WriteBool('Partition', '6', Prediction6Btn.Checked);
+
+        WriteBool('Frame', 'Cabac', FrameCABACBtn.Checked);
+        WriteBool('Frame', 'loop', FrameLoopBtn.Checked);
+        WriteBool('Frame', 'gop', FrameOpenGOPBtn.Checked);
+        WriteInteger('Frame', 'gop2', FrameGopList.ItemIndex);
+        WriteBool('Frame', 'interlaced', FrameInterlacedBtn.Checked);
+        WriteInteger('Frame', 'interlaced2', FrameInterlacedList.ItemIndex);
+        WriteString('Frame', 'MaxRef', FrameMaxRefEdit.Text);
+        WriteString('Frame', 'MaxConB', FrameMaxConBEdit.Text);
+        WriteString('Frame', 'BBias', FrameBBiasEdit.Text);
+        WriteInteger('Frame', 'AdaptiveB', FrameAdaptiveBList.ItemIndex);
+        WriteInteger('Frame', 'Ref', FrameRefList.ItemIndex);
+        // todo: I frame stuff!!!!
+
+        WriteBool('Analysis', 'MixedRef', AnalysisMixedRefBtn.Checked);
+        WriteBool('Analysis', 'Chroma', AnalysisChromaBtn.Checked);
+        WriteBool('Analysis', 'trellis', AnalysisTrellisBtn.Checked);
+        WriteBool('Analysis', 'skip', AnalysisFastSkipBtn.Checked);
+        WriteBool('Analysis', 'dct', AnalysisDCTBtn.Checked);
+        WriteInteger('Analysis', 'trellis2', AnalysisTrellisList.ItemIndex);
+        WriteInteger('Analysis', 'matrix', AnalysisMatrixList.ItemIndex);
+        WriteString('Analysis', 'ptrellis1', AnalysisPTrellistEdit.Text);
+        WriteString('Analysis', 'ptrellis2', AnalysisPRateEdit.Text);
+        WriteString('Analysis', 'noise', AnalysisNoiseEdit.Text);
+        WriteString('Analysis', 'luma1', AnalysisLuma1Edit.Text);
+        WriteString('Analysis', 'luma2', AnalysisLuma2Edit.Text);
+
+        WriteString('Quant', 'minquant', MinQuantEdit.Text);
+        WriteString('Quant', 'maxquant', MaxQuantEdit.Text);
+        WriteString('Quant', 'step', QauntStepEdit.Text);
+        WriteString('Quant', 'ip', IPQuantEdit.Text);
+        WriteString('Quant', 'pb', PBQuantEdit.Text);
+        WriteString('Quant', 'cl', CLQuantEdit.Text);
+        WriteString('Quant', 'curve1', QuantCurve1Edit.Text);
+        WriteString('Quant', 'curve2', QuantCurve2Edit.Text);
+        WriteString('Quant', 'curve3', QuantCurve3Edit.Text);
+        WriteString('Quant', 'adap', AdaptiveEdit.Text);
+        WriteInteger('Quant', 'var', VarianceAQList.ItemIndex);
+
+        WriteString('Advanced', 'vbf1', VBFMaxBitrateEdit.Text);
+        WriteString('Advanced', 'vbf2', VBFBufferSizeEdit.Text);
+        WriteString('Advanced', 'vbf3', VBFInitialEdit.Text);
+        WriteString('Advanced', 'slice1', Slice1Edit.Text);
+        WriteString('Advanced', 'slice2', Slice2Edit.Text);
+        WriteString('Advanced', 'slice3', Slice3Edit.Text);
+      end;
+    end;
+
+  finally
+
   end;
 
 end;
@@ -5339,6 +5817,14 @@ begin
     end;
 
   end;
+
+end;
+
+procedure TMainForm.PredefListChange(Sender: TObject);
+begin
+
+  if PresetsList.ItemIndex > -1 then
+  ApplyPreDef(PredefList.Text);
 
 end;
 
