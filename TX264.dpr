@@ -17,7 +17,6 @@ uses
   Vcl.Styles,
   UnitAdvancedOptions in 'Forms\UnitAdvancedOptions.pas' {AdvancedOptionsForm} ,
   UnitUpdater in 'Forms\UnitUpdater.pas' {UpdaterForm} ,
-  UnitAvisFilters in 'Forms\UnitAvisFilters.pas' {AvisForm} ,
   UnitSox in 'Forms\UnitSox.pas' {SoXForm} ,
   UnitProgress in 'Forms\UnitProgress.pas' {ProgressForm};
 
@@ -26,7 +25,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  ReportMemoryLeaksOnShutdown := True;
+  // ReportMemoryLeaksOnShutdown := True;
   Application.Title := 'TX264';
   Application.CreateForm(TMainForm, MainForm);
   Application.CreateForm(TLogForm, LogForm);
@@ -34,7 +33,6 @@ begin
   Application.CreateForm(TAboutForm, AboutForm);
   Application.CreateForm(TAdvancedOptionsForm, AdvancedOptionsForm);
   Application.CreateForm(TUpdaterForm, UpdaterForm);
-  Application.CreateForm(TAvisForm, AvisForm);
   Application.CreateForm(TSoXForm, SoXForm);
   Application.CreateForm(TProgressForm, ProgressForm);
   Application.Run;

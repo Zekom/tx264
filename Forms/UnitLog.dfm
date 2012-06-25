@@ -6,6 +6,7 @@ object LogForm: TLogForm
   ClientHeight = 575
   ClientWidth = 825
   Color = 14870243
+  DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -144,7 +145,6 @@ object LogForm: TLogForm
         TabOrder = 0
         WantTabs = True
         OnChange = OutputListChange
-        ExplicitTop = 4
       end
     end
     object TabSheet2: TTabSheet

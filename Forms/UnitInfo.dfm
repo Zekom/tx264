@@ -6,6 +6,7 @@ object InfoForm: TInfoForm
   ClientHeight = 615
   ClientWidth = 665
   Color = 14870243
+  DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -131,6 +132,7 @@ object InfoForm: TInfoForm
     ShowWorkAreas = True
     TabOrder = 2
     ViewStyle = vsReport
+    OnAdvancedCustomDrawItem = InfoListAdvancedCustomDrawItem
   end
   object SaveDialog1: TSaveDialog
     FileName = 'FileInfo.txt'

@@ -320,9 +320,9 @@ object MainForm: TMainForm
     end
     object ProcessPages: TPageControl
       Left = 9
-      Top = 70
+      Top = 97
       Width = 572
-      Height = 487
+      Height = 460
       ActivePage = TabSheet15
       Anchors = [akLeft, akTop, akRight, akBottom]
       TabOrder = 7
@@ -333,7 +333,7 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 564
-          Height = 459
+          Height = 432
           Align = alClient
           BorderStyle = bsNone
           Color = 14870243
@@ -365,7 +365,7 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 564
-          Height = 459
+          Height = 432
           Align = alClient
           BevelInner = bvNone
           BevelOuter = bvNone
@@ -384,7 +384,7 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 564
-          Height = 459
+          Height = 432
           Align = alClient
           BorderStyle = bsNone
           Color = 14870243
@@ -402,6 +402,56 @@ object MainForm: TMainForm
           SkinData.SkinSection = 'EDIT'
         end
       end
+    end
+    object PostEncodeList: TsComboBox
+      Left = 464
+      Top = 70
+      Width = 116
+      Height = 21
+      Anchors = [akTop, akRight]
+      Alignment = taLeftJustify
+      BoundLabel.Active = True
+      BoundLabel.Caption = 'Post-encode action:'
+      BoundLabel.Indent = 0
+      BoundLabel.Font.Charset = DEFAULT_CHARSET
+      BoundLabel.Font.Color = clWindowText
+      BoundLabel.Font.Height = -11
+      BoundLabel.Font.Name = 'Tahoma'
+      BoundLabel.Font.Style = []
+      BoundLabel.Layout = sclLeft
+      BoundLabel.MaxWidth = 0
+      BoundLabel.UseSkinColor = True
+      SkinData.SkinSection = 'COMBOBOX'
+      Style = csDropDownList
+      ItemIndex = 0
+      TabOrder = 8
+      Text = 'Do nothing'
+      Items.Strings = (
+        'Do nothing'
+        'Close TX264'
+        'Open output folder')
+    end
+    object TimePassedEdit: TsEdit
+      Left = 62
+      Top = 70
+      Width = 75
+      Height = 21
+      Alignment = taCenter
+      ReadOnly = True
+      TabOrder = 9
+      Text = '00:00:00'
+      SkinData.SkinSection = 'EDIT'
+      BoundLabel.Active = True
+      BoundLabel.Caption = 'Time left:'
+      BoundLabel.Indent = 0
+      BoundLabel.Font.Charset = DEFAULT_CHARSET
+      BoundLabel.Font.Color = clWindowText
+      BoundLabel.Font.Height = -11
+      BoundLabel.Font.Name = 'Tahoma'
+      BoundLabel.Font.Style = []
+      BoundLabel.Layout = sclLeft
+      BoundLabel.MaxWidth = 0
+      BoundLabel.UseSkinColor = True
     end
   end
   object AboutBtn: TsBitBtn
@@ -1356,7 +1406,7 @@ object MainForm: TMainForm
       Top = 290
       Width = 95
       Height = 20
-      Hint = 'Make source directory as output directory'
+      Hint = 'Set source directory to output directory'
       Caption = 'Same as source'
       Anchors = [akRight, akBottom]
       TabOrder = 8
@@ -1478,7 +1528,7 @@ object MainForm: TMainForm
     Top = 332
     Width = 573
     Height = 230
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Anchors = [akLeft, akRight, akBottom]
     Images = PageImages
     MultiLine = True
@@ -1636,6 +1686,32 @@ object MainForm: TMainForm
             Anchors = [akRight, akBottom]
             TabOrder = 4
           end
+          object FileSizeBtn: TsCheckBox
+            Left = 173
+            Top = 78
+            Width = 68
+            Height = 20
+            Caption = 'Size (mb):'
+            TabOrder = 5
+            OnClick = FileSizeBtnClick
+            SkinData.SkinSection = 'CHECKBOX'
+            ImgChecked = 0
+            ImgUnchecked = 0
+          end
+          object FileSizeEdit: TJvSpinEdit
+            Left = 255
+            Top = 78
+            Width = 50
+            Height = 21
+            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+            CheckMaxValue = False
+            Alignment = taCenter
+            ButtonKind = bkClassic
+            MinValue = 1.000000000000000000
+            Value = 1.000000000000000000
+            Enabled = False
+            TabOrder = 6
+          end
         end
         object GroupBox6: TGroupBox
           Left = 343
@@ -1695,7 +1771,7 @@ object MainForm: TMainForm
           object ProfileList: TsComboBox
             Left = 52
             Top = 24
-            Width = 155
+            Width = 65
             Height = 21
             Hint = 'Profile'
             Anchors = [akLeft, akTop, akRight]
@@ -1771,10 +1847,51 @@ object MainForm: TMainForm
               'Fastdecode'
               'Zerolatency')
           end
+          object LevelList: TsComboBox
+            Left = 156
+            Top = 24
+            Width = 50
+            Height = 21
+            Alignment = taLeftJustify
+            BoundLabel.Active = True
+            BoundLabel.Caption = 'Level:'
+            BoundLabel.Indent = 0
+            BoundLabel.Font.Charset = DEFAULT_CHARSET
+            BoundLabel.Font.Color = clWindowText
+            BoundLabel.Font.Height = -11
+            BoundLabel.Font.Name = 'Tahoma'
+            BoundLabel.Font.Style = []
+            BoundLabel.Layout = sclLeft
+            BoundLabel.MaxWidth = 0
+            BoundLabel.UseSkinColor = True
+            SkinData.SkinSection = 'COMBOBOX'
+            Style = csDropDownList
+            ItemIndex = 0
+            TabOrder = 3
+            Text = 'Auto'
+            Items.Strings = (
+              'Auto'
+              '1 '
+              '1b '
+              '1.1 '
+              '1.2 '
+              '1.3 '
+              '2 '
+              '2.1 '
+              '2.2 '
+              '3 '
+              '3.1 '
+              '3.2 '
+              '4 '
+              '4.1 '
+              '4.2 '
+              '5 '
+              '5.1')
+          end
         end
         object ConstantFPSBtn: TsCheckBox
-          Left = 436
-          Top = 159
+          Left = 440
+          Top = 174
           Width = 110
           Height = 20
           Caption = 'Force constant fps'
@@ -1787,8 +1904,8 @@ object MainForm: TMainForm
           ImgUnchecked = 0
         end
         object ContainerList: TsComboBox
-          Left = 481
-          Top = 134
+          Left = 480
+          Top = 147
           Width = 70
           Height = 21
           Anchors = [akRight, akBottom]
@@ -1821,11 +1938,11 @@ object MainForm: TMainForm
             'MP4')
         end
         object SubtitleBtn: TsCheckBox
-          Left = 12
-          Top = 132
-          Width = 237
+          Left = 9
+          Top = 148
+          Width = 131
           Height = 20
-          Caption = 'Mux subtitles to output mkv/mp4 from source'
+          Caption = 'Mux subtitles to output'
           Anchors = [akLeft, akBottom]
           Checked = True
           State = cbChecked
@@ -1835,11 +1952,11 @@ object MainForm: TMainForm
           ImgUnchecked = 0
         end
         object CopyChapertBtn: TsCheckBox
-          Left = 12
-          Top = 159
-          Width = 166
+          Left = 9
+          Top = 174
+          Width = 180
           Height = 20
-          Caption = 'Copy chapter info from source'
+          Caption = 'Copy menu from source mkv/mp4'
           Anchors = [akLeft, akBottom]
           TabOrder = 5
           SkinData.SkinSection = 'CHECKBOX'
@@ -1848,7 +1965,7 @@ object MainForm: TMainForm
         end
         object UseAdvancedBtn: TsCheckBox
           Left = 343
-          Top = 107
+          Top = 113
           Width = 106
           Height = 20
           Hint = 'Use advanced options'
@@ -1862,7 +1979,7 @@ object MainForm: TMainForm
         end
         object AdvancedBtn: TsBitBtn
           Left = 455
-          Top = 105
+          Top = 113
           Width = 100
           Height = 25
           Hint = 'Edit advanced options'
@@ -1943,6 +2060,20 @@ object MainForm: TMainForm
           Width = 29
           Height = 13
           Caption = 'Right:'
+        end
+        object sLabel1: TsLabel
+          Left = 176
+          Top = 173
+          Width = 4
+          Height = 13
+          Caption = ':'
+        end
+        object sLabel2: TsLabel
+          Left = 52
+          Top = 173
+          Width = 62
+          Height = 13
+          Caption = 'Aspect ratio:'
         end
         object CropBottomEdit: TJvSpinEdit
           Left = 435
@@ -2142,6 +2273,76 @@ object MainForm: TMainForm
           Value = 320.000000000000000000
           Color = clBtnFace
           TabOrder = 9
+        end
+        object SARBtn: TsCheckBox
+          Left = 12
+          Top = 120
+          Width = 78
+          Height = 20
+          Caption = 'Aspect ratio'
+          TabOrder = 10
+          OnClick = SARBtnClick
+          SkinData.SkinSection = 'CHECKBOX'
+          ImgChecked = 0
+          ImgUnchecked = 0
+        end
+        object SARList: TsComboBox
+          Left = 120
+          Top = 143
+          Width = 116
+          Height = 21
+          Alignment = taLeftJustify
+          BoundLabel.Active = True
+          BoundLabel.Caption = 'Pre-defined:'
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'COMBOBOX'
+          Style = csDropDownList
+          Enabled = False
+          ItemIndex = 0
+          TabOrder = 11
+          Text = '1:1'
+          OnChange = SARListChange
+          Items.Strings = (
+            '1:1'
+            '16:9'
+            '4:3'
+            '166:100'
+            '239:100'
+            '185:100'
+            '275:100'
+            '')
+        end
+        object SAR1Edit: TJvSpinEdit
+          Left = 120
+          Top = 170
+          Width = 50
+          Height = 21
+          CheckMinValue = True
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          Value = 1.000000000000000000
+          Enabled = False
+          TabOrder = 12
+        end
+        object SAR2Edit: TJvSpinEdit
+          Left = 186
+          Top = 170
+          Width = 50
+          Height = 21
+          CheckMinValue = True
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          Value = 1.000000000000000000
+          Enabled = False
+          TabOrder = 13
         end
       end
     end
@@ -2861,6 +3062,66 @@ object MainForm: TMainForm
               SkinData.SkinSection = 'PANEL'
             end
           end
+          object TabSheet16: TTabSheet
+            Caption = 'FLAC'
+            ImageIndex = 7
+            object sPanel3: TsPanel
+              Left = 0
+              Top = 0
+              Width = 550
+              Height = 131
+              Align = alClient
+              BevelOuter = bvNone
+              Color = 14870243
+              ParentBackground = False
+              TabOrder = 0
+              SkinData.SkinSection = 'PANEL'
+              object FLACCompList: TsComboBox
+                Left = 94
+                Top = 8
+                Width = 145
+                Height = 21
+                Alignment = taLeftJustify
+                BoundLabel.Active = True
+                BoundLabel.Caption = 'Compression Lvl:'
+                BoundLabel.Indent = 0
+                BoundLabel.Font.Charset = DEFAULT_CHARSET
+                BoundLabel.Font.Color = clWindowText
+                BoundLabel.Font.Height = -11
+                BoundLabel.Font.Name = 'Tahoma'
+                BoundLabel.Font.Style = []
+                BoundLabel.Layout = sclLeft
+                BoundLabel.MaxWidth = 0
+                BoundLabel.UseSkinColor = True
+                SkinData.SkinSection = 'COMBOBOX'
+                Style = csDropDownList
+                ItemIndex = 5
+                TabOrder = 0
+                Text = '5 - Default'
+                Items.Strings = (
+                  '0 - Worst'
+                  '1'
+                  '2'
+                  '3'
+                  '4'
+                  '5 - Default'
+                  '6'
+                  '7'
+                  '8 - Best')
+              end
+              object FLACEMSBtn: TsCheckBox
+                Left = 410
+                Top = 9
+                Width = 139
+                Height = 20
+                Caption = 'Exhaustive model search'
+                TabOrder = 1
+                SkinData.SkinSection = 'CHECKBOX'
+                ImgChecked = 0
+                ImgUnchecked = 0
+              end
+            end
+          end
         end
         object AudioEffectsBtn: TsBitBtn
           Left = 456
@@ -2909,7 +3170,7 @@ object MainForm: TMainForm
         end
         object AudioMethodList: TsComboBox
           Left = 50
-          Top = 168
+          Top = 161
           Width = 100
           Height = 21
           Anchors = [akLeft, akBottom]
@@ -3268,7 +3529,7 @@ object MainForm: TMainForm
     end
   end
   object StartBtn: TsBitBtn
-    Left = 430
+    Left = 431
     Top = 563
     Width = 150
     Height = 30
@@ -3315,8 +3576,8 @@ object MainForm: TMainForm
     SkinData.SkinSection = 'BUTTON'
   end
   object XPManifest1: TXPManifest
-    Left = 240
-    Top = 40
+    Left = 472
+    Top = 240
   end
   object AddMenu: TPopupMenu
     Left = 184
@@ -3337,7 +3598,7 @@ object MainForm: TMainForm
   object OpenDialog: TOpenDialog
     Filter = 
       'Supported|*.mp4;*.mkv;*.avi;*.mov;*.m4v;*.mpeg;*.mpg;*.flv;*.vob' +
-      '|AVS Files|*.avs|All Files|*.*'
+      ';*.divx|AVS Files|*.avs|All Files|*.*'
     Options = [ofHideReadOnly, ofAllowMultiSelect, ofEnableSizing]
     Left = 352
     Top = 152
@@ -3354,8 +3615,8 @@ object MainForm: TMainForm
     ConsoleOptions = [coRedirect]
     OnTerminate = ProcessTerminate
     OnRead = ProcessRead
-    Left = 104
-    Top = 120
+    Left = 48
+    Top = 168
   end
   object LogThread: TJvThread
     Exclusive = True
@@ -3447,8 +3708,8 @@ object MainForm: TMainForm
     ThirdParty.ThirdScrollControl = ' '#13#10
     ThirdParty.ThirdUpDown = ' '#13#10
     ThirdParty.ThirdScrollBar = ' '
-    Left = 80
-    Top = 64
+    Left = 192
+    Top = 288
   end
   object sSkinProvider1: TsSkinProvider
     AddedTitle.Font.Charset = DEFAULT_CHARSET
@@ -3459,8 +3720,8 @@ object MainForm: TMainForm
     SkinData.SkinSection = 'FORM'
     ScreenSnap = True
     TitleButtons = <>
-    Left = 312
-    Top = 65528
+    Left = 288
+    Top = 280
   end
   object MainMenu: TMainMenu
     Left = 504
@@ -3713,8 +3974,8 @@ object MainForm: TMainForm
           E78808668699E1BD0F5CC4C027409665FFDE779BE2288A9E9C73B740B4E7AC4F
           D3F4ED1B64925DEC202A74160000000049454E44AE426082}
       end>
-    Left = 296
-    Top = 48
+    Left = 424
+    Top = 304
     Bitmap = {}
   end
   object FileSearch: TJvSearchFiles
@@ -3735,7 +3996,8 @@ object MainForm: TMainForm
       '*.m4v'
       '*.m2v'
       '*.webm'
-      '*.m2ts')
+      '*.m2ts'
+      '*.divx')
     OnFindFile = FileSearchFindFile
     OnProgress = FileSearchProgress
     Left = 256
@@ -3870,6 +4132,38 @@ object MainForm: TMainForm
           D954F7FD3272C5554AAC67F20853CDF46C54BF327F5170819655493FE437EBE3
           4C1573E977514248E2A7D86CFC9BFBF8AFC0DF01995968660C14D30800000000
           49454E44AE426082}
+      end
+      item
+        ImageFormat = ifPNG
+        ImgData = {
+          89504E470D0A1A0A0000000D4948445200000016000000160806000000C4B46C
+          3B0000000473424954080808087C086488000000097048597300000DD700000D
+          D70142289B780000001974455874536F667477617265007777772E696E6B7363
+          6170652E6F72679BEE3C1A000002EF49444154388DB594BF6B5B5714C73FE7E9
+          497A9691715543870CA65321242624CD10A2C14BBB447F403B86D84E084E02C1
+          C95FE02D2E248A8D31F5A0A93FA0949A12BA6A70429D90C14BA181623C842C76
+          644B96DED393EE3D1D9EA467A98941861EB83CB8F7FBBE7CEE39E71E5155FE8F
+          7001D6D7D705F8C675DD87C69873A7314A2412FFB4DBED25A0343333D3763BFB
+          DF4E4C4C7C9FCFE733B95C0E1119CA5455A9542A5F6C6E6E16F7F6F6C6812551
+          554AA5D276A150984ABF7C49B8B686F8FE70C6E934A9D9595AF93C1B1B1BEF8C
+          31675C0063CCD95C2E47656D0DE7CD9BA14C010468ADAE325E28A0AA9F02634E
+          EF506468D2BE88FF5540DC0F8A545180540A3506DAEDFE73CF036B9156AB47DC
+          83EBD4C76120ACB5D112819F7EC0F9E3197AE922D618AC31E8F9F338CF7EC7F9
+          F5176C2A15EBADEDF3E933B6C6C442C741C6C6209B25F1DD125CBA884E4D9128
+          3E86D15148A7D156D8FB6730FA526155C15A54156D3468DDB94772B908990C6E
+          B1086A219D8620205C788006CD3805C67C9C58ADEDA36EBF7E4DF3F63C349B90
+          4A46946148F3CE5DCC9F5BB1D6187480DAFD8F71971840151978F222B1AEBB21
+          51714E20262E9E1A835CB880B7BA125D3F0C23F2640A6F6519E7F2973D9DB536
+          4AE3C78C8F57D83A0EDE93C790C94010509FBBC9D1F51B68A3019EC7C8CA329A
+          C9C4202711D31168B7DD021F6D34A8CDDDA4F9FC05E1AB57D46ECCA20707D86A
+          15E3FB3DD313736C55E31CFB3E075F7D0DE2607D1F3A570DB7B6787FE52A924C
+          A241D07B14CE402AFA8BA71AD1AAA2AAE007D1DEE0CCF67DA463AA1DE3414DBF
+          B1E745A65DEA636B30BAA4220222E8C848174E0075015CD7FDEBF0F0706A7C61
+          81CAA347D8A3A35E3BA96AD476C766B4AA466DD69D0BA3A37C72FF3EB55A0DE0
+          607171B1E102ECEFEF17CBE5F2D3E9E9E991C96BD74E35E8ABD52AE57239DCD9
+          D9F9797777F7335155B2D96C767E7E7E6E7272F2563299FC7C28D74E586BDF6E
+          6F6FFF562A957EACD7EB7F4B377F22E2026340701A6320D5F9D655B5F52FFA3D
+          DFC7E0A4ED6B0000000049454E44AE426082}
       end>
     Left = 152
     Top = 216
@@ -3881,5 +4175,11 @@ object MainForm: TMainForm
     Items = <>
     Left = 240
     Top = 128
+  end
+  object Timer: TTimer
+    Enabled = False
+    OnTimer = TimerTimer
+    Left = 328
+    Top = 80
   end
 end

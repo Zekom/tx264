@@ -21,6 +21,7 @@ type
     Memo1: TMemo;
     sButton1: TsButton;
     sButton2: TsButton;
+    Memo2: TMemo;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure CloseBtnClick(Sender: TObject);
     procedure HomepageBtnClick(Sender: TObject);
@@ -37,7 +38,7 @@ var
   AboutForm: TAboutForm;
 
 const
-  Build = '1462';
+  Build = '1655';
 
 implementation
 
@@ -62,7 +63,7 @@ end;
 procedure TAboutForm.FormShow(Sender: TObject);
 begin
 
-  Label1.Caption := 'TX264 0.7.3 Beta Build: ' + Build;
+  Label1.Caption := 'TX264 0.7.5 Beta Build: ' + Build;
 
 end;
 

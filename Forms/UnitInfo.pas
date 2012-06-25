@@ -18,6 +18,9 @@ type
     procedure SaveBtnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure InfoListAdvancedCustomDrawItem(Sender: TCustomListView;
+      Item: TListItem; State: TCustomDrawState; Stage: TCustomDrawStage;
+      var DefaultDraw: Boolean);
   private
     { Private declarations }
   public
@@ -58,6 +61,22 @@ procedure TInfoForm.FormDestroy(Sender: TObject);
 begin
 
   FreeAndNil(InfoTMP);
+
+end;
+
+procedure TInfoForm.InfoListAdvancedCustomDrawItem(Sender: TCustomListView;
+  Item: TListItem; State: TCustomDrawState; Stage: TCustomDrawStage;
+  var DefaultDraw: Boolean);
+begin
+
+  if Item.SubItems[0] = '' then
+  begin
+    Sender.Canvas.Font.Style := [fsBold];
+  end
+  else
+  begin
+    Sender.Canvas.Font.Style := [];
+  end;
 
 end;
 

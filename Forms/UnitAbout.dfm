@@ -3,9 +3,10 @@ object AboutForm: TAboutForm
   Top = 0
   BorderStyle = bsDialog
   Caption = 'About'
-  ClientHeight = 413
-  ClientWidth = 338
+  ClientHeight = 612
+  ClientWidth = 416
   Color = 14870243
+  DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -16,14 +17,14 @@ object AboutForm: TAboutForm
   OnClose = FormClose
   OnShow = FormShow
   DesignSize = (
-    338
-    413)
+    416
+    612)
   PixelsPerInch = 96
   TextHeight = 13
   object Image1: TImage
     Left = 0
     Top = 0
-    Width = 338
+    Width = 416
     Height = 73
     Align = alTop
     Center = True
@@ -336,7 +337,7 @@ object AboutForm: TAboutForm
   object Label1: TLabel
     Left = 0
     Top = 73
-    Width = 338
+    Width = 416
     Height = 18
     Align = alTop
     Alignment = taCenter
@@ -347,7 +348,7 @@ object AboutForm: TAboutForm
   object Label2: TLabel
     Left = 0
     Top = 91
-    Width = 338
+    Width = 416
     Height = 18
     Align = alTop
     Alignment = taCenter
@@ -358,7 +359,7 @@ object AboutForm: TAboutForm
   object Label3: TLabel
     Left = 0
     Top = 109
-    Width = 338
+    Width = 416
     Height = 18
     Align = alTop
     Alignment = taCenter
@@ -371,7 +372,7 @@ object AboutForm: TAboutForm
   object Label4: TLabel
     Left = 0
     Top = 127
-    Width = 338
+    Width = 416
     Height = 18
     Align = alTop
     Alignment = taCenter
@@ -382,7 +383,7 @@ object AboutForm: TAboutForm
   object Label5: TLabel
     Left = 0
     Top = 145
-    Width = 338
+    Width = 416
     Height = 18
     Align = alTop
     Alignment = taCenter
@@ -391,8 +392,8 @@ object AboutForm: TAboutForm
     ExplicitWidth = 486
   end
   object CloseBtn: TsBitBtn
-    Left = 230
-    Top = 380
+    Left = 308
+    Top = 579
     Width = 100
     Height = 25
     Anchors = [akRight, akBottom]
@@ -435,10 +436,12 @@ object AboutForm: TAboutForm
     TabOrder = 0
     OnClick = CloseBtnClick
     SkinData.SkinSection = 'BUTTON'
+    ExplicitLeft = 230
+    ExplicitTop = 380
   end
   object HomepageBtn: TsBitBtn
     Left = 8
-    Top = 380
+    Top = 579
     Width = 100
     Height = 25
     Anchors = [akLeft, akBottom]
@@ -481,11 +484,12 @@ object AboutForm: TAboutForm
     TabOrder = 1
     OnClick = HomepageBtnClick
     SkinData.SkinSection = 'BUTTON'
+    ExplicitTop = 380
   end
   object Memo1: TMemo
     Left = 8
-    Top = 169
-    Width = 322
+    Top = 170
+    Width = 400
     Height = 179
     Alignment = taCenter
     Anchors = [akLeft, akRight, akBottom]
@@ -507,10 +511,12 @@ object AboutForm: TAboutForm
       'SoX.exe')
     ReadOnly = True
     TabOrder = 2
+    ExplicitTop = 169
+    ExplicitWidth = 322
   end
   object sButton1: TsButton
     Left = 8
-    Top = 353
+    Top = 553
     Width = 100
     Height = 20
     Anchors = [akLeft, akBottom]
@@ -518,10 +524,11 @@ object AboutForm: TAboutForm
     TabOrder = 3
     OnClick = sButton1Click
     SkinData.SkinSection = 'BUTTON'
+    ExplicitTop = 552
   end
   object sButton2: TsButton
-    Left = 230
-    Top = 353
+    Left = 308
+    Top = 553
     Width = 100
     Height = 20
     Anchors = [akLeft, akBottom]
@@ -529,6 +536,33 @@ object AboutForm: TAboutForm
     TabOrder = 4
     OnClick = sButton2Click
     SkinData.SkinSection = 'BUTTON'
+    ExplicitTop = 552
+  end
+  object Memo2: TMemo
+    Left = 8
+    Top = 355
+    Width = 400
+    Height = 192
+    Lines.Strings = (
+      'This program is free software; you can redistribute it and/or'
+      'modify it under the terms of the GNU General Public License'
+      'as published by the Free Software Foundation; either version 2'
+      'of the License, or (at your option) any later version.'
+      ''
+      'This program is distributed in the hope that it will be useful,'
+      'but WITHOUT ANY WARRANTY; without even the implied warranty of'
+      'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the'
+      'GNU General Public License for more details.'
+      ''
+      
+        'You should have received a copy of the GNU General Public Licens' +
+        'e'
+      'along with this program; if not, write to the Free Software'
+      
+        'Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02' +
+        '110'#8722'1301, USA.')
+    ReadOnly = True
+    TabOrder = 5
   end
   object sSkinProvider1: TsSkinProvider
     AddedTitle.Font.Charset = DEFAULT_CHARSET
