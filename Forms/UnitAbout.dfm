@@ -3,7 +3,7 @@ object AboutForm: TAboutForm
   Top = 0
   BorderStyle = bsDialog
   Caption = 'About'
-  ClientHeight = 612
+  ClientHeight = 621
   ClientWidth = 416
   Color = 14870243
   DoubleBuffered = True
@@ -18,7 +18,7 @@ object AboutForm: TAboutForm
   OnShow = FormShow
   DesignSize = (
     416
-    612)
+    621)
   PixelsPerInch = 96
   TextHeight = 13
   object Image1: TImage
@@ -393,7 +393,7 @@ object AboutForm: TAboutForm
   end
   object CloseBtn: TsBitBtn
     Left = 308
-    Top = 579
+    Top = 588
     Width = 100
     Height = 25
     Anchors = [akRight, akBottom]
@@ -436,12 +436,10 @@ object AboutForm: TAboutForm
     TabOrder = 0
     OnClick = CloseBtnClick
     SkinData.SkinSection = 'BUTTON'
-    ExplicitLeft = 230
-    ExplicitTop = 380
   end
   object HomepageBtn: TsBitBtn
     Left = 8
-    Top = 579
+    Top = 588
     Width = 100
     Height = 25
     Anchors = [akLeft, akBottom]
@@ -484,13 +482,12 @@ object AboutForm: TAboutForm
     TabOrder = 1
     OnClick = HomepageBtnClick
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 380
   end
   object Memo1: TMemo
     Left = 8
-    Top = 170
+    Top = 169
     Width = 400
-    Height = 179
+    Height = 189
     Alignment = taCenter
     Anchors = [akLeft, akRight, akBottom]
     BevelInner = bvNone
@@ -508,15 +505,14 @@ object AboutForm: TAboutForm
       'oggenc2.exe'
       'aften.exe'
       'AlphaControls LE'
-      'SoX.exe')
+      'SoX.exe'
+      'flac.exe')
     ReadOnly = True
     TabOrder = 2
-    ExplicitTop = 169
-    ExplicitWidth = 322
   end
   object sButton1: TsButton
     Left = 8
-    Top = 553
+    Top = 562
     Width = 100
     Height = 20
     Anchors = [akLeft, akBottom]
@@ -524,11 +520,10 @@ object AboutForm: TAboutForm
     TabOrder = 3
     OnClick = sButton1Click
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 552
   end
   object sButton2: TsButton
     Left = 308
-    Top = 553
+    Top = 562
     Width = 100
     Height = 20
     Anchors = [akLeft, akBottom]
@@ -536,11 +531,10 @@ object AboutForm: TAboutForm
     TabOrder = 4
     OnClick = sButton2Click
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 552
   end
   object Memo2: TMemo
     Left = 8
-    Top = 355
+    Top = 364
     Width = 400
     Height = 192
     Lines.Strings = (

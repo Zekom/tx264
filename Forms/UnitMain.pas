@@ -248,6 +248,9 @@ type
     PredefList: TsComboBox;
     ApplyBtn: TsBitBtn;
     SaveCurrentAsBtn: TsBitBtn;
+    sBitBtn1: TsBitBtn;
+    Force32bitBtn: TsCheckBox;
+    AutoLogSave: TsCheckBox;
     procedure AddFiles1Click(Sender: TObject);
     procedure AddFolder1Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
@@ -326,6 +329,8 @@ type
     procedure SaveCurrentAsBtnClick(Sender: TObject);
     procedure PredefListChange(Sender: TObject);
     procedure ApplyBtnClick(Sender: TObject);
+    procedure sBitBtn1Click(Sender: TObject);
+    procedure Force32bitBtnClick(Sender: TObject);
   private
     { Private declarations }
     CommandLines: TStringList;
@@ -403,7 +408,10 @@ type
 
     // calculates bitrate for a curtain file size
     function CalculateBitrate(const TargetSize: integer;
-      const FileLength: integer; const AudioBitrate: integer): string;
+      const FileLength: integer; const AudioStreamSize: integer): string;
+
+    // gets audio streams size
+    function GetAudioSize(const FileName: string; const AudioIndex: integer):integer;
 
     // fills summary list
     procedure FillSummaryList();
@@ -454,6 +462,10 @@ type
 
     // saves current state into a predef file
     procedure SavePreDef(const PreDefName: string);
+
+    // checks if os is 64-bit
+    function IsOS64Bit: Boolean;
+    procedure Set32_64Backend();
   public
     { Public declarations }
     AppFolder: string;
@@ -462,7 +474,7 @@ type
   end;
 
 const
-  BuildInt = 1655;
+  BuildInt = 1928;
 
 var
   MainForm: TMainForm;
@@ -592,7 +604,7 @@ begin
         begin
           TmpStr := TmpStr + ' --bitrate ' +
             CalculateBitrate(Round(FileSizeEdit.Value),
-            GetDurationEx(FileName), 80);
+            GetDurationEx(FileName), GetAudioSize(FileName, StrToInt(AudioIndexes[Index])));
         end;
 
         // bitrate tolerance
@@ -1390,7 +1402,6 @@ begin
   case ContainerList.ItemIndex of
     0: // mkv
       begin
-
         // include chapter info from source
         if (CopyChapertBtn.Checked) and (Length(ChapterOutName) > 0) then
         begin
@@ -1760,7 +1771,8 @@ begin
             (Extension = '.m4v') or (Extension = '.mkv') or
             (Extension = '.mpeg') or (Extension = '.mpg') or
             (Extension = '.flv') or (Extension = '.avi') or (Extension = '.vob')
-            or (Extension = '.avs') or (Extension = '.divx') then
+            or (Extension = '.avs') or (Extension = '.divx') or
+            (Extension = '.wmv') then
           begin
             ProgressForm.ProgressLabel.Caption := ExtractFileName(FileName);
             AddFile(FileName, False);
@@ -1946,7 +1958,7 @@ procedure TMainForm.ApplyBtnClick(Sender: TObject);
 begin
 
   if PresetsList.ItemIndex > -1 then
-  ApplyPreDef(PredefList.Text);
+    ApplyPreDef(PredefList.Text);
 
 end;
 
@@ -1964,6 +1976,7 @@ begin
       ProfileList.ItemIndex := ReadInteger('Settings', 'Profile', 0);
       PresetsList.ItemIndex := ReadInteger('Settings', 'Preset', 6);
       TuneList.ItemIndex := ReadInteger('Settings', 'Tune', 0);
+      LevelList.ItemIndex := ReadInteger('Settings', 'Level', 0);
       BitrateEdit.Text := ReadString('Settings', 'Bitrate', '512');
       QuantEdit.Text := ReadString('Settings', 'Quant', '21');
       CRFEdit.Text := ReadString('Settings', 'CRF', '21');
@@ -2233,11 +2246,12 @@ begin
 
 end;
 
-function TMainForm.CalculateBitrate(const TargetSize, FileLength: integer;
-  const AudioBitrate: integer): string;
+function TMainForm.CalculateBitrate(const TargetSize,
+  FileLength: integer; const AudioStreamSize: integer): string;
 var
   AudioSize: integer;
   TotalSize: integer;
+  AudioBitrate: integer;
 begin
 
   Result := '512';
@@ -2245,7 +2259,40 @@ begin
   if FileLength > 0 then
   begin
 
-    AudioSize := ((AudioBitrate * 1024) div 8) * FileLength;
+    case AudioMethodList.ItemIndex of
+      0: // encode
+        begin
+          // decide audio size
+          // todo: for wav and FLAC
+          case AudioEncoderList.ItemIndex of
+            0:
+              AudioBitrate := StrToInt(FAACBitrateEdit.Text);
+            1:
+              AudioBitrate := StrToInt(NeroBitrateEdit.Text);
+            2:
+              AudioBitrate := StrToInt(QaacBitrateEdit.Text);
+            3:
+              AudioBitrate := StrToInt(AftenBitrateEdit.Text);
+            4:
+              AudioBitrate := StrToInt(OggBitrateEdit.Text);
+            5:
+              AudioBitrate := 0;
+            6:
+              AudioBitrate := 0;
+          end;
+
+          AudioSize := ((AudioBitrate * 1024) div 8) * FileLength;
+        end;
+      1: // copy
+        begin
+          AudioSize := AudioStreamSize;
+        end;
+      2: // none
+        begin
+          AudioSize := 0;
+        end;
+    end;
+
     TotalSize := 1024 * 1024 * TargetSize;
 
     Result := FloatToStr((((TotalSize - AudioSize) div FileLength) *
@@ -2301,6 +2348,9 @@ begin
   if FileIndex < FilesToCheck.Count then
     Result := FileExists(FilesToCheck[FileIndex]);
 
+  if SplittingBtn.Checked then
+    Result := True;
+
 end;
 
 function TMainForm.CheckOutputFiles: Boolean;
@@ -2316,7 +2366,7 @@ begin
   for I := 0 to FilesToCheck.Count - 1 do
   begin
 
-    if not FileExists(FilesToCheck[i]) then
+    if (not FileExists(FilesToCheck[i])) then
     begin
 
       // add to log
@@ -2329,6 +2379,14 @@ begin
 
     end;
 
+  end;
+
+  if SplittingBtn.Checked then
+  begin
+    Result := True;
+
+    LogForm.OutputList.Lines.Add('[' + DateTimeToStr(Now) +
+      '] Since splitting enabled, output files cannot be checked for now.');
   end;
 
   // show a warning to the user
@@ -2712,7 +2770,8 @@ begin
         if (Extension = '.mp4') or (Extension = '.mov') or (Extension = '.m4v')
           or (Extension = '.mkv') or (Extension = '.mpeg') or
           (Extension = '.mpg') or (Extension = '.flv') or (Extension = '.avi')
-          or (Extension = '.wmv') or (Extension = '.avs') then
+          or (Extension = '.vob') or (Extension = '.avs') or
+          (Extension = '.divx') or (Extension = '.wmv') then
         begin
           AddFile(Value[i], False);
           ProgressForm.ProgressBar.Position := i;
@@ -3289,6 +3348,13 @@ begin
 
 end;
 
+procedure TMainForm.Force32bitBtnClick(Sender: TObject);
+begin
+
+  Set32_64Backend();
+
+end;
+
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 
@@ -3323,14 +3389,34 @@ begin
   SaveOptions();
   DeleteTempFiles();
 
+  // save log
+  if AutoLogSave.Checked then
+  begin
+    LogForm.OutputList.Lines.SaveToFile(AppFolder + '\log.txt');
+  end;
+
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 var
   i: integer;
+  SettingsFile: TIniFile;
 begin
 
-  if SystemInfo.CPU.Is64Bits then
+  // this must done here because if user wants to use 32bit backends
+  // and doesnt change settings before he starts, 64bit backends may be
+  // fired.
+  SettingsFile := TIniFile.Create(ExtractFileDir(Application.ExeName) +
+    '\settings.ini');
+  try
+    Force32bitBtn.Checked := SettingsFile.ReadBool('Settings',
+      'Force32', False);
+  finally
+    SettingsFile.Free;
+  end;
+
+  // check necessary files.
+  if IsOS64Bit then
   begin
 
     if not FileExists(ExtractFileDir(Application.ExeName) + '\tools\x264_64.exe')
@@ -3363,7 +3449,7 @@ begin
 
   end;
 
-  if SystemInfo.CPU.Is64Bits then
+  if IsOS64Bit then
   begin
 
     if not FileExists(ExtractFileDir(Application.ExeName) +
@@ -3398,7 +3484,7 @@ begin
     FFMpegPath := ExtractFileDir(Application.ExeName) + '\tools\ffmpeg.exe';
   end;
 
-  if SystemInfo.CPU.Is64Bits then
+  if IsOS64Bit then
   begin
     if not FileExists(ExtractFileDir(Application.ExeName) + '\tools\lame_64.exe')
     then
@@ -3525,7 +3611,7 @@ begin
     AftenPath := ExtractFileDir(Application.ExeName) + '\tools\aften\aften.exe';
   end;
 
-  if SystemInfo.CPU.Is64Bits then
+  if IsOS64Bit then
   begin
     if not FileExists(ExtractFileDir(Application.ExeName) +
       '\tools\oggenc2_64.exe') then
@@ -3654,7 +3740,6 @@ begin
   LoadOptions();
   DeleteTempFiles();
 
-
   if not FileExists(ExtractFileDir(Application.ExeName) +
     '\tools\neroAacEnc.exe') then
   begin
@@ -3710,14 +3795,15 @@ begin
         MediaInfo_Open(MediaInfoHandle, PWideChar(FileName));
         MediaInfo_Option(0, 'Complete', '1');
 
-        TmpStr := Trim(ReplaceStr(MediaInfo_Get(MediaInfoHandle, Stream_Audio,
-          AudioID - 1, 'Codec', Info_Text, Info_Name), ' ', ''));
+        TmpStr := LowerCase(Trim(ReplaceStr(MediaInfo_Get(MediaInfoHandle,
+          Stream_Audio, AudioID, 'Codec', Info_Text, Info_Name), ' ', '')));
 
         if ContainsText(TmpStr, 'vorbis') then
         begin
           Result := 'ogg';
         end
-        else if ContainsText(TmpStr, 'mp3') or ContainsText(TmpStr, 'lame') then
+        else if ContainsText(TmpStr, 'mp3') or ContainsText(TmpStr, 'lame') or
+          ContainsText(TmpStr, 'mpeg') or ContainsText(TmpStr, 'mpa1l3') then
         begin
           Result := 'mp3';
         end
@@ -3739,7 +3825,83 @@ begin
         end
         else
         begin
-          Result := TmpStr;
+          TmpStr := LowerCase(Trim(ReplaceStr(MediaInfo_Get(MediaInfoHandle,
+            Stream_Audio, AudioID, 'Codec ID/Hint', Info_Text, Info_Name),
+            ' ', '')));
+
+          if ContainsText(TmpStr, 'vorbis') then
+          begin
+            Result := 'ogg';
+          end
+          else if ContainsText(TmpStr, 'mp3') or ContainsText(TmpStr, 'lame') or
+            ContainsText(TmpStr, 'mpeg') or ContainsText(TmpStr, 'mpa1l3') then
+          begin
+            Result := 'mp3';
+          end
+          else if ContainsText(TmpStr, 'aac') then
+          begin
+            Result := 'aac';
+          end
+          else if ContainsText(TmpStr, 'ac3') then
+          begin
+            Result := 'ac3';
+          end
+          else if ContainsText(TmpStr, 'wav') or ContainsText(TmpStr, 'pcm')
+          then
+          begin
+            Result := 'wav';
+          end
+          else if ContainsText(TmpStr, 'mp2') then
+          begin
+            Result := 'mp2';
+          end;
+        end;
+
+      finally
+        MediaInfo_Close(MediaInfoHandle);
+      end;
+
+    end;
+
+  end;
+
+end;
+
+function TMainForm.GetAudioSize(const FileName: string;
+  const AudioIndex: integer): integer;
+var
+  MediaInfoHandle: Cardinal;
+  AudioSize: string;
+begin
+
+  Result := 0;
+
+  if (FileExists(FileName)) then
+  begin
+
+    // New handle for mediainfo
+    MediaInfoHandle := MediaInfo_New();
+
+    if MediaInfoHandle <> 0 then
+    begin
+
+      try
+        // Open a file in complete mode
+        MediaInfo_Open(MediaInfoHandle, PWideChar(FileName));
+        MediaInfo_Option(0, 'Complete', '1');
+
+        // get length
+        AudioSize := MediaInfo_Get(MediaInfoHandle, Stream_Audio, AudioIndex-1, 'StreamSize',
+          Info_Text, Info_Name);
+
+        if Length(AudioSize) < 1 then
+        begin
+          AudioSize := '0';
+        end;
+
+        if IsStringNumeric(AudioSize) then
+        begin
+          Result := StrToInt64(AudioSize);
         end;
 
       finally
@@ -4279,6 +4441,49 @@ begin
 
 end;
 
+function TMainForm.IsOS64Bit: Boolean;
+type
+  TIsWow64Process = function(Handle: THandle; var IsWow64: BOOL): BOOL; stdcall;
+var
+  hKernel32: Integer;
+  IsWow64Process: TIsWow64Process;
+  IsWow64: BOOL;
+begin
+  // that function is copied from: http://stackoverflow.com/questions/601089/detect-whether-current-windows-version-is-32-bit-or-64-bit
+
+  // we can check if the operating system is 64-bit by checking whether
+  // we are running under Wow64 (we are 32-bit code). We must check if this
+  // function is implemented before we call it, because some older versions
+  // of kernel32.dll (eg. Windows 2000) don't know about it.
+  // see http://msdn.microsoft.com/en-us/library/ms684139%28VS.85%29.aspx
+
+  // if user forces to use 32bit
+  if Force32bitBtn.Checked then
+  begin
+    Result := False;
+  end
+  else
+  begin
+    Result := False;
+    hKernel32 := LoadLibrary('kernel32.dll');
+    if (hKernel32 = 0) then
+      RaiseLastOSError;
+    @IsWow64Process := GetProcAddress(hKernel32, 'IsWow64Process');
+    if Assigned(IsWow64Process) then
+    begin
+      IsWow64 := False;
+      if (IsWow64Process(GetCurrentProcess, IsWow64)) then
+      begin
+        Result := IsWow64;
+      end
+      else
+        RaiseLastOSError;
+    end;
+    FreeLibrary(hKernel32);
+  end;
+
+end;
+
 function TMainForm.IsStringNumeric(Str: string): Boolean;
 var
   p: PChar;
@@ -4371,6 +4576,7 @@ begin
       ProfileList.ItemIndex := ReadInteger('Settings', 'Profile', 0);
       PresetsList.ItemIndex := ReadInteger('Settings', 'Preset', 6);
       TuneList.ItemIndex := ReadInteger('Settings', 'Tune', 0);
+      LevelList.ItemIndex := ReadInteger('Settings', 'Level', 0);
       BitrateEdit.Text := ReadString('Settings', 'Bitrate', '512');
       QuantEdit.Text := ReadString('Settings', 'Quant', '21');
       CRFEdit.Text := ReadString('Settings', 'CRF', '21');
@@ -4466,6 +4672,9 @@ begin
       SAR2Edit.Text := ReadString('Settings', 'SAR2', '1');
 
       PredefList.ItemIndex := ReadInteger('Settings', 'PreDefIndex', -1);
+
+      Force32bitBtn.Checked := ReadBool('Settings', 'Force32', False);
+      AutoLogSave.Checked := ReadBool('Settings', 'AutoLogSave', True);
     end;
 
   finally
@@ -4996,7 +5205,9 @@ var
   StateName: string;
 begin
 
-  if IDYES = Application.MessageBox('Are you sure you want to save current state as a new predef?', 'Save', MB_ICONQUESTION or MB_YESNO) then
+  if IDYES = Application.MessageBox
+    ('Are you sure you want to save current state as a new predef?', 'Save',
+    MB_ICONQUESTION or MB_YESNO) then
   begin
 
     StateName := InputBox('Predef name', 'Enter predef name:', '');
@@ -5030,6 +5241,7 @@ begin
       WriteInteger('Settings', 'Profile', ProfileList.ItemIndex);
       WriteInteger('Settings', 'Preset', PresetsList.ItemIndex);
       WriteInteger('Settings', 'Tune', TuneList.ItemIndex);
+      WriteInteger('Settings', 'Level', LevelList.ItemIndex);
       WriteString('Settings', 'Bitrate', BitrateEdit.Text);
       WriteString('Settings', 'Quant', QuantEdit.Text);
       WriteString('Settings', 'CRF', CRFEdit.Text);
@@ -5122,6 +5334,9 @@ begin
       WriteString('Settings', 'SAR2', SAR2Edit.Text);
 
       WriteInteger('Settings', 'PreDefIndex', PredefList.ItemIndex);
+
+      WriteBool('Settings', 'Force32', Force32bitBtn.Checked);
+      WriteBool('Settings', 'AutoLogSave', AutoLogSave.Checked);
     end;
 
   finally
@@ -5144,6 +5359,7 @@ begin
       WriteInteger('Settings', 'Profile', ProfileList.ItemIndex);
       WriteInteger('Settings', 'Preset', PresetsList.ItemIndex);
       WriteInteger('Settings', 'Tune', TuneList.ItemIndex);
+      WriteInteger('Settings', 'Level', LevelList.ItemIndex);
       WriteString('Settings', 'Bitrate', BitrateEdit.Text);
       WriteString('Settings', 'Quant', QuantEdit.Text);
       WriteString('Settings', 'CRF', CRFEdit.Text);
@@ -5301,6 +5517,56 @@ begin
 
 end;
 
+procedure TMainForm.sBitBtn1Click(Sender: TObject);
+begin
+
+  ShellExecute(Self.Handle, 'open',
+    'http://www.nero.com/eng/downloads-nerodigital-nero-aac-codec.php', nil,
+    nil, SW_NORMAL);
+
+end;
+
+procedure TMainForm.Set32_64Backend;
+begin
+
+  if IsOS64Bit then
+  begin
+    x264Path := ExtractFileDir(Application.ExeName) + '\tools\x264_64.exe';
+  end
+  else
+  begin
+    x264Path := ExtractFileDir(Application.ExeName) + '\tools\x264.exe';
+  end;
+
+  if IsOS64Bit then
+  begin
+    FFMpegPath := ExtractFileDir(Application.ExeName) + '\tools\ffmpeg_64.exe';
+  end
+  else
+  begin
+    FFMpegPath := ExtractFileDir(Application.ExeName) + '\tools\ffmpeg.exe';
+  end;
+
+  if IsOS64Bit then
+  begin
+    LamePath := ExtractFileDir(Application.ExeName) + '\tools\lame_64.exe';
+  end
+  else
+  begin
+    LamePath := ExtractFileDir(Application.ExeName) + '\tools\lame.exe';
+  end;
+
+  if IsOS64Bit then
+  begin
+    OggEncPath := ExtractFileDir(Application.ExeName) + '\tools\oggenc2_64.exe';
+  end
+  else
+  begin
+    OggEncPath := ExtractFileDir(Application.ExeName) + '\tools\oggenc2.exe';
+  end;
+
+end;
+
 procedure TMainForm.SliceThreadsBtnClick(Sender: TObject);
 begin
 
@@ -5403,7 +5669,6 @@ begin
           Self.Enabled := True;
           Self.Caption := 'Encoding [TX264]';
         end;
-        FilesToCheck.SaveToFile('C:\asd.txt');
 
         // add commandlines to the log
         with LogForm.OutputList.Lines do
@@ -5423,18 +5688,7 @@ begin
         LastPercent := 0;
         StoppedByUser := False;
 
-        if SystemInfo.CPU.Is64Bits then
-        begin
-          x264Path := ExtractFileDir(Application.ExeName) +
-            '\tools\x264_64.exe';
-        end
-        else
-        begin
-          x264Path := ExtractFileDir(Application.ExeName) + '\tools\x264.exe';
-        end;
-
         Process.ApplicationName := x264Path;
-
         Process.CommandLine := CommandLines.Strings[0];
         FillSummaryList();
         FillProgressList();
@@ -5824,7 +6078,7 @@ procedure TMainForm.PredefListChange(Sender: TObject);
 begin
 
   if PresetsList.ItemIndex > -1 then
-  ApplyPreDef(PredefList.Text);
+    ApplyPreDef(PredefList.Text);
 
 end;
 
@@ -6218,6 +6472,7 @@ begin
 
             if StrToInt(CurrentFileIndexes[FileIndex]) > i then
             begin
+              // todo: checking does not work with splitting
               if CheckOutputFile(i) then
               begin
                 Item[i].StateIndex := 2;
