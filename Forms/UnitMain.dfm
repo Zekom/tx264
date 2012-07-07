@@ -1529,7 +1529,7 @@ object MainForm: TMainForm
     Top = 332
     Width = 573
     Height = 230
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Anchors = [akLeft, akRight, akBottom]
     Images = PageImages
     MultiLine = True
@@ -1715,7 +1715,7 @@ object MainForm: TMainForm
             TabOrder = 6
           end
         end
-        object GroupBox6: TGroupBox
+        object ProfileBox: TGroupBox
           Left = 343
           Top = 3
           Width = 217
@@ -1894,7 +1894,7 @@ object MainForm: TMainForm
         end
         object ConstantFPSBtn: TsCheckBox
           Left = 440
-          Top = 164
+          Top = 171
           Width = 110
           Height = 20
           Caption = 'Force constant fps'
@@ -1908,7 +1908,7 @@ object MainForm: TMainForm
         end
         object ContainerList: TsComboBox
           Left = 480
-          Top = 137
+          Top = 144
           Width = 70
           Height = 21
           Anchors = [akRight, akBottom]
@@ -1942,7 +1942,7 @@ object MainForm: TMainForm
         end
         object SubtitleBtn: TsCheckBox
           Left = 9
-          Top = 138
+          Top = 145
           Width = 131
           Height = 20
           Caption = 'Mux subtitles to output'
@@ -1956,7 +1956,7 @@ object MainForm: TMainForm
         end
         object CopyChapertBtn: TsCheckBox
           Left = 9
-          Top = 164
+          Top = 171
           Width = 180
           Height = 20
           Caption = 'Copy menu from source mkv/mp4'
@@ -1966,25 +1966,11 @@ object MainForm: TMainForm
           ImgChecked = 0
           ImgUnchecked = 0
         end
-        object UseAdvancedBtn: TsCheckBox
-          Left = 343
-          Top = 115
-          Width = 126
-          Height = 20
-          Hint = 'Use advanced options'
-          Caption = 'Use advanced options'
-          Anchors = [akRight, akBottom]
-          TabOrder = 6
-          OnClick = UseAdvancedBtnClick
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
-        end
         object AdvancedBtn: TsBitBtn
-          Left = 480
-          Top = 115
-          Width = 70
-          Height = 20
+          Left = 504
+          Top = 117
+          Width = 54
+          Height = 21
           Hint = 'Edit advanced options'
           Anchors = [akRight, akBottom]
           Caption = 'Edit'
@@ -2024,7 +2010,7 @@ object MainForm: TMainForm
             0000000000000000000000000000000000000000000000000000000000000000
             0000000000000000000000000000000000000000000000000000000000000000
             0000000000000000000000000000000000000000000000000000}
-          TabOrder = 7
+          TabOrder = 6
           OnClick = AdvancedBtnClick
           SkinData.SkinSection = 'BUTTON'
         end
@@ -2035,11 +2021,37 @@ object MainForm: TMainForm
           Height = 20
           Hint = 'Bitrate tolerance'
           Caption = 'Tolerance:'
-          TabOrder = 8
+          TabOrder = 7
           OnClick = BitrateTolBtnClick
           SkinData.SkinSection = 'CHECKBOX'
           ImgChecked = 0
           ImgUnchecked = 0
+        end
+        object AdvancedOptionsList: TsComboBox
+          Left = 343
+          Top = 119
+          Width = 160
+          Height = 21
+          Alignment = taLeftJustify
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'COMBOBOX'
+          Style = csDropDownList
+          ItemIndex = 0
+          TabOrder = 8
+          Text = 'Don'#39't use advanced options'
+          OnChange = AdvancedOptionsListChange
+          Items.Strings = (
+            'Don'#39't use advanced options'
+            'Use only advanced options'
+            'Combine with profiles etc.')
         end
       end
     end
@@ -2107,11 +2119,11 @@ object MainForm: TMainForm
           Caption = ':'
         end
         object sLabel2: TsLabel
-          Left = 52
+          Left = 90
           Top = 173
-          Width = 62
+          Width = 24
           Height = 13
-          Caption = 'Aspect ratio:'
+          Caption = 'SAR:'
         end
         object CropBottomEdit: TJvSpinEdit
           Left = 435
@@ -2315,9 +2327,9 @@ object MainForm: TMainForm
         object SARBtn: TsCheckBox
           Left = 12
           Top = 120
-          Width = 78
+          Width = 293
           Height = 20
-          Caption = 'Aspect ratio'
+          Caption = 'Set DAR (potentially allows stretching if used with resize)'
           TabOrder = 10
           OnClick = SARBtnClick
           SkinData.SkinSection = 'CHECKBOX'
@@ -2354,10 +2366,9 @@ object MainForm: TMainForm
             '16:9'
             '4:3'
             '166:100'
-            '239:100'
+            '235:100'
             '185:100'
-            '275:100'
-            '')
+            '275:100')
         end
         object SAR1Edit: TJvSpinEdit
           Left = 120
@@ -3277,7 +3288,7 @@ object MainForm: TMainForm
         end
         object AudioMethodList: TsComboBox
           Left = 278
-          Top = 5
+          Top = 2
           Width = 100
           Height = 21
           Anchors = [akLeft, akBottom]

@@ -66,7 +66,7 @@ type
     Label9: TLabel;
     Label11: TLabel;
     Label12: TLabel;
-    GroupBox6: TGroupBox;
+    ProfileBox: TGroupBox;
     PresetsList: TsComboBox;
     ProfileList: TsComboBox;
     TuneList: TsComboBox;
@@ -155,7 +155,6 @@ type
     Label42: TLabel;
     NoNeroNotifyBtn: TsCheckBox;
     CopyChapertBtn: TsCheckBox;
-    UseAdvancedBtn: TsCheckBox;
     AdvancedBtn: TsBitBtn;
     FullLogBtn: TsCheckBox;
     SplittingMethodList: TsComboBox;
@@ -251,6 +250,7 @@ type
     sBitBtn1: TsBitBtn;
     Force32bitBtn: TsCheckBox;
     AutoLogSave: TsCheckBox;
+    AdvancedOptionsList: TsComboBox;
     procedure AddFiles1Click(Sender: TObject);
     procedure AddFolder1Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
@@ -291,7 +291,6 @@ type
     procedure QaacEncodeMethodListChange(Sender: TObject);
     procedure OggencodeListChange(Sender: TObject);
     procedure AftenEncodeListChange(Sender: TObject);
-    procedure UseAdvancedBtnClick(Sender: TObject);
     procedure AdvancedBtnClick(Sender: TObject);
     procedure SplittingBtnClick(Sender: TObject);
 
@@ -331,6 +330,7 @@ type
     procedure ApplyBtnClick(Sender: TObject);
     procedure sBitBtn1Click(Sender: TObject);
     procedure Force32bitBtnClick(Sender: TObject);
+    procedure AdvancedOptionsListChange(Sender: TObject);
   private
     { Private declarations }
     CommandLines: TStringList;
@@ -360,8 +360,6 @@ type
     LastPercent: Integer;
 
     LastDirectory: string;
-
-    FileAlreadyExistWarningStr: string;
 
     TimePassed: Integer;
 
@@ -403,6 +401,10 @@ type
     procedure DisableUI();
     procedure EnableUI();
 
+    // get height/width
+    function GetHeight(Index: Integer): Integer;
+    function GetWidth(Index: Integer): Integer;
+
     // adds command line for x264.exe
     procedure AddCommandLine(Index: Integer; AdvancedOptions: string);
 
@@ -411,14 +413,12 @@ type
       const FileLength: integer; const AudioStreamSize: integer): string;
 
     // gets audio streams size
-    function GetAudioSize(const FileName: string; const AudioIndex: integer):integer;
+    function GetAudioSize(const FileName: string;
+      const AudioIndex: integer): integer;
 
     // fills summary list
     procedure FillSummaryList();
     procedure FillProgressList();
-
-    // checks if output files already exit
-    function CheckOutputFilesAlreadyExist: Boolean;
 
     // gets audio codec
     function GetAudioKind(const FileName: string;
@@ -448,7 +448,7 @@ type
     // plays selected file with filters applied
     procedure PlayFile(Index: Integer);
 
-    // adds a file file to the extracting audio info
+    // adds a file to the file list extracting audio info
     procedure AddFile(const FileName: string; const AddingLater: Boolean);
 
     // checks if source has chapters
@@ -474,7 +474,7 @@ type
   end;
 
 const
-  BuildInt = 1928;
+  BuildInt = 2041;
 
 var
   MainForm: TMainForm;
@@ -502,6 +502,95 @@ begin
 
 end;
 
+function TMainForm.GetWidth(Index: Integer): Integer;
+var
+  MediaInfoHandle: Cardinal;
+  Height: string;
+  FileName: string;
+begin
+
+  FileName := Files[Index];
+
+  if (FileExists(FileName)) then
+  begin
+
+    // New handle for mediainfo
+    MediaInfoHandle := MediaInfo_New();
+
+    if MediaInfoHandle <> 0 then
+    begin
+
+      try
+        // Open a file in complete mode
+        MediaInfo_Open(MediaInfoHandle, PwideChar(FileName));
+        MediaInfo_Option(0, 'Complete', '1');
+
+        // get length
+        Height := MediaInfo_Get(MediaInfoHandle, Stream_Video, 0, 'Width',
+          Info_Text, Info_Name);
+
+        if not IsStringNumeric(Height) then
+        begin
+          Height := '240';
+        end;
+
+        Result := StrToInt(Height);
+
+      finally
+        MediaInfo_Close(MediaInfoHandle);
+      end;
+
+    end;
+
+  end;
+
+end;
+
+function TMainForm.GetHeight(Index: Integer): Integer;
+var
+  MediaInfoHandle: Cardinal;
+  Height: string;
+  FileName: string;
+begin
+
+  FileName := Files[Index];
+
+  if (FileExists(FileName)) then
+  begin
+
+    // New handle for mediainfo
+    MediaInfoHandle := MediaInfo_New();
+
+    if MediaInfoHandle <> 0 then
+    begin
+
+      try
+        // Open a file in complete mode
+        MediaInfo_Open(MediaInfoHandle, PwideChar(FileName));
+        MediaInfo_Option(0, 'Complete', '1');
+
+        // get length
+        Height := MediaInfo_Get(MediaInfoHandle, Stream_Video, 0, 'Height',
+          Info_Text, Info_Name);
+
+        if not IsStringNumeric(Height) then
+        begin
+          Height := '240';
+        end;
+
+        Result := StrToInt(Height);
+
+      finally
+        MediaInfo_Close(MediaInfoHandle);
+      end;
+
+    end;
+
+  end;
+
+end;
+
+
 procedure TMainForm.AddCommandLine(Index: Integer; AdvancedOptions: string);
 var
   OutFileName: string;
@@ -523,6 +612,7 @@ var
   SplittingStr: string;
   FileIndex: integer;
   TmpFileName: string;
+  SARValue1, SARValue2: string;
 begin
 
   // paths and files
@@ -603,8 +693,8 @@ begin
         else
         begin
           TmpStr := TmpStr + ' --bitrate ' +
-            CalculateBitrate(Round(FileSizeEdit.Value),
-            GetDurationEx(FileName), GetAudioSize(FileName, StrToInt(AudioIndexes[Index])));
+            CalculateBitrate(Round(FileSizeEdit.Value), GetDurationEx(FileName),
+            GetAudioSize(FileName, StrToInt(AudioIndexes[Index])));
         end;
 
         // bitrate tolerance
@@ -618,79 +708,151 @@ begin
   end;
 
   // advanced options - presets
-  if UseAdvancedBtn.Checked then
-  begin
-    TmpStr := TmpStr + ' ' + AdvancedOptions;
-  end
-  else
-  begin
+  case AdvancedOptionsList.ItemIndex of
+    0: // presets
+      begin
+        // profile
+        case ProfileList.ItemIndex of
+          1:
+            TmpStr := TmpStr + ' --profile baseline';
+          2:
+            TmpStr := TmpStr + ' --profile main';
+          3:
+            TmpStr := TmpStr + ' --profile high';
+          4:
+            TmpStr := TmpStr + ' --profile high10';
+          5:
+            TmpStr := TmpStr + ' --profile high422';
+          6:
+            TmpStr := TmpStr + ' --profile high444';
+        end;
 
-    // profile
-    case ProfileList.ItemIndex of
-      1:
-        TmpStr := TmpStr + ' --profile baseline';
-      2:
-        TmpStr := TmpStr + ' --profile main';
-      3:
-        TmpStr := TmpStr + ' --profile high';
-      4:
-        TmpStr := TmpStr + ' --profile high10';
-      5:
-        TmpStr := TmpStr + ' --profile high422';
-      6:
-        TmpStr := TmpStr + ' --profile high444';
-    end;
+        // level
+        if LevelList.ItemIndex > 0 then
+        begin
+          TmpStr := TmpStr + ' --level ' + LevelList.Text;
+        end;
 
-    // level
-    if LevelList.ItemIndex > 0 then
-    begin
-      TmpStr := TmpStr + ' --level ' + LevelList.Text;
-    end;
+        // presets
+        case PresetsList.ItemIndex of
+          1:
+            TmpStr := TmpStr + ' --preset ultrafast';
+          2:
+            TmpStr := TmpStr + ' --preset superfast';
+          3:
+            TmpStr := TmpStr + ' --preset veryfast';
+          4:
+            TmpStr := TmpStr + ' --preset faster';
+          5:
+            TmpStr := TmpStr + ' --preset fast';
+          6:
+            TmpStr := TmpStr + ' --preset medium';
+          7:
+            TmpStr := TmpStr + ' --preset slow';
+          8:
+            TmpStr := TmpStr + ' --preset slower';
+          9:
+            TmpStr := TmpStr + ' --preset veryslow';
+          10:
+            TmpStr := TmpStr + ' --preset placebo';
+        end;
 
-    // presets
-    case PresetsList.ItemIndex of
-      1:
-        TmpStr := TmpStr + ' --preset ultrafast';
-      2:
-        TmpStr := TmpStr + ' --preset superfast';
-      3:
-        TmpStr := TmpStr + ' --preset veryfast';
-      4:
-        TmpStr := TmpStr + ' --preset faster';
-      5:
-        TmpStr := TmpStr + ' --preset fast';
-      6:
-        TmpStr := TmpStr + ' --preset medium';
-      7:
-        TmpStr := TmpStr + ' --preset slow';
-      8:
-        TmpStr := TmpStr + ' --preset slower';
-      9:
-        TmpStr := TmpStr + ' --preset veryslow';
-      10:
-        TmpStr := TmpStr + ' --preset placebo';
-    end;
+        // tune
+        case TuneList.ItemIndex of
+          1:
+            TmpStr := TmpStr + ' --tune film';
+          2:
+            TmpStr := TmpStr + ' --tune animation';
+          3:
+            TmpStr := TmpStr + ' --tune grain';
+          4:
+            TmpStr := TmpStr + ' --tune stillimage';
+          5:
+            TmpStr := TmpStr + ' --tune psnr';
+          6:
+            TmpStr := TmpStr + ' --tune ssim';
+          7:
+            TmpStr := TmpStr + ' --tune fastdecode';
+          8:
+            TmpStr := TmpStr + ' --tune zerolatency';
+        end;
+      end;
+    1: // advanced
+      begin
+        TmpStr := TmpStr + ' ' + AdvancedOptions;
+      end;
+    2: // presets+advanced
+      begin
 
-    // tune
-    case TuneList.ItemIndex of
-      1:
-        TmpStr := TmpStr + ' --tune film';
-      2:
-        TmpStr := TmpStr + ' --tune animation';
-      3:
-        TmpStr := TmpStr + ' --tune grain';
-      4:
-        TmpStr := TmpStr + ' --tune stillimage';
-      5:
-        TmpStr := TmpStr + ' --tune psnr';
-      6:
-        TmpStr := TmpStr + ' --tune ssim';
-      7:
-        TmpStr := TmpStr + ' --tune fastdecode';
-      8:
-        TmpStr := TmpStr + ' --tune zerolatency';
-    end;
+        // profile
+        case ProfileList.ItemIndex of
+          1:
+            TmpStr := TmpStr + ' --profile baseline';
+          2:
+            TmpStr := TmpStr + ' --profile main';
+          3:
+            TmpStr := TmpStr + ' --profile high';
+          4:
+            TmpStr := TmpStr + ' --profile high10';
+          5:
+            TmpStr := TmpStr + ' --profile high422';
+          6:
+            TmpStr := TmpStr + ' --profile high444';
+        end;
 
+        // level
+        if LevelList.ItemIndex > 0 then
+        begin
+          TmpStr := TmpStr + ' --level ' + LevelList.Text;
+        end;
+
+        // presets
+        case PresetsList.ItemIndex of
+          1:
+            TmpStr := TmpStr + ' --preset ultrafast';
+          2:
+            TmpStr := TmpStr + ' --preset superfast';
+          3:
+            TmpStr := TmpStr + ' --preset veryfast';
+          4:
+            TmpStr := TmpStr + ' --preset faster';
+          5:
+            TmpStr := TmpStr + ' --preset fast';
+          6:
+            TmpStr := TmpStr + ' --preset medium';
+          7:
+            TmpStr := TmpStr + ' --preset slow';
+          8:
+            TmpStr := TmpStr + ' --preset slower';
+          9:
+            TmpStr := TmpStr + ' --preset veryslow';
+          10:
+            TmpStr := TmpStr + ' --preset placebo';
+        end;
+
+        // tune
+        case TuneList.ItemIndex of
+          1:
+            TmpStr := TmpStr + ' --tune film';
+          2:
+            TmpStr := TmpStr + ' --tune animation';
+          3:
+            TmpStr := TmpStr + ' --tune grain';
+          4:
+            TmpStr := TmpStr + ' --tune stillimage';
+          5:
+            TmpStr := TmpStr + ' --tune psnr';
+          6:
+            TmpStr := TmpStr + ' --tune ssim';
+          7:
+            TmpStr := TmpStr + ' --tune fastdecode';
+          8:
+            TmpStr := TmpStr + ' --tune zerolatency';
+        end;
+
+        // advanced
+        TmpStr := TmpStr + ' ' + AdvancedOptions;
+      end;
   end;
 
   // constant fps
@@ -712,11 +874,32 @@ begin
   // filters
   if ResizeBtn.Checked then
   begin
-
+    // resize
     TmpStr := TmpStr + ' --video-filter resize:width=' + WidthEdit.Text +
       ',height=' + HeightEdit.Text + ',method=' +
       LowerCase(ResizeMethodList.Text);
+    // resize and SAR
+    if SARBtn.Checked then
+    begin
+      SARValue1 := ReplaceStr(FloatToStr((SAR1Edit.Value / SAR2Edit.Value)
+        ), ',', '');
+      SARValue2 := ReplaceStr
+        (FloatToStr(WidthEdit.Value / HeightEdit.Value), ',', '');
 
+      if Length(SARValue1) > 5 then
+      begin
+        Delete(SARValue1, 4, MAXINT);
+      end;
+
+      if Length(SARValue2) > 5 then
+      begin
+        Delete(SARValue2, 4, MAXINT);
+      end;
+
+      TmpStr := TmpStr + ',sar=' + SARValue1 + ':' + SARValue2;
+    end;
+
+    // resize+SAR+Crop
     if CropBtn.Checked then
     begin
       TmpStr := TmpStr + '/crop:' + CropLeftEdit.Text + ',' + CropTopEdit.Text +
@@ -726,19 +909,46 @@ begin
   end
   else
   begin
-
-    if CropBtn.Checked then
+    // just SAR
+    if SARBtn.Checked then
     begin
-      TmpStr := TmpStr + ' --video-filter crop:' + CropLeftEdit.Text + ',' +
-        CropTopEdit.Text + ',' + CropRightEdit.Text + ',' + CropBottomEdit.Text;
+      SARValue1 := ReplaceStr(FloatToStr((SAR1Edit.Value / SAR2Edit.Value)
+        ), ',', '');
+      SARValue2 := ReplaceStr
+        (FloatToStr(GetWidth(Index) / GetHeight(Index)), ',', '');
+
+      if Length(SARValue1) > 5 then
+      begin
+        Delete(SARValue1, 4, MAXINT);
+      end;
+
+      if Length(SARValue2) > 5 then
+      begin
+        Delete(SARValue2, 4, MAXINT);
+      end;
+
+      TmpStr := TmpStr + ' --video-filter resize:sar=' + SARValue1 + ':' + SARValue2;
+
+      // SAR+Crop
+      if CropBtn.Checked then
+      begin
+        TmpStr := TmpStr + '/crop:' + CropLeftEdit.Text + ',' + CropTopEdit.Text
+          + ',' + CropRightEdit.Text + ',' + CropBottomEdit.Text;
+      end;
+
+    end
+    else
+    begin
+      // Just crop
+      if CropBtn.Checked then
+      begin
+        TmpStr := TmpStr + ' --video-filter crop:' + CropLeftEdit.Text + ',' +
+          CropTopEdit.Text + ',' + CropRightEdit.Text + ',' +
+          CropBottomEdit.Text;
+      end;
+
     end;
 
-  end;
-
-  if SARBtn.Checked then
-  begin
-    TmpStr := TmpStr + ' --sar ' + ReplaceStr(SAR1Edit.Text, ',', '.') + ':' +
-      ReplaceStr(SAR2Edit.Text, ',', '.');
   end;
 
   // custom video options
@@ -1539,6 +1749,15 @@ begin
         VDuration := MediaInfo_Get(MediaInfoHandle, Stream_Video, 0, 'Duration',
           Info_Text, Info_Name);
 
+        if Length(Trim(VDuration)) < 1 then
+        begin
+          VDuration := MediaInfo_Get(MediaInfoHandle, Stream_General, 0,
+            'Duration', Info_Text, Info_Name);
+          LogForm.OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] File: ' +
+            FileName + ' [Video duration failed. Trying general duration: ' +
+            VDuration + ']');
+        end;
+
         // get number of audio tracks
         AudioCount := MediaInfo_Get(MediaInfoHandle, Stream_Audio, 0,
           'StreamCount', Info_Text, Info_Name);
@@ -1655,13 +1874,20 @@ begin
 
               end;
 
+            end
+            else
+            begin
+              LogForm.OutputList.Lines.Add('[' + DateTimeToStr(Now) +
+                '] Cannot add file: ' + FileName + ' [No video stream found: ' +
+                VideoCount + ']');
             end;
 
           end
           else
           begin
             LogForm.OutputList.Lines.Add('[' + DateTimeToStr(Now) +
-              '] Cannot add file: ' + FileName);
+              '] Cannot add file: ' + FileName + ' [Duration is not numeric: ' +
+              VDuration + ']');
           end;
 
         end
@@ -1845,7 +2071,7 @@ begin
     FilesAddedLater.Clear;
 
     // generate advanced options
-    if UseAdvancedBtn.Checked then
+    if AdvancedOptionsList.ItemIndex = 1 then
     begin
       AdvancedOptions := CreateAdvancedCommandLine();
     end;
@@ -1904,6 +2130,29 @@ begin
 
   Self.Enabled := False;
   AdvancedOptionsForm.show;
+
+end;
+
+procedure TMainForm.AdvancedOptionsListChange(Sender: TObject);
+begin
+
+  case AdvancedOptionsList.ItemIndex of
+    0:
+      begin
+        AdvancedBtn.Enabled := False;
+        ProfileBox.Enabled := True;
+      end;
+    1:
+      begin
+        AdvancedBtn.Enabled := True;
+        ProfileBox.Enabled := False;
+      end;
+    2:
+      begin
+        AdvancedBtn.Enabled := True;
+        ProfileBox.Enabled := True;
+      end;
+  end;
 
 end;
 
@@ -1980,6 +2229,7 @@ begin
       BitrateEdit.Text := ReadString('Settings', 'Bitrate', '512');
       QuantEdit.Text := ReadString('Settings', 'Quant', '21');
       CRFEdit.Text := ReadString('Settings', 'CRF', '21');
+      AdvancedOptionsList.ItemIndex := ReadInteger('Settings', 'Advanced1', 1);
 
       ConstantFPSBtn.Checked := ReadBool('Settings', 'CFR', False);
       SubtitleBtn.Checked := ReadBool('Settings', 'Subtitle', False);
@@ -2046,7 +2296,7 @@ begin
       SliceThreadsBtn.Checked := ReadBool('Settings', 'Slice', False);
       SliceThreadsEdit.Text := ReadString('Settings', 'SliceThreadStr',
         FloatToStr(SystemInfo.CPU.LogicalCore));
-      UseAdvancedBtn.Checked := ReadBool('Settings', 'Advanced', False);
+      AdvancedOptionsList.ItemIndex := ReadInteger('Settings', 'Advanced1', 0);
 
       SplittingMethodList.ItemIndex := ReadInteger('Settings', 'SplitM', 1);
       SplitEdit.Text := ReadString('Settings', 'SplitE', '1');
@@ -2123,6 +2373,7 @@ begin
         QuantCurve3Edit.Text := ReadString('Quant', 'curve3', '0,50');
         AdaptiveEdit.Text := ReadString('Quant', 'adap', '0,50');
         VarianceAQList.ItemIndex := ReadInteger('Quant', 'var', 0);
+        VarianceAQBtn.Checked := ReadBool('Quant', 'var2', True);
 
         VBFMaxBitrateEdit.Text := ReadString('Advanced', 'vbf1', '0');
         VBFBufferSizeEdit.Text := ReadString('Advanced', 'vbf2', '0');
@@ -2148,19 +2399,21 @@ begin
     AftenEncodeList.OnChange(Self);
     ThreadsBtn.OnClick(Self);
     SliceThreadsBtn.OnClick(Self);
-    UseAdvancedBtn.OnClick(Self);
+    AdvancedOptionsList.OnChange(Self);
     SplittingBtn.OnClick(Self);
     AudioMethodList.OnChange(Self);
     LameEncodeList.OnChange(Self);
     FileSizeBtn.OnClick(Self);
     SARBtn.OnClick(Self);
     AudioEncoderList.ItemIndex := AudioPages.ActivePageIndex;
+    AdvancedOptionsList.OnChange(Self);
 
     with AdvancedOptionsForm do
     begin
       FrameOpenGOPBtn.OnClick(Self);
       FrameInterlacedBtn.OnClick(Self);
       AnalysisTrellisBtn.OnClick(Self);
+      VarianceAQBtn.OnClick(Self);
     end;
   end;
 
@@ -2246,8 +2499,8 @@ begin
 
 end;
 
-function TMainForm.CalculateBitrate(const TargetSize,
-  FileLength: integer; const AudioStreamSize: integer): string;
+function TMainForm.CalculateBitrate(const TargetSize, FileLength: integer;
+  const AudioStreamSize: integer): string;
 var
   AudioSize: integer;
   TotalSize: integer;
@@ -2304,46 +2557,7 @@ end;
 function TMainForm.CheckOutputFile(const FileIndex: integer): Boolean;
 var
   OutputName: string;
-  index: integer;
 begin
-
-  // genereta file name according to given index
-  // OutputName := Files[StrToInt(CurrentFileIndexes[FileIndex])];
-  // case ContainerList.ItemIndex of
-  // 0:
-  // begin
-  // OutputName := ChangeFileExt(OutputName, '.mkv');
-  // Index := 1;
-  // if FileExists(OutputName) then
-  // begin
-  // while FileExists(OutputName) do
-  // begin
-  // OutputName := ChangeFileExt(OutputName, '_' + FloatToStr(FileIndex)
-  // + '.mkv');
-  // Inc(index);
-  // end;
-  // end;
-  // end;
-  // 1:
-  // begin
-  // OutputName := ChangeFileExt(OutputName, '.mp4');
-  // Index := 1;
-  // if FileExists(OutputName) then
-  // begin
-  // while FileExists(OutputName) do
-  // begin
-  // OutputName := ChangeFileExt(OutputName, '_' + FloatToStr(FileIndex)
-  // + '.mp4');
-  // Inc(index);
-  // end;
-  // end;
-  // end;
-  // end;
-  //
-  // if not SameAsSourceBtn.Checked then
-  // begin
-  // OutputName := DirectoryEdit.Text + '\' + ExtractFileName(OutputName);
-  // end;
 
   if FileIndex < FilesToCheck.Count then
     Result := FileExists(FilesToCheck[FileIndex]);
@@ -2401,29 +2615,6 @@ begin
     // add to log
     LogForm.OutputList.Lines.Add('[' + DateTimeToStr(Now) +
       '] TX264 could locate all the output files');
-  end;
-
-end;
-
-function TMainForm.CheckOutputFilesAlreadyExist: Boolean;
-var
-  i: integer;
-begin
-
-  Result := False;
-  FileAlreadyExistWarningStr := '';
-
-  for I := 0 to FilesToCheck.Count - 1 do
-  begin
-
-    if FileExists(FilesToCheck[i]) then
-    begin
-      Result := True;
-
-      FileAlreadyExistWarningStr := FileAlreadyExistWarningStr + #10#13 +
-        FilesToCheck[i];
-    end;
-
   end;
 
 end;
@@ -2571,7 +2762,12 @@ begin
     if AnalysisTrellisBtn.Checked then
     begin
       TmpStr := TmpStr + ' --trellis ' +
-        FloatToStr(AnalysisTrellisList.ItemIndex);
+        FloatToStr(AnalysisTrellisList.ItemIndex + 1);
+    end
+    else
+    begin
+
+      TmpStr := TmpStr + ' --trellis 0 ';
     end;
     if not AnalysisFastSkipBtn.Checked then
     begin
@@ -2604,7 +2800,15 @@ begin
     TmpStr := TmpStr + ' --cplxblur ' + ReplaceStr(QuantCurve2Edit.Text,
       ',', '.');
     TmpStr := TmpStr + ' --qblur ' + ReplaceStr(QuantCurve3Edit.Text, ',', '.');
-    TmpStr := TmpStr + ' --aq-mode ' + FloatToStr(VarianceAQList.ItemIndex);
+    if VarianceAQBtn.Checked then
+    begin
+      TmpStr := TmpStr + ' --aq-mode ' +
+        FloatToStr(VarianceAQList.ItemIndex + 1);
+    end
+    else
+    begin
+      TmpStr := TmpStr + ' --aq-mode 0';
+    end;
     TmpStr := TmpStr + ' --aq-strength ' + ReplaceStr(AdaptiveEdit.Text,
       ',', '.');
 
@@ -3101,9 +3305,16 @@ begin
         end;
     end;
 
-    if UseAdvancedBtn.Checked then
+    if AdvancedOptionsList.ItemIndex = 1 then
     begin
       AddChild(NewNode, 'Using advanced options');
+    end
+    else if AdvancedOptionsList.ItemIndex = 2 then
+    begin
+      AddChild(NewNode, 'Using advanced options and presets');
+      AddChild(NewNode, 'Preset: ' + PresetsList.Text);
+      AddChild(NewNode, 'Profile: ' + ProfileList.Text);
+      AddChild(NewNode, 'Tune: ' + TuneList.Text);
     end
     else
     begin
@@ -3331,6 +3542,8 @@ var
   StrPos1, StrPos2: integer;
   PercentStr: string;
 begin
+
+  Result := 0;
 
   if Length(FLACOutput) > 0 then
   begin
@@ -3891,8 +4104,8 @@ begin
         MediaInfo_Option(0, 'Complete', '1');
 
         // get length
-        AudioSize := MediaInfo_Get(MediaInfoHandle, Stream_Audio, AudioIndex-1, 'StreamSize',
-          Info_Text, Info_Name);
+        AudioSize := MediaInfo_Get(MediaInfoHandle, Stream_Audio,
+          AudioIndex - 1, 'StreamSize', Info_Text, Info_Name);
 
         if Length(AudioSize) < 1 then
         begin
@@ -3943,7 +4156,18 @@ begin
 
         if Length(VDuration) < 1 then
         begin
-          VDuration := '0';
+          if Length(Trim(VDuration)) < 1 then
+          begin
+            VDuration := MediaInfo_Get(MediaInfoHandle, Stream_General, 0,
+              'Duration', Info_Text, Info_Name);
+            LogForm.OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] File: ' +
+              FileName + ' [Video duration failed. Trying general duration: ' +
+              VDuration + ']');
+          end
+          else
+          begin
+            VDuration := '0';
+          end;
         end;
 
         Result := FloatToStr(StrToInt64(VDuration) div 1000);
@@ -3986,7 +4210,18 @@ begin
 
         if Length(VDuration) < 1 then
         begin
-          VDuration := '0';
+          if Length(Trim(VDuration)) < 1 then
+          begin
+            VDuration := MediaInfo_Get(MediaInfoHandle, Stream_General, 0,
+              'Duration', Info_Text, Info_Name);
+            LogForm.OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] File: ' +
+              FileName + ' [Video duration failed. Trying general duration: ' +
+              VDuration + ']');
+          end
+          else
+          begin
+            VDuration := '0';
+          end;
         end;
 
         Result := StrToInt64(VDuration) div 1000;
@@ -4648,7 +4883,7 @@ begin
         FloatToStr(SystemInfo.CPU.LogicalCore));
       CheckUpdateBtn.Checked := ReadBool('Settings', 'Update', True);
       NoNeroNotifyBtn.Checked := ReadBool('Settings', 'NeroCheck', False);
-      UseAdvancedBtn.Checked := ReadBool('Settings', 'Advanced', False);
+      AdvancedOptionsList.ItemIndex := ReadInteger('Settings', 'Advanced1', 1);
       FullLogBtn.Checked := ReadBool('Settings', 'FullLog', False);
 
       SplittingMethodList.ItemIndex := ReadInteger('Settings', 'SplitM', 1);
@@ -4691,7 +4926,7 @@ begin
     AftenEncodeList.OnChange(Self);
     ThreadsBtn.OnClick(Self);
     SliceThreadsBtn.OnClick(Self);
-    UseAdvancedBtn.OnClick(Self);
+    AdvancedOptionsList.OnChange(Self);
     SplittingBtn.OnClick(Self);
     AudioMethodList.OnChange(Self);
     LameEncodeList.OnChange(Self);
@@ -5310,7 +5545,7 @@ begin
       WriteString('Settings', 'SliceThreadStr', SliceThreadsEdit.Text);
       WriteBool('Settings', 'Update', CheckUpdateBtn.Checked);
       WriteBool('Settings', 'NeroCheck', NoNeroNotifyBtn.Checked);
-      WriteBool('Settings', 'Advanced', UseAdvancedBtn.Checked);
+      WriteInteger('Settings', 'Advanced1', AdvancedOptionsList.ItemIndex);
       WriteBool('Settings', 'FullLog', FullLogBtn.Checked);
 
       WriteInteger('Settings', 'SplitM', SplittingMethodList.ItemIndex);
@@ -5363,6 +5598,7 @@ begin
       WriteString('Settings', 'Bitrate', BitrateEdit.Text);
       WriteString('Settings', 'Quant', QuantEdit.Text);
       WriteString('Settings', 'CRF', CRFEdit.Text);
+      WriteInteger('Settings', 'Advanced1', AdvancedOptionsList.ItemIndex);
 
       WriteBool('Settings', 'CFR', ConstantFPSBtn.Checked);
       WriteBool('Settings', 'Subtitle', SubtitleBtn.Checked);
@@ -5426,7 +5662,7 @@ begin
       WriteString('Settings', 'ThreadStr', ThreadsEdit.Text);
       WriteBool('Settings', 'Slice', SliceThreadsBtn.Checked);
       WriteString('Settings', 'SliceThreadStr', SliceThreadsEdit.Text);
-      WriteBool('Settings', 'Advanced', UseAdvancedBtn.Checked);
+      WriteInteger('Settings', 'Advanced1', AdvancedOptionsList.ItemIndex);
 
       WriteInteger('Settings', 'SplitM', SplittingMethodList.ItemIndex);
       WriteString('Settings', 'SplitE', SplitEdit.Text);
@@ -5501,6 +5737,7 @@ begin
         WriteString('Quant', 'curve3', QuantCurve3Edit.Text);
         WriteString('Quant', 'adap', AdaptiveEdit.Text);
         WriteInteger('Quant', 'var', VarianceAQList.ItemIndex);
+        WriteBool('Quant', 'var2', VarianceAQBtn.Checked);
 
         WriteString('Advanced', 'vbf1', VBFMaxBitrateEdit.Text);
         WriteString('Advanced', 'vbf2', VBFBufferSizeEdit.Text);
@@ -5512,7 +5749,7 @@ begin
     end;
 
   finally
-
+    PreDefFile.Free;
   end;
 
 end;
@@ -5575,9 +5812,6 @@ begin
 end;
 
 function TMainForm.SoXPercentage(const SoxOutput: string): Integer;
-var
-  prog: String;
-  TmpFloat: Extended;
 begin
 
   Result := 0;
@@ -5610,7 +5844,6 @@ procedure TMainForm.StartBtnClick(Sender: TObject);
 var
   i: Integer;
   AdvancedOptions: string;
-  GoodToGo: Boolean;
 begin
 
   if FileList.Items.Count > 0 then
@@ -5647,7 +5880,8 @@ begin
         DisableUI;
 
         // generate advanced options
-        if UseAdvancedBtn.Checked then
+        if (AdvancedOptionsList.ItemIndex = 1) or
+          (AdvancedOptionsList.ItemIndex = 2) then
         begin
           AdvancedOptions := CreateAdvancedCommandLine();
         end;
@@ -5803,7 +6037,7 @@ end;
 procedure TMainForm.UpBtnClick(Sender: TObject);
 var
   i: Integer;
-  lv1, lv2, lv: TListItem;
+  lv2, lv: TListItem;
 begin
 
   for i := 0 to FileList.Items.Count - 1 do
@@ -5915,22 +6149,6 @@ begin
   end;
 
   UpdateThread.CancelExecute;
-
-end;
-
-procedure TMainForm.UseAdvancedBtnClick(Sender: TObject);
-begin
-
-  if UseAdvancedBtn.Checked then
-  begin
-    GroupBox6.Enabled := False;
-    AdvancedBtn.Enabled := True;
-  end
-  else
-  begin
-    GroupBox6.Enabled := True;
-    AdvancedBtn.Enabled := False;
-  end;
 
 end;
 
