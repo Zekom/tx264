@@ -370,6 +370,7 @@ type
     procedure SummaryBtnClick(Sender: TObject);
     procedure ConsoleOutputBtnClick(Sender: TObject);
     procedure Mp4WebBtnClick(Sender: TObject);
+    procedure FHGMethodListChange(Sender: TObject);
   private
     { Private declarations }
     CommandLines: TStringList;
@@ -3879,6 +3880,24 @@ begin
 
 end;
 
+procedure TMainForm.FHGMethodListChange(Sender: TObject);
+begin
+
+  if FHGMethodList.ItemIndex = 0 then
+  begin
+    FHGBitrateEdit.Enabled := True;
+    FHGQualityEdit.Enabled := False;
+    FHGProfileList.Enabled := True;
+  end
+  else
+  begin
+    FHGBitrateEdit.Enabled := False;
+    FHGQualityEdit.Enabled := True;
+    FHGProfileList.Enabled := False;
+  end;
+
+end;
+
 procedure TMainForm.FileListAdvancedCustomDrawItem(Sender: TCustomListView;
   Item: TListItem; State: TCustomDrawState; Stage: TCustomDrawStage;
   var DefaultDraw: Boolean);
@@ -5896,6 +5915,11 @@ begin
       AftenQualityEdit.Text := ReadString('Settings', 'AftenQuality', '240');
       AftenBitrateEdit.Text := ReadString('Settings', 'AftenBitrate', '320');
 
+      FHGMethodList.ItemIndex := ReadInteger('Settings', 'FHGEncode', 0);
+      FHGQualityEdit.Text := ReadString('Settings', 'FHGQuality', '6');
+      FHGBitrateEdit.Text := ReadString('Settings', 'FHGBitrate', '128');
+      FHGProfileList.ItemIndex := ReadInteger('Settings', 'FHGProfile', 0);
+
       CustomVideoOptionsEdit.Text := ReadString('Settings', 'CustomVideo', '');
       CustomAudioOptionsEdit.Text := ReadString('Settings', 'CustomAudio', '');
       CustomMKVEdit.Text := ReadString('Settings', 'CustomMKV', '');
@@ -5975,6 +5999,7 @@ begin
     SameAsSourceBtn.OnClick(Self);
     AudioLangCopyBtn.OnClick(Self);
     Mp4WebBtn.OnClick(Self);
+    FHGMethodList.OnChange(Self);
 
     case PageControl.ActivePageIndex of
       0:
@@ -6615,6 +6640,11 @@ begin
       WriteInteger('Settings', 'AftenEncode', AftenEncodeList.ItemIndex);
       WriteString('Settings', 'AftenQuality', AftenQualityEdit.Text);
       WriteString('Settings', 'AftenBitrate', AftenBitrateEdit.Text);
+
+      WriteInteger('Settings', 'FHGEncode', FHGMethodList.ItemIndex);
+      WriteString('Settings', 'FHGQuality', FHGQualityEdit.Text);
+      WriteString('Settings', 'FHGBitrate', FHGBitrateEdit.Text);
+      WriteInteger('Settings', 'FHGProfile', FHGProfileList.ItemIndex);
 
       WriteInteger('Settings', 'AudioMethod', AudioMethodList.ItemIndex);
 

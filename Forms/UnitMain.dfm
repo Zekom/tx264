@@ -547,7 +547,13 @@ object MainForm: TMainForm
       Color = clWhite
       DoubleBuffered = False
       Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
       ParentDoubleBuffered = False
+      ParentFont = False
       TabOrder = 10
       Visible = False
       BoundLabel.Indent = 0
@@ -661,7 +667,7 @@ object MainForm: TMainForm
     Top = 344
     Width = 573
     Height = 200
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     Anchors = [akLeft, akRight, akBottom]
     Images = PageImages
     MultiLine = True
@@ -1669,7 +1675,7 @@ object MainForm: TMainForm
           Top = 61
           Width = 558
           Height = 128
-          ActivePage = FAAC
+          ActivePage = TabSheet12
           Style = tsButtons
           TabOrder = 0
           OnChange = AudioPagesChange
@@ -2419,10 +2425,6 @@ object MainForm: TMainForm
               ParentBackground = False
               TabOrder = 0
               SkinData.SkinSection = 'CHECKBOX'
-              ExplicitLeft = 296
-              ExplicitTop = 8
-              ExplicitWidth = 185
-              ExplicitHeight = 41
               object Label2: TLabel
                 Left = 50
                 Top = 39
@@ -2466,6 +2468,7 @@ object MainForm: TMainForm
                 ParentFont = False
                 TabOrder = 0
                 Text = 'CBR'
+                OnChange = FHGMethodListChange
                 Items.Strings = (
                   'CBR'
                   'VBR')
@@ -2906,7 +2909,7 @@ object MainForm: TMainForm
           Left = 272
           Top = 16
           Width = 18
-          Height = 133
+          Height = 132
           Anchors = [akTop, akBottom]
           Shape = bsRightLine
           ExplicitHeight = 137
