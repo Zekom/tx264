@@ -5,7 +5,7 @@ object LogForm: TLogForm
   Caption = 'Logs/Outputs'
   ClientHeight = 575
   ClientWidth = 825
-  Color = 14870243
+  Color = clWhite
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,7 +15,9 @@ object LogForm: TLogForm
   KeyPreview = True
   OldCreateOrder = False
   Position = poMainFormCenter
+  OnCreate = FormCreate
   OnKeyDown = FormKeyDown
+  OnResize = FormResize
   DesignSize = (
     825
     575)
@@ -115,11 +117,12 @@ object LogForm: TLogForm
   end
   object PageControl1: TPageControl
     Left = 8
-    Top = 8
+    Top = 40
     Width = 809
-    Height = 528
+    Height = 496
     ActivePage = TabSheet1
     Anchors = [akLeft, akTop, akRight, akBottom]
+    Style = tsFlatButtons
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Normal Log'
@@ -131,7 +134,7 @@ object LogForm: TLogForm
         Left = 0
         Top = 0
         Width = 801
-        Height = 500
+        Height = 465
         Align = alClient
         BorderStyle = bsNone
         Font.Charset = DEFAULT_CHARSET
@@ -139,6 +142,7 @@ object LogForm: TLogForm
         Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentColor = True
         ParentFont = False
         ReadOnly = True
         ScrollBars = ssBoth
@@ -158,7 +162,7 @@ object LogForm: TLogForm
         Left = 0
         Top = 0
         Width = 801
-        Height = 500
+        Height = 465
         Align = alClient
         BorderStyle = bsNone
         Font.Charset = DEFAULT_CHARSET
@@ -166,6 +170,7 @@ object LogForm: TLogForm
         Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentColor = True
         ParentFont = False
         ParentShowHint = False
         ReadOnly = True
@@ -223,6 +228,29 @@ object LogForm: TLogForm
     OnClick = SaveBtnClick
     SkinData.SkinSection = 'BUTTON'
   end
+  object NormalLogBtn: TsBitBtn
+    Left = 8
+    Top = 8
+    Width = 403
+    Height = 32
+    Anchors = [akTop]
+    Caption = 'Normal Log'
+    TabOrder = 4
+    OnClick = NormalLogBtnClick
+    SkinData.SkinSection = 'BUTTON'
+  end
+  object FullLogBtn: TsBitBtn
+    Left = 414
+    Top = 8
+    Width = 403
+    Height = 32
+    Anchors = [akTop]
+    Caption = 'Full Log'
+    TabOrder = 5
+    OnClick = FullLogBtnClick
+    SkinData.SkinSection = 'BUTTON'
+    Down = True
+  end
   object SaveDialog1: TSaveDialog
     FileName = 'TX264.txt'
     Filter = 'Text files|*.txt'
@@ -238,7 +266,7 @@ object LogForm: TLogForm
     AddedTitle.Font.Style = []
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
-    Left = 448
-    Top = 16
+    Left = 488
+    Top = 376
   end
 end

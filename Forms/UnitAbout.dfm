@@ -5,7 +5,7 @@ object AboutForm: TAboutForm
   Caption = 'About'
   ClientHeight = 621
   ClientWidth = 416
-  Color = 14870243
+  Color = 8217672
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -566,7 +566,7 @@ object AboutForm: TAboutForm
     AddedTitle.Font.Style = []
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
-    Left = 264
-    Top = 72
+    Left = 296
+    Top = 88
   end
 end
