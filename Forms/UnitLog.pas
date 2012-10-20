@@ -19,8 +19,6 @@ type
     TabSheet2: TTabSheet;
     sSkinProvider1: TsSkinProvider;
     FullOutputList: TMemo;
-    NormalLogBtn: TsBitBtn;
-    FullLogBtn: TsBitBtn;
     OutputList: TMemo;
     procedure ClearBtnClick(Sender: TObject);
     procedure SaveBtnClick(Sender: TObject);
@@ -33,10 +31,6 @@ type
     procedure FullOutputListDrawItem(Control: TWinControl; Index: Integer;
       Rect: TRect; State: TOwnerDrawState);
     procedure OutputListChange(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure NormalLogBtnClick(Sender: TObject);
-    procedure FullLogBtnClick(Sender: TObject);
-    procedure FormResize(Sender: TObject);
   private
     { Private declarations }
   public
@@ -81,15 +75,6 @@ begin
 
 end;
 
-procedure TLogForm.FormCreate(Sender: TObject);
-begin
-
-  PageControl1.Pages[0].TabVisible := False;
-  PageControl1.Pages[1].TabVisible := False;
-  PageControl1.ActivePageIndex := 0;
-
-end;
-
 procedure TLogForm.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
@@ -98,25 +83,6 @@ begin
   begin
     CloseBtn.OnClick(Self);
   end;
-
-end;
-
-procedure TLogForm.FormResize(Sender: TObject);
-begin
-
-  NormalLogBtn.Width := (PageControl1.Width - 3) div 2;
-  FullLogBtn.Width := NormalLogBtn.Width;
-  NormalLogBtn.Left := PageControl1.Left;
-  FullLogBtn.Left := NormalLogBtn.Left + NormalLogBtn.Width + 3;
-
-end;
-
-procedure TLogForm.FullLogBtnClick(Sender: TObject);
-begin
-
-  PageControl1.ActivePageIndex := 1;
-  NormalLogBtn.Down := True;
-  FullLogBtn.Down := False;
 
 end;
 
@@ -157,15 +123,6 @@ begin
     end;
 
   end;
-
-end;
-
-procedure TLogForm.NormalLogBtnClick(Sender: TObject);
-begin
-
-  PageControl1.ActivePageIndex := 0;
-  NormalLogBtn.Down := False;
-  FullLogBtn.Down := True;
 
 end;
 

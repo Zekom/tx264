@@ -246,15 +246,9 @@ type
     Mp4SBRBtn: TsCheckBox;
     AudioLangList: TsComboBox;
     AudioLangCopyBtn: TsCheckBox;
-    CurrentProgressBar: TsGauge;
-    TotalProgressBar: TsGauge;
+    CurrentProgressBar: TProgressBar;
+    TotalProgressBar: TProgressBar;
     ConsoleOutputEdit: TsLabel;
-    GeneralBtn: TsBitBtn;
-    FiltersBtn: TsBitBtn;
-    CustomOptionsBtn: TsBitBtn;
-    ContainerBtn: TsBitBtn;
-    AudioBtn: TsBitBtn;
-    OtherBtn: TsBitBtn;
     Bevel1: TBevel;
     sLabel4: TsLabel;
     sLabel5: TsLabel;
@@ -263,7 +257,7 @@ type
     ConsoleOutputBtn: TsBitBtn;
     sLabel6: TsLabel;
     MKVSBRBtn: TsCheckBox;
-    TimePassedLabel: TsLabelFX;
+    TimePassedLabel: TsLabel;
     TabSheet12: TTabSheet;
     sPanel5: TsPanel;
     FHGMethodList: TsComboBox;
@@ -272,6 +266,8 @@ type
     FHGBitrateEdit: TJvSpinEdit;
     Label2: TLabel;
     Label3: TLabel;
+    CurrentProgressLabel: TsLabel;
+    TotalProgressLabel: TsLabel;
     procedure AddFiles1Click(Sender: TObject);
     procedure AddFolder1Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
@@ -359,12 +355,6 @@ type
     procedure Button1Click(Sender: TObject);
     procedure TempEditChange(Sender: TObject);
     procedure AudioLangCopyBtnClick(Sender: TObject);
-    procedure GeneralBtnClick(Sender: TObject);
-    procedure FiltersBtnClick(Sender: TObject);
-    procedure AudioBtnClick(Sender: TObject);
-    procedure ContainerBtnClick(Sender: TObject);
-    procedure CustomOptionsBtnClick(Sender: TObject);
-    procedure OtherBtnClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure ProgressBtnClick(Sender: TObject);
     procedure SummaryBtnClick(Sender: TObject);
@@ -520,7 +510,7 @@ type
   end;
 
 const
-  BuildInt = 2485;
+  BuildInt = 2536;
 
 var
   MainForm: TMainForm;
@@ -1182,12 +1172,21 @@ begin
                 AudioStr := AudioStr + ' −−multi-threaded ';
               end;
 
-              if AudioStr <> '' then
+              if (AudioStr <> '') or (DRCBtn.Checked) then
               begin
                 AudioStr := AudioStr + ' "' + TempAudioFile + '"';
                 TempAudioFile := TempFolder + '\sox.wav';
                 AudioStr := AudioStr + ' -V6 --show-progress "' +
-                  TempAudioFile + '"';
+                  TempAudioFile + '" ';
+
+                // DRC
+                if DRCBtn.Checked then
+                begin
+                  AudioStr := AudioStr + ' compand ' +
+                    ReplaceText(AttackEdit.Text, ',', '.') + ',' +
+                    ReplaceText(DecayEdit.Text, ',', '.') +
+                    ' 6:-70,-43,-20 -6 -90 0.1';
+                end;
 
                 CommandLines.Add(AudioStr);
                 CurrentFileIndexes.Add(FloatToStr(Index));
@@ -1366,7 +1365,7 @@ begin
             4: // oggenc
               begin
                 // encoding mode
-                case QaacEncodeMethodList.ItemIndex of
+                case OggencodeList.ItemIndex of
                   0: // quality
                     begin
                       AudioStr := AudioStr + ' -q ' + OggQualityEdit.Text;
@@ -1945,7 +1944,7 @@ begin
           VDuration := MediaInfo_Get(MediaInfoHandle, Stream_General, 0,
             'Duration', Info_Text, Info_Name);
           LogForm.OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] File: ' +
-            FileName + ' [Video duration failed. Trying general duration: ' +
+            FileName + ' [AddFile:Video duration failed. Trying general duration: ' +
             VDuration + ']');
         end;
 
@@ -2047,6 +2046,11 @@ begin
                       AudioID := '1';
                     end;
 
+                    if Length(VideoID) < 1 then
+                    begin
+                      VideoID := '0';
+                    end;
+
                     // fill new item
                     if i = 0 then
                     begin
@@ -2146,7 +2150,7 @@ begin
   begin
 
     Self.Enabled := False;
-    ProgressForm.ProgressBar.MaxValue := OpenDialog.Files.Count - 1;
+    ProgressForm.ProgressBar.Max := OpenDialog.Files.Count - 1;
     ProgressForm.show;
     try
 
@@ -2161,7 +2165,7 @@ begin
         else
         begin
           AddFile(OpenDialog.Files[i], False);
-          ProgressForm.ProgressBar.Progress := i;
+          ProgressForm.ProgressBar.Position := i;
           ProgressForm.ProgressLabel.Caption :=
             ExtractFileName(OpenDialog.Files[i]);
         end;
@@ -2334,8 +2338,9 @@ begin
     LogForm.OutputList.Lines.Add('');
 
     // re-calculate
-    LastPercent := Round((TotalProgressBar.MaxValue * FileIndex)
+    LastPercent := Round((TotalProgressBar.Max * FileIndex)
       div CommandLines.Count);
+    TotalProgressLabel.Caption := FloatToStr(TotalProgressBar.Position) + '0%';
 
   end;
 
@@ -2644,19 +2649,6 @@ begin
 
 end;
 
-procedure TMainForm.AudioBtnClick(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 2;
-  GeneralBtn.Down := True;
-  FiltersBtn.Down := True;
-  AudioBtn.Down := False;
-  ContainerBtn.Down := True;
-  CustomOptionsBtn.Down := True;
-  OtherBtn.Down := True;
-
-end;
-
 procedure TMainForm.AudioEffectsBtnClick(Sender: TObject);
 begin
 
@@ -2902,19 +2894,6 @@ begin
 
 end;
 
-procedure TMainForm.ContainerBtnClick(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 3;
-  GeneralBtn.Down := True;
-  FiltersBtn.Down := True;
-  AudioBtn.Down := True;
-  ContainerBtn.Down := False;
-  CustomOptionsBtn.Down := True;
-  OtherBtn.Down := True;
-
-end;
-
 function TMainForm.CreateAdvancedCommandLine: string;
 var
   TmpStr: string;
@@ -3092,7 +3071,8 @@ begin
     TmpStr := TmpStr + ' --ipratio ' + ReplaceStr(IPQuantEdit.Text, ',', '.');
     TmpStr := TmpStr + ' --pbratio ' + ReplaceStr(PBQuantEdit.Text, ',', '.');
     TmpStr := TmpStr + ' --chroma-qp-offset ' + CLQuantEdit.Text;
-    TmpStr := TmpStr + ' --qcomp ' + ReplaceStr(QuantCurve1Edit.Text, ',', '.');
+    TmpStr := TmpStr + ' --qcomp 0.' + ReplaceStr(QuantCurve1Edit.Text,
+      ',', '.');
     TmpStr := TmpStr + ' --cplxblur ' + ReplaceStr(QuantCurve2Edit.Text,
       ',', '.');
     TmpStr := TmpStr + ' --qblur ' + ReplaceStr(QuantCurve3Edit.Text, ',', '.');
@@ -3561,19 +3541,6 @@ begin
 
 end;
 
-procedure TMainForm.CustomOptionsBtnClick(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 4;
-  GeneralBtn.Down := True;
-  FiltersBtn.Down := True;
-  AudioBtn.Down := True;
-  ContainerBtn.Down := True;
-  CustomOptionsBtn.Down := False;
-  OtherBtn.Down := True;
-
-end;
-
 procedure TMainForm.DeleteTempFiles;
 var
   Search: TSearchRec;
@@ -3692,7 +3659,7 @@ begin
 
   Self.Enabled := False;
   ProgressForm.show;
-  ProgressForm.ProgressBar.MaxValue := Value.Count - 1;
+  ProgressForm.ProgressBar.Max := Value.Count - 1;
   AddingStopped := False;
   try
 
@@ -3716,7 +3683,7 @@ begin
         then
         begin
           AddFile(Value[i], False);
-          ProgressForm.ProgressBar.Progress := i;
+          ProgressForm.ProgressBar.Position := i;
           ProgressForm.ProgressLabel.Caption := ExtractFileName(Value[i]);
         end;
       end;
@@ -3871,7 +3838,7 @@ begin
     begin
       if (StrToInt(Durations[DurationIndex]) > 0) then
       begin
-        Result := (CurrentProgressBar.MaxValue * PositionInt)
+        Result := (CurrentProgressBar.Max * PositionInt)
           div StrToInt(Durations[DurationIndex]);
       end;
     end;
@@ -4266,6 +4233,17 @@ begin
                   AddChild(NewNode, 'Exhaustive model search: False');
                 end;
               end;
+            8:
+              begin
+                AddChild(NewNode, 'Encoder: FHG AAC');
+                case FHGMethodList.ItemIndex of
+                  0:
+                    AddChild(NewNode, 'CBR: ' + FHGBitrateEdit.Text + ' kbps');
+                  1:
+                    AddChild(NewNode, 'VBR: ' + FHGQualityEdit.Text);
+                end;
+                AddChild(NewNode, 'Profile: ' + FHGProfileList.Text);
+              end;
           end;
           NewNode.Expand(True);
           // effects
@@ -4283,6 +4261,14 @@ begin
                 BoolToStr(ThreadBtn.Checked, True));
               AddChild(NewNode, 'Samplerate: ' + SampleList.Text);
               AddChild(NewNode, 'Channels: ' + ChannelList.Text);
+              if not DRCBtn.Checked then
+              begin
+                AddChild(NewNode, 'DRC: Disabled');
+              end
+              else
+              begin
+                AddChild(NewNode, 'DRC: ' + AttackEdit.Text + ',' + DecayEdit.Text);
+              end;
               NewNode.Expand(True)
             end
             else
@@ -4324,19 +4310,6 @@ begin
 
   SummaryView.Items.Item[0].Selected := True;
   SummaryView.Items.Item[0].SelectedIndex := 0;
-
-end;
-
-procedure TMainForm.FiltersBtnClick(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 1;
-  GeneralBtn.Down := True;
-  FiltersBtn.Down := False;
-  AudioBtn.Down := True;
-  ContainerBtn.Down := True;
-  CustomOptionsBtn.Down := True;
-  OtherBtn.Down := True;
 
 end;
 
@@ -4418,6 +4391,8 @@ var
   i: integer;
   SettingsFile: TIniFile;
 begin
+
+
 
   // this must done here because if user wants to use 32bit backends
   // and doesnt change settings before he starts, 64bit backends may be
@@ -4729,13 +4704,6 @@ begin
   end;
   AudioPages.ActivePageIndex := 0;
 
-  for I := 0 to PageControl.PageCount - 1 do
-  begin
-    PageControl.Pages[i].TabVisible := False;
-    PageControl.Pages[i].BorderWidth := 0;
-  end;
-  PageControl.ActivePageIndex := 0;
-
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -4762,20 +4730,6 @@ var
 begin
 
   ButtonWidth := (PageControl.Width - 15) div 6;
-
-  GeneralBtn.Width := ButtonWidth;
-  FiltersBtn.Width := ButtonWidth;
-  AudioBtn.Width := ButtonWidth;
-  ContainerBtn.Width := ButtonWidth;
-  CustomOptionsBtn.Width := ButtonWidth;
-  OtherBtn.Width := ButtonWidth;
-
-  GeneralBtn.Left := PageControl.Left;
-  FiltersBtn.Left := GeneralBtn.Left + GeneralBtn.Width + 3;
-  AudioBtn.Left := FiltersBtn.Left + FiltersBtn.Width + 3;
-  ContainerBtn.Left := AudioBtn.Left + AudioBtn.Width + 3;
-  CustomOptionsBtn.Left := ContainerBtn.Left + ContainerBtn.Width + 3;
-  OtherBtn.Left := CustomOptionsBtn.Left + CustomOptionsBtn.Width + 3;
 
   ProgressBtn.Width := (ProgressList.Width - 6) div 3;
   SummaryBtn.Width := ProgressBtn.Width;
@@ -4819,7 +4773,6 @@ begin
         'Missing Component', MB_ICONERROR);
 
       PageControl.ActivePageIndex := 5;
-      OtherBtn.OnClick(Self);
     end;
 
     NeroAACPath := ''; // will be checked
@@ -4842,19 +4795,6 @@ begin
   // colors
   DirectoryEdit.Color := AudioTrackList.Color;
   TempEdit.Color := AudioTrackList.Color;
-
-end;
-
-procedure TMainForm.GeneralBtnClick(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 0;
-  GeneralBtn.Down := False;
-  FiltersBtn.Down := True;
-  AudioBtn.Down := True;
-  ContainerBtn.Down := True;
-  CustomOptionsBtn.Down := True;
-  OtherBtn.Down := True;
 
 end;
 
@@ -4945,6 +4885,10 @@ begin
                 begin
                   AudioCodec := '.mp2';
                 end
+                else if ContainsText(TmpStr, 'flac') then
+                begin
+                  Result := 'flac';
+                end
                 else
                 begin
                   TmpStr := LowerCase
@@ -4982,6 +4926,10 @@ begin
                   else if ContainsText(TmpStr, 'mpa1l2') then
                   begin
                     AudioCodec := '.mp2';
+                  end
+                  else if ContainsText(TmpStr, 'flac') then
+                  begin
+                    Result := 'flac';
                   end
                   else
                   begin
@@ -5021,6 +4969,10 @@ begin
                     else if ContainsText(TmpStr, 'mpa1l2') then
                     begin
                       AudioCodec := '.mp2';
+                    end
+                    else if ContainsText(TmpStr, 'flac') then
+                    begin
+                      Result := 'flac';
                     end;
                   end;
                 end;
@@ -5205,7 +5157,7 @@ begin
             VDuration := MediaInfo_Get(MediaInfoHandle, Stream_General, 0,
               'Duration', Info_Text, Info_Name);
             LogForm.OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] File: ' +
-              FileName + ' [Video duration failed. Trying general duration: ' +
+              FileName + ' [GetDuration:Video duration failed. Trying general duration: ' +
               VDuration + ']');
           end
           else
@@ -5259,7 +5211,7 @@ begin
             VDuration := MediaInfo_Get(MediaInfoHandle, Stream_General, 0,
               'Duration', Info_Text, Info_Name);
             LogForm.OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] File: ' +
-              FileName + ' [Video duration failed. Trying general duration: ' +
+              FileName + ' [GetDurationEx:Video duration failed. Trying general duration: ' +
               VDuration + ']');
           end
           else
@@ -6000,21 +5952,6 @@ begin
     AudioLangCopyBtn.OnClick(Self);
     Mp4WebBtn.OnClick(Self);
     FHGMethodList.OnChange(Self);
-
-    case PageControl.ActivePageIndex of
-      0:
-        GeneralBtn.OnClick(Self);
-      1:
-        FiltersBtn.OnClick(Self);
-      2:
-        AudioBtn.OnClick(Self);
-      3:
-        ContainerBtn.OnClick(Self);
-      4:
-        CustomOptionsBtn.OnClick(Self);
-      5:
-        OtherBtn.OnClick(Self);
-    end;
   end;
 
 end;
@@ -6212,7 +6149,7 @@ begin
     begin
       if (StrToInt(Durations[DurationIndex]) > 0) then
       begin
-        Result := (CurrentProgressBar.MaxValue * StrToInt(FConsoleOutput))
+        Result := (CurrentProgressBar.Max * StrToInt(FConsoleOutput))
           div StrToInt(Durations[DurationIndex]);
       end;
     end
@@ -6263,19 +6200,6 @@ begin
 
 end;
 
-procedure TMainForm.OtherBtnClick(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 5;
-  GeneralBtn.Down := True;
-  FiltersBtn.Down := True;
-  AudioBtn.Down := True;
-  ContainerBtn.Down := True;
-  CustomOptionsBtn.Down := True;
-  OtherBtn.Down := False;
-
-end;
-
 procedure TMainForm.OutputBtnClick(Sender: TObject);
 begin
 
@@ -6318,42 +6242,42 @@ begin
     if ProcessTypeList[FileIndex] = '1' then
     begin
       // video encoding
-      CurrentProgressBar.Progress := x264Percentage(ConsoleOutput);
+      CurrentProgressBar.Position := x264Percentage(ConsoleOutput);
     end
     else if ProcessTypeList[FileIndex] = '2' then
     begin
       // audio decoding
-      CurrentProgressBar.Progress := FFMpegPercentage(ConsoleOutput);
+      CurrentProgressBar.Position := FFMpegPercentage(ConsoleOutput);
     end
     else if ProcessTypeList[FileIndex] = '3' then
     begin
       // mkvmerge
-      CurrentProgressBar.Progress := MkvExtractPercentage(ConsoleOutput);
+      CurrentProgressBar.Position := MkvExtractPercentage(ConsoleOutput);
     end
     else if ProcessTypeList[FileIndex] = '4' then
     begin
       // mp4box
-      CurrentProgressBar.Progress := Mp4BoxPercentage(ConsoleOutput);
+      CurrentProgressBar.Position := Mp4BoxPercentage(ConsoleOutput);
     end
     else if ProcessTypeList[FileIndex] = '5' then
     begin
       // mkvextract
-      CurrentProgressBar.Progress := MkvExtractPercentage(ConsoleOutput);
+      CurrentProgressBar.Position := MkvExtractPercentage(ConsoleOutput);
     end
     else if ProcessTypeList[FileIndex] = '6' then
     begin
       // faac
-      CurrentProgressBar.Progress := FAACPercentage(ConsoleOutput);
+      CurrentProgressBar.Position := FAACPercentage(ConsoleOutput);
     end
     else if ProcessTypeList[FileIndex] = '7' then
     begin
       // neroaacenc
-      CurrentProgressBar.Progress := NeroPercentage(ConsoleOutput);
+      CurrentProgressBar.Position := NeroPercentage(ConsoleOutput);
     end
     else if ProcessTypeList[FileIndex] = '8' then
     begin
       // qaac
-      CurrentProgressBar.Progress := x264Percentage(ConsoleOutput);
+      CurrentProgressBar.Position := x264Percentage(ConsoleOutput);
     end
     else if ProcessTypeList[FileIndex] = '9' then
     begin
@@ -6362,12 +6286,12 @@ begin
     else if ProcessTypeList[FileIndex] = '10' then
     begin
       // ogg vorbis
-      CurrentProgressBar.Progress := x264Percentage(ConsoleOutput);
+      CurrentProgressBar.Position := x264Percentage(ConsoleOutput);
     end
     else if ProcessTypeList[FileIndex] = '11' then
     begin
       // aften
-      CurrentProgressBar.Progress := AftenPercentage(ConsoleOutput);
+      CurrentProgressBar.Position := AftenPercentage(ConsoleOutput);
     end
     else if ProcessTypeList[FileIndex] = '12' then
     begin
@@ -6380,27 +6304,27 @@ begin
     else if ProcessTypeList[FileIndex] = '14' then
     begin
       // ffmpeg-video encoding
-      CurrentProgressBar.Progress := FFMpegPercentage(ConsoleOutput);
+      CurrentProgressBar.Position := FFMpegPercentage(ConsoleOutput);
     end
     else if ProcessTypeList[FileIndex] = '15' then
     begin
       // sox
-      CurrentProgressBar.Progress := SoXPercentage(ConsoleOutput)
+      CurrentProgressBar.Position := SoXPercentage(ConsoleOutput)
     end
     else if ProcessTypeList[FileIndex] = '16' then
     begin
       // ffmpeg
-      CurrentProgressBar.Progress := LamePercentage(ConsoleOutput)
+      CurrentProgressBar.Position := LamePercentage(ConsoleOutput)
     end
     else if ProcessTypeList[FileIndex] = '17' then
     begin
       // flac
-      CurrentProgressBar.Progress := FLACPercentage(ConsoleOutput)
+      CurrentProgressBar.Position := FLACPercentage(ConsoleOutput)
     end
     else if ProcessTypeList[FileIndex] = '18' then
     begin
       // fhg
-      CurrentProgressBar.Progress := MkvExtractPercentage(ConsoleOutput);
+      CurrentProgressBar.Position := MkvExtractPercentage(ConsoleOutput);
     end;
 
     if ConsoleOutputList.Visible then
@@ -6416,7 +6340,7 @@ begin
     if ProcessTypeList[FileIndex] = '1' then
     begin
       // video encoding
-      CurrentProgressBar.Progress := x264Percentage(ConsoleOutput);
+      CurrentProgressBar.Position := x264Percentage(ConsoleOutput);
     end;
 
     if ConsoleOutputList.Visible then
@@ -6429,15 +6353,18 @@ begin
 
   if CommandLines.Count > 0 then
   begin
-    TotalProgressBar.Progress := LastPercent +
-      (CurrentProgressBar.Progress div CommandLines.Count);
+    TotalProgressBar.Position := LastPercent +
+      (CurrentProgressBar.Position div CommandLines.Count);
   end;
 
-  Self.Caption := FloatToStr(CurrentProgressBar.Progress) + '% / ' +
-    FloatToStr(TotalProgressBar.Progress) + '% [TX264]';
+  Self.Caption := FloatToStr(CurrentProgressBar.Position) + '% / ' +
+    FloatToStr(TotalProgressBar.Position) + '% [TX264]';
 
-  SetProgressValue(Self.Handle, TotalProgressBar.Progress,
-    TotalProgressBar.MaxValue);
+  CurrentProgressLabel.Caption := FloatToStr(CurrentProgressBar.Position) + '%';
+  TotalProgressLabel.Caption := FloatToStr(TotalProgressBar.Position) + '%';
+
+  SetProgressValue(Self.Handle, TotalProgressBar.Position,
+    TotalProgressBar.Max);
 
 end;
 
@@ -7547,7 +7474,7 @@ procedure TMainForm.PreviewProcessTerminate(Sender: TObject;
   ExitCode: Cardinal);
 begin
 
-  LastPercent := TotalProgressBar.Progress;
+  LastPercent := TotalProgressBar.Position;
 
   if FullLogBtn.Checked then
   begin
@@ -7581,14 +7508,16 @@ begin
 
     Self.Caption := 'TX264';
 
-    TotalProgressBar.Progress := 0;
+    TotalProgressBar.Position := 0;
     SetProgressValue(Self.Handle, 0, 100);
     SetProgressState(Self.Handle, tbpsNone);
     PositionTimer.Enabled := False;
     Timer.Enabled := False;
     TimePassed := 0;
     TimePassedLabel.Caption := 'Time Passed: 00:00:00';
-    CurrentProgressBar.Progress := 0;
+    CurrentProgressBar.Position := 0;
+    CurrentProgressLabel.Caption := '0%';
+    TotalProgressLabel.Caption := '0%';
 
   end
   else
@@ -7606,14 +7535,16 @@ begin
 
       Self.Caption := 'TX264';
 
-      TotalProgressBar.Progress := 0;
+      TotalProgressBar.Position := 0;
       SetProgressValue(Self.Handle, 0, 100);
       SetProgressState(Self.Handle, tbpsNone);
       PositionTimer.Enabled := False;
       Timer.Enabled := False;
       TimePassed := 0;
       TimePassedLabel.Caption := 'Time Passed: 00:00:00';
-      CurrentProgressBar.Progress := 0;
+      CurrentProgressBar.Position := 0;
+    CurrentProgressLabel.Caption := '0%';
+    TotalProgressLabel.Caption := '0%';
 
       if FileExists(TempFolder + '\preview.mp4') then
       begin
@@ -7832,7 +7763,7 @@ begin
 
   end;
 
-  LastPercent := Round((TotalProgressBar.MaxValue * FileIndex)
+  LastPercent := Round((TotalProgressBar.Max * FileIndex)
     div CommandLines.Count);
 
   if StoppedByUser then
@@ -7841,14 +7772,16 @@ begin
 
     Self.Caption := 'TX264';
 
-    TotalProgressBar.Progress := 0;
+    TotalProgressBar.Position := 0;
     SetProgressValue(Self.Handle, 0, 100);
     SetProgressState(Self.Handle, tbpsNone);
     PositionTimer.Enabled := False;
     Timer.Enabled := False;
     TimePassed := 0;
     TimePassedLabel.Caption := 'Time Passed: 00:00:00';
-    CurrentProgressBar.Progress := 0;
+    CurrentProgressBar.Position := 0;
+    CurrentProgressLabel.Caption := '0%';
+    TotalProgressLabel.Caption := '0%';
 
     // post-encode action
     case PostEncodeList.ItemIndex of
@@ -7973,14 +7906,16 @@ begin
 
         Self.Caption := 'TX264';
 
-        TotalProgressBar.Progress := 0;
+        TotalProgressBar.Position := 0;
         SetProgressValue(Self.Handle, 0, 100);
         SetProgressState(Self.Handle, tbpsNone);
         PositionTimer.Enabled := False;
         Timer.Enabled := False;
         TimePassed := 0;
         TimePassedLabel.Caption := 'Time Passed: 00:00:00';
-        CurrentProgressBar.Progress := 0;
+        CurrentProgressBar.Position := 0;
+    CurrentProgressLabel.Caption := '0%';
+    TotalProgressLabel.Caption := '0%';
 
         // post-encode action
         case PostEncodeList.ItemIndex of
@@ -8049,14 +7984,16 @@ begin
 
       Self.Caption := 'TX264';
 
-      TotalProgressBar.Progress := 0;
+      TotalProgressBar.Position := 0;
       SetProgressValue(Self.Handle, 0, 100);
       SetProgressState(Self.Handle, tbpsNone);
       PositionTimer.Enabled := False;
       Timer.Enabled := False;
       TimePassed := 0;
       TimePassedLabel.Caption := 'Time Passed: 00:00:00';
-      CurrentProgressBar.Progress := 0;
+      CurrentProgressBar.Position := 0;
+    CurrentProgressLabel.Caption := '0%';
+    TotalProgressLabel.Caption := '0%';
 
       // post-encode action
       case PostEncodeList.ItemIndex of

@@ -38,7 +38,7 @@ var
   AboutForm: TAboutForm;
 
 const
-  Build = '2485';
+  Build = '2536';
 
 implementation
 
@@ -63,7 +63,7 @@ end;
 procedure TAboutForm.FormShow(Sender: TObject);
 begin
 
-  Label1.Caption := 'TX264 0.8.4 Beta Build: ' + Build;
+  Label1.Caption := 'TX264 0.8.5 Beta Build: ' + Build;
 
 end;
 

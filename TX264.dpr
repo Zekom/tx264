@@ -7,15 +7,15 @@ uses
   madListProcesses,
   madListModules,
   Forms,
-  UnitMain in 'Forms\UnitMain.pas' {MainForm},
-  UnitLog in 'Forms\UnitLog.pas' {LogForm},
+  UnitMain in 'Forms\UnitMain.pas' {MainForm} ,
+  UnitLog in 'Forms\UnitLog.pas' {LogForm} ,
   windows7taskbar in 'Units\windows7taskbar.pas',
   MediaInfoDLL in 'Units\MediaInfoDLL.pas',
-  UnitInfo in 'Forms\UnitInfo.pas' {InfoForm},
-  UnitAbout in 'Forms\UnitAbout.pas' {AboutForm},
-  UnitAdvancedOptions in 'Forms\UnitAdvancedOptions.pas' {AdvancedOptionsForm},
-  UnitUpdater in 'Forms\UnitUpdater.pas' {UpdaterForm},
-  UnitSox in 'Forms\UnitSox.pas' {SoXForm},
+  UnitInfo in 'Forms\UnitInfo.pas' {InfoForm} ,
+  UnitAbout in 'Forms\UnitAbout.pas' {AboutForm} ,
+  UnitAdvancedOptions in 'Forms\UnitAdvancedOptions.pas' {AdvancedOptionsForm} ,
+  UnitUpdater in 'Forms\UnitUpdater.pas' {UpdaterForm} ,
+  UnitSox in 'Forms\UnitSox.pas' {SoXForm} ,
   UnitProgress in 'Forms\UnitProgress.pas' {ProgressForm};
 
 {$R *.res}

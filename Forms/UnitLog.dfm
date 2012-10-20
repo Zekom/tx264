@@ -5,7 +5,7 @@ object LogForm: TLogForm
   Caption = 'Logs/Outputs'
   ClientHeight = 575
   ClientWidth = 825
-  Color = clWhite
+  Color = 14870243
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,9 +15,7 @@ object LogForm: TLogForm
   KeyPreview = True
   OldCreateOrder = False
   Position = poMainFormCenter
-  OnCreate = FormCreate
   OnKeyDown = FormKeyDown
-  OnResize = FormResize
   DesignSize = (
     825
     575)
@@ -117,24 +115,19 @@ object LogForm: TLogForm
   end
   object PageControl1: TPageControl
     Left = 8
-    Top = 40
+    Top = 8
     Width = 809
-    Height = 496
+    Height = 528
     ActivePage = TabSheet1
     Anchors = [akLeft, akTop, akRight, akBottom]
-    Style = tsFlatButtons
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Normal Log'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object OutputList: TMemo
         Left = 0
         Top = 0
         Width = 801
-        Height = 465
+        Height = 500
         Align = alClient
         BorderStyle = bsNone
         Font.Charset = DEFAULT_CHARSET
@@ -154,15 +147,11 @@ object LogForm: TLogForm
     object TabSheet2: TTabSheet
       Caption = 'Full Output'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object FullOutputList: TMemo
         Left = 0
         Top = 0
         Width = 801
-        Height = 465
+        Height = 500
         Align = alClient
         BorderStyle = bsNone
         Font.Charset = DEFAULT_CHARSET
@@ -227,29 +216,6 @@ object LogForm: TLogForm
     TabOrder = 3
     OnClick = SaveBtnClick
     SkinData.SkinSection = 'BUTTON'
-  end
-  object NormalLogBtn: TsBitBtn
-    Left = 8
-    Top = 8
-    Width = 403
-    Height = 32
-    Anchors = [akTop]
-    Caption = 'Normal Log'
-    TabOrder = 4
-    OnClick = NormalLogBtnClick
-    SkinData.SkinSection = 'BUTTON'
-  end
-  object FullLogBtn: TsBitBtn
-    Left = 414
-    Top = 8
-    Width = 403
-    Height = 32
-    Anchors = [akTop]
-    Caption = 'Full Log'
-    TabOrder = 5
-    OnClick = FullLogBtnClick
-    SkinData.SkinSection = 'BUTTON'
-    Down = True
   end
   object SaveDialog1: TSaveDialog
     FileName = 'TX264.txt'

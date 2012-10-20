@@ -5,7 +5,7 @@ object AboutForm: TAboutForm
   Caption = 'About'
   ClientHeight = 621
   ClientWidth = 416
-  Color = 8217672
+  Color = 14870243
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
