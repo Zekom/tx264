@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, sBitBtn,
-  Vcl.Mask, JvExMask, JvSpin, sComboBox, sCheckBox, Inifiles, sLabel;
+  Vcl.Mask, JvExMask, JvSpin, sComboBox, sCheckBox, Inifiles, sLabel,
+  sSkinProvider;
 
 type
   TSoXForm = class(TForm)
@@ -23,6 +24,7 @@ type
     sLabel2: TsLabel;
     DecayEdit: TJvSpinEdit;
     AttackEdit: TJvSpinEdit;
+    sSkinProvider1: TsSkinProvider;
     procedure CloseBtnClick(Sender: TObject);
     procedure VolumeBtnClick(Sender: TObject);
     procedure EnableBtnClick(Sender: TObject);

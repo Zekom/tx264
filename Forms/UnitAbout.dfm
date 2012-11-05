@@ -3,9 +3,9 @@ object AboutForm: TAboutForm
   Top = 0
   BorderStyle = bsDialog
   Caption = 'About'
-  ClientHeight = 621
+  ClientHeight = 581
   ClientWidth = 416
-  Color = 14870243
+  Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,14 +18,14 @@ object AboutForm: TAboutForm
   OnShow = FormShow
   DesignSize = (
     416
-    621)
+    581)
   PixelsPerInch = 96
   TextHeight = 13
   object Image1: TImage
     Left = 0
     Top = 0
     Width = 416
-    Height = 73
+    Height = 57
     Align = alTop
     Center = True
     Picture.Data = {
@@ -332,33 +332,34 @@ object AboutForm: TAboutForm
       003F0000FE000000007F0000FF00000000FF0000FF80000001FF0000FFC00000
       03FF0000FFF000000FFF0000FFFC00003FFF0000FFFF0000FFFF0000FFFFE007
       FFFF0000}
-    ExplicitWidth = 486
   end
   object Label1: TLabel
     Left = 0
-    Top = 73
+    Top = 57
     Width = 416
     Height = 18
     Align = alTop
     Alignment = taCenter
     AutoSize = False
     Caption = 'TX264 x Alpha Build: x'
+    ExplicitTop = 73
     ExplicitWidth = 486
   end
   object Label2: TLabel
     Left = 0
-    Top = 91
+    Top = 75
     Width = 416
     Height = 18
     Align = alTop
     Alignment = taCenter
     AutoSize = False
     Caption = '2012 ozok ozok26@gmail.com'
+    ExplicitTop = 91
     ExplicitWidth = 486
   end
   object Label3: TLabel
     Left = 0
-    Top = 109
+    Top = 93
     Width = 416
     Height = 18
     Align = alTop
@@ -367,33 +368,36 @@ object AboutForm: TAboutForm
     Caption = 
       'Licenced under the terms of GPL 2 or above. See GPL.txt for more' +
       '.'
+    ExplicitTop = 109
     ExplicitWidth = 486
   end
   object Label4: TLabel
     Left = 0
-    Top = 127
+    Top = 111
     Width = 416
     Height = 18
     Align = alTop
     Alignment = taCenter
     AutoSize = False
     Caption = 'Please feel free to send bug reports, suggestions etc'
+    ExplicitTop = 127
     ExplicitWidth = 486
   end
   object Label5: TLabel
     Left = 0
-    Top = 145
+    Top = 129
     Width = 416
     Height = 18
     Align = alTop
     Alignment = taCenter
     AutoSize = False
     Caption = 'TX264 uses tools listed below:'
+    ExplicitTop = 145
     ExplicitWidth = 486
   end
   object CloseBtn: TsBitBtn
     Left = 308
-    Top = 588
+    Top = 548
     Width = 100
     Height = 25
     Anchors = [akRight, akBottom]
@@ -439,7 +443,7 @@ object AboutForm: TAboutForm
   end
   object HomepageBtn: TsBitBtn
     Left = 8
-    Top = 588
+    Top = 548
     Width = 100
     Height = 25
     Anchors = [akLeft, akBottom]
@@ -485,11 +489,11 @@ object AboutForm: TAboutForm
   end
   object Memo1: TMemo
     Left = 8
-    Top = 169
+    Top = 153
     Width = 400
-    Height = 189
+    Height = 201
     Alignment = taCenter
-    Anchors = [akLeft, akRight, akBottom]
+    Anchors = [akLeft, akTop, akRight, akBottom]
     BevelInner = bvNone
     BevelOuter = bvNone
     Lines.Strings = (
@@ -506,15 +510,16 @@ object AboutForm: TAboutForm
       'aften.exe'
       'AlphaControls LE'
       'SoX.exe'
-      'flac.exe')
+      'flac.exe'
+      'fhgaacenc.exe')
     ReadOnly = True
     TabOrder = 2
   end
   object sButton1: TsButton
-    Left = 8
-    Top = 562
-    Width = 100
-    Height = 20
+    Left = 114
+    Top = 548
+    Width = 90
+    Height = 25
     Anchors = [akLeft, akBottom]
     Caption = 'Doom9 thread'
     TabOrder = 3
@@ -522,10 +527,10 @@ object AboutForm: TAboutForm
     SkinData.SkinSection = 'BUTTON'
   end
   object sButton2: TsButton
-    Left = 308
-    Top = 562
-    Width = 100
-    Height = 20
+    Left = 210
+    Top = 548
+    Width = 90
+    Height = 25
     Anchors = [akLeft, akBottom]
     Caption = 'Doom10 thread'
     TabOrder = 4
@@ -534,9 +539,10 @@ object AboutForm: TAboutForm
   end
   object Memo2: TMemo
     Left = 8
-    Top = 364
+    Top = 360
     Width = 400
-    Height = 192
+    Height = 182
+    Anchors = [akLeft, akRight, akBottom]
     Lines.Strings = (
       'This program is free software; you can redistribute it and/or'
       'modify it under the terms of the GNU General Public License'

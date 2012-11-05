@@ -4,7 +4,7 @@ object ProgressForm: TProgressForm
   BorderStyle = bsNone
   ClientHeight = 59
   ClientWidth = 580
-  Color = 14870243
+  Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -24,15 +24,7 @@ object ProgressForm: TProgressForm
     Top = 8
     Width = 67
     Height = 13
-    Caption = 'ProgressLabel'
-  end
-  object ProgressBar: TProgressBar
-    Left = 8
-    Top = 21
-    Width = 483
-    Height = 30
-    Anchors = [akLeft, akTop, akRight]
-    TabOrder = 1
+    Caption = 'Adding files...'
   end
   object AbortBtn: TsBitBtn
     Left = 497
@@ -109,6 +101,13 @@ object ProgressForm: TProgressForm
     OnClick = AbortBtnClick
     SkinData.SkinSection = 'BUTTON'
   end
+  object ProgressBar: TProgressBar
+    Left = 8
+    Top = 21
+    Width = 483
+    Height = 30
+    TabOrder = 1
+  end
   object sSkinProvider1: TsSkinProvider
     AddedTitle.Font.Charset = DEFAULT_CHARSET
     AddedTitle.Font.Color = clNone
@@ -117,6 +116,7 @@ object ProgressForm: TProgressForm
     AddedTitle.Font.Style = []
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
-    Left = 368
+    Left = 376
+    Top = 65520
   end
 end

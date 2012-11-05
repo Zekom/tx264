@@ -5,7 +5,7 @@ object InfoForm: TInfoForm
   Caption = 'File Info'
   ClientHeight = 615
   ClientWidth = 665
-  Color = 14870243
+  Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

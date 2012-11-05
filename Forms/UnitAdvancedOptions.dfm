@@ -5,7 +5,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
   Caption = 'Advanced Options'
   ClientHeight = 536
   ClientWidth = 645
-  Color = 14870243
+  Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -30,28 +30,22 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
   end
   object PageControl: TPageControl
     Left = 8
-    Top = 50
+    Top = 27
     Width = 629
-    Height = 447
-    ActivePage = TabSheet5
+    Height = 470
+    ActivePage = TabSheet7
     Anchors = [akLeft, akTop, akRight, akBottom]
-    Style = tsFlatButtons
     TabOrder = 0
     object TabSheet7: TTabSheet
       Caption = 'Rate control'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel7: TsPanel
         Left = 0
         Top = 0
         Width = 621
-        Height = 416
+        Height = 442
         Align = alClient
         BevelOuter = bvNone
-        Color = 14870245
         ParentBackground = False
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
@@ -65,8 +59,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object FastFirstPassBtn: TsCheckBox
           Left = 12
           Top = 12
-          Width = 110
-          Height = 19
+          Width = 102
+          Height = 20
           Caption = 'No fast first pass'
           TabOrder = 0
           SkinData.SkinSection = 'CHECKBOX'
@@ -76,8 +70,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object MBTreeRCBtn: TsCheckBox
           Left = 12
           Top = 35
-          Width = 117
-          Height = 19
+          Width = 109
+          Height = 20
           Caption = 'Macroblock-tree rc'
           Checked = True
           State = cbChecked
@@ -102,21 +96,17 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     end
     object TabSheet1: TTabSheet
       Caption = 'Motion'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel1: TsPanel
         Left = 0
         Top = 0
         Width = 621
-        Height = 416
+        Height = 442
         Align = alClient
         BevelOuter = bvNone
-        Color = 14870243
         ParentBackground = False
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
+        ExplicitTop = 4
         object GroupBox1: TGroupBox
           Left = 8
           Top = 8
@@ -303,8 +293,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object MEConstrainedBtn: TsCheckBox
           Left = 24
           Top = 260
-          Width = 161
-          Height = 19
+          Width = 153
+          Height = 20
           Caption = 'Constrained intra prediction'
           TabOrder = 3
           SkinData.SkinSection = 'CHECKBOX'
@@ -314,8 +304,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object MeWeightBBtn: TsCheckBox
           Left = 24
           Top = 237
-          Width = 177
-          Height = 19
+          Width = 169
+          Height = 20
           Caption = 'Weight prediction for B-Frames'
           Checked = True
           State = cbChecked
@@ -329,26 +319,21 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     object TabSheet2: TTabSheet
       Caption = 'Partition'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel2: TsPanel
         Left = 0
         Top = 0
         Width = 621
-        Height = 416
+        Height = 442
         Align = alClient
         BevelOuter = bvNone
-        Color = 14870243
         ParentBackground = False
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
         object Prediction1Btn: TsCheckBox
           Left = 16
           Top = 24
-          Width = 148
-          Height = 19
+          Width = 140
+          Height = 20
           Caption = '8x8 dct spatial transform'
           Checked = True
           State = cbChecked
@@ -360,8 +345,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object Prediction2Btn: TsCheckBox
           Left = 16
           Top = 47
-          Width = 272
-          Height = 19
+          Width = 264
+          Height = 20
           Caption = '8x8, 8x16 and 8x16 p-frame intra-predicted blocks'
           Checked = True
           State = cbChecked
@@ -373,8 +358,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object Prediction3Btn: TsCheckBox
           Left = 16
           Top = 70
-          Width = 272
-          Height = 19
+          Width = 264
+          Height = 20
           Caption = '8x8, 8x16 and 8x16 b-frame intra-predicted blocks'
           Checked = True
           State = cbChecked
@@ -386,8 +371,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object Prediction4Btn: TsCheckBox
           Left = 16
           Top = 93
-          Width = 260
-          Height = 19
+          Width = 252
+          Height = 20
           Caption = '4x4, 4x8 and 8x8 p-frame intra-predicted blocks'
           TabOrder = 3
           SkinData.SkinSection = 'CHECKBOX'
@@ -397,8 +382,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object Prediction5Btn: TsCheckBox
           Left = 16
           Top = 116
-          Width = 152
-          Height = 19
+          Width = 144
+          Height = 20
           Caption = '8x8 intra-predicted blocks'
           Checked = True
           State = cbChecked
@@ -410,8 +395,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object Prediction6Btn: TsCheckBox
           Left = 16
           Top = 139
-          Width = 152
-          Height = 19
+          Width = 144
+          Height = 20
           Caption = '4x4 intra-predicted blocks'
           Checked = True
           State = cbChecked
@@ -425,18 +410,13 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     object TabSheet3: TTabSheet
       Caption = 'Frame'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel3: TsPanel
         Left = 0
         Top = 0
         Width = 621
-        Height = 416
+        Height = 442
         Align = alClient
         BevelOuter = bvNone
-        Color = 14870243
         ParentBackground = False
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
@@ -703,8 +683,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           object FrameIIntraBtn: TsCheckBox
             Left = 16
             Top = 78
-            Width = 128
-            Height = 19
+            Width = 120
+            Height = 20
             Caption = 'Periodic intra refresh'
             TabOrder = 0
             SkinData.SkinSection = 'CHECKBOX'
@@ -750,8 +730,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object FrameCABACBtn: TsCheckBox
           Left = 18
           Top = 32
-          Width = 62
-          Height = 19
+          Width = 54
+          Height = 20
           Caption = 'CABAC'
           Checked = True
           State = cbChecked
@@ -763,8 +743,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object FrameInterlacedBtn: TsCheckBox
           Left = 18
           Top = 112
-          Width = 81
-          Height = 19
+          Width = 73
+          Height = 20
           Caption = 'Interlaced:'
           TabOrder = 4
           OnClick = FrameInterlacedBtnClick
@@ -775,8 +755,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object FrameLoopBtn: TsCheckBox
           Left = 18
           Top = 55
-          Width = 180
-          Height = 19
+          Width = 172
+          Height = 20
           Caption = 'Loop filter: Strength/Threshold:'
           Checked = True
           State = cbChecked
@@ -789,8 +769,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object FrameOpenGOPBtn: TsCheckBox
           Left = 18
           Top = 82
-          Width = 82
-          Height = 19
+          Width = 74
+          Height = 20
           Caption = 'Open GOP:'
           TabOrder = 6
           OnClick = FrameOpenGOPBtnClick
@@ -803,18 +783,13 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     object TabSheet4: TTabSheet
       Caption = 'Analysis'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel4: TsPanel
         Left = 0
         Top = 0
         Width = 621
-        Height = 416
+        Height = 442
         Align = alClient
         BevelOuter = bvNone
-        Color = 14870243
         ParentBackground = False
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
@@ -1003,8 +978,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object AnalysisChromaBtn: TsCheckBox
           Left = 24
           Top = 55
-          Width = 152
-          Height = 19
+          Width = 144
+          Height = 20
           Caption = 'Chroma motion estimation'
           Checked = True
           State = cbChecked
@@ -1016,8 +991,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object AnalysisDCTBtn: TsCheckBox
           Left = 24
           Top = 124
-          Width = 163
-          Height = 19
+          Width = 155
+          Height = 20
           Caption = 'DCT decimaiton on P-frames'
           Checked = True
           State = cbChecked
@@ -1029,8 +1004,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object AnalysisFastSkipBtn: TsCheckBox
           Left = 24
           Top = 101
-          Width = 179
-          Height = 19
+          Width = 171
+          Height = 20
           Caption = 'Fast skip detection on P-frames'
           Checked = True
           State = cbChecked
@@ -1042,8 +1017,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object AnalysisMixedRefBtn: TsCheckBox
           Left = 24
           Top = 32
-          Width = 111
-          Height = 19
+          Width = 103
+          Height = 20
           Caption = 'Mixed references'
           Checked = True
           State = cbChecked
@@ -1055,8 +1030,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         object AnalysisTrellisBtn: TsCheckBox
           Left = 24
           Top = 78
-          Width = 121
-          Height = 19
+          Width = 113
+          Height = 20
           Caption = 'Trellis quantization:'
           Checked = True
           State = cbChecked
@@ -1075,10 +1050,9 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Left = 0
         Top = 0
         Width = 621
-        Height = 416
+        Height = 442
         Align = alClient
         BevelOuter = bvNone
-        Color = 14870243
         ParentBackground = False
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
@@ -1356,21 +1330,17 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     object TabSheet6: TTabSheet
       Caption = 'Advanced'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel6: TsPanel
         Left = 0
         Top = 0
         Width = 621
-        Height = 416
+        Height = 442
         Align = alClient
         BevelOuter = bvNone
-        Color = 14870243
         ParentBackground = False
         TabOrder = 0
         SkinData.SkinSection = 'PANEL'
+        ExplicitTop = 4
         object GroupBox13: TGroupBox
           Left = 8
           Top = 8
@@ -1429,10 +1399,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
             CheckOptions = [coCheckOnExit, coCropBeyondLimit]
             Alignment = taCenter
             ButtonKind = bkClassic
-            Increment = 0.010000000000000000
-            MaxValue = 1.000000000000000000
-            ValueType = vtFloat
-            Value = 0.900000000000000000
+            MaxValue = 100.000000000000000000
+            Value = 90.000000000000000000
             TabOrder = 2
           end
         end
@@ -1560,82 +1528,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     OnClick = ResetBtnClick
     SkinData.SkinSection = 'BUTTON'
   end
-  object sBitBtn1: TsBitBtn
-    Left = 8
-    Top = 21
-    Width = 85
-    Height = 32
-    Caption = 'Rate Control'
-    TabOrder = 3
-    OnClick = sBitBtn1Click
-    SkinData.SkinSection = 'BUTTON'
-  end
-  object sBitBtn2: TsBitBtn
-    Left = 97
-    Top = 21
-    Width = 85
-    Height = 32
-    Caption = 'Motion'
-    TabOrder = 4
-    OnClick = sBitBtn2Click
-    SkinData.SkinSection = 'BUTTON'
-    Down = True
-  end
-  object sBitBtn3: TsBitBtn
-    Left = 188
-    Top = 21
-    Width = 85
-    Height = 32
-    Caption = 'Partition'
-    TabOrder = 5
-    OnClick = sBitBtn3Click
-    SkinData.SkinSection = 'BUTTON'
-    Down = True
-  end
-  object sBitBtn4: TsBitBtn
-    Left = 279
-    Top = 21
-    Width = 85
-    Height = 32
-    Caption = 'Frame'
-    TabOrder = 6
-    OnClick = sBitBtn4Click
-    SkinData.SkinSection = 'BUTTON'
-    Down = True
-  end
-  object sBitBtn5: TsBitBtn
-    Left = 370
-    Top = 21
-    Width = 85
-    Height = 32
-    Caption = 'Analysis'
-    TabOrder = 7
-    OnClick = sBitBtn5Click
-    SkinData.SkinSection = 'BUTTON'
-    Down = True
-  end
-  object sBitBtn6: TsBitBtn
-    Left = 461
-    Top = 21
-    Width = 85
-    Height = 32
-    Caption = 'Quantiser'
-    TabOrder = 8
-    OnClick = sBitBtn6Click
-    SkinData.SkinSection = 'BUTTON'
-    Down = True
-  end
-  object sBitBtn7: TsBitBtn
-    Left = 552
-    Top = 21
-    Width = 85
-    Height = 32
-    Caption = 'Advanced'
-    TabOrder = 9
-    OnClick = sBitBtn7Click
-    SkinData.SkinSection = 'BUTTON'
-    Down = True
-  end
   object sSkinProvider1: TsSkinProvider
     AddedTitle.Font.Charset = DEFAULT_CHARSET
     AddedTitle.Font.Color = clNone
@@ -1644,7 +1536,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     AddedTitle.Font.Style = []
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
-    Left = 528
-    Top = 65528
+    Left = 472
+    Top = 88
   end
 end

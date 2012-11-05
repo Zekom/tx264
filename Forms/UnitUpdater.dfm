@@ -5,7 +5,7 @@ object UpdaterForm: TUpdaterForm
   Caption = 'Updater'
   ClientHeight = 314
   ClientWidth = 599
-  Color = 14870243
+  Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -34,13 +34,6 @@ object UpdaterForm: TUpdaterForm
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-  end
-  object ProgressBar: TProgressBar
-    Left = 8
-    Top = 281
-    Width = 371
-    Height = 25
-    TabOrder = 3
   end
   object UpdateBtn: TsBitBtn
     Left = 491
@@ -162,6 +155,14 @@ object UpdaterForm: TUpdaterForm
     BoundLabel.MaxWidth = 0
     BoundLabel.UseSkinColor = True
     SkinData.SkinSection = 'EDIT'
+  end
+  object ProgressBar: TProgressBar
+    Left = 8
+    Top = 281
+    Width = 371
+    Height = 25
+    TabOrder = 3
+    Visible = False
   end
   object UpdateThread: TJvThread
     Exclusive = True

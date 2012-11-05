@@ -5,7 +5,7 @@ object SoXForm: TSoXForm
   Caption = 'Audio Effects'
   ClientHeight = 233
   ClientWidth = 266
-  Color = 14870243
+  Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -27,6 +27,12 @@ object SoXForm: TSoXForm
     Width = 35
     Height = 13
     Caption = 'Attack:'
+    ParentFont = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
   end
   object sLabel2: TsLabel
     Left = 168
@@ -34,6 +40,12 @@ object SoXForm: TSoXForm
     Width = 34
     Height = 13
     Caption = 'Decay:'
+    ParentFont = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
   end
   object NormBtn: TsCheckBox
     Left = 8
@@ -86,7 +98,7 @@ object SoXForm: TSoXForm
     BoundLabel.Caption = 'Channels:'
     BoundLabel.Indent = 0
     BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = 16182738
+    BoundLabel.Font.Color = clBlack
     BoundLabel.Font.Height = -11
     BoundLabel.Font.Name = 'Tahoma'
     BoundLabel.Font.Style = []
@@ -95,7 +107,7 @@ object SoXForm: TSoXForm
     BoundLabel.UseSkinColor = True
     SkinData.SkinSection = 'COMBOBOX'
     Style = csDropDownList
-    Color = 15855332
+    Color = clWhite
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -121,7 +133,7 @@ object SoXForm: TSoXForm
     BoundLabel.Caption = 'Sampling rate:'
     BoundLabel.Indent = 0
     BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = 16182738
+    BoundLabel.Font.Color = clBlack
     BoundLabel.Font.Height = -11
     BoundLabel.Font.Name = 'Tahoma'
     BoundLabel.Font.Style = []
@@ -130,7 +142,7 @@ object SoXForm: TSoXForm
     BoundLabel.UseSkinColor = True
     SkinData.SkinSection = 'COMBOBOX'
     Style = csDropDownList
-    Color = 15855332
+    Color = clWhite
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -207,7 +219,6 @@ object SoXForm: TSoXForm
     TabOrder = 6
     OnClick = CloseBtnClick
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 172
   end
   object ThreadBtn: TsCheckBox
     Left = 8
@@ -263,5 +274,16 @@ object SoXForm: TSoXForm
     Value = 0.300000000000000000
     Enabled = False
     TabOrder = 10
+  end
+  object sSkinProvider1: TsSkinProvider
+    AddedTitle.Font.Charset = DEFAULT_CHARSET
+    AddedTitle.Font.Color = clNone
+    AddedTitle.Font.Height = -11
+    AddedTitle.Font.Name = 'Tahoma'
+    AddedTitle.Font.Style = []
+    SkinData.SkinSection = 'FORM'
+    TitleButtons = <>
+    Left = 128
+    Top = 32
   end
 end

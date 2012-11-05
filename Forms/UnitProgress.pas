@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Buttons,
-  sBitBtn, sSkinProvider, sGauge;
+  sBitBtn, sSkinProvider, sGauge, UbuntuProgress;
 
 type
   TProgressForm = class(TForm)
@@ -35,7 +35,7 @@ procedure TProgressForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 
   ProgressBar.Position := 0;
-  ProgressLabel.Caption := '';
+  ProgressLabel.Caption := 'Adding files...';
 
 end;
 

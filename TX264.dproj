@@ -83,11 +83,12 @@
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <VerInfo_Release>5</VerInfo_Release>
+        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
+        <VerInfo_Release>7</VerInfo_Release>
         <VerInfo_AutoGenVersion>false</VerInfo_AutoGenVersion>
         <VerInfo_MinorVer>8</VerInfo_MinorVer>
-        <VerInfo_Build>2536</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=ozok;FileDescription=TX264 - x264 GUI;FileVersion=0.8.5.2536;InternalName=tx264;LegalCopyright=2012 ozok;LegalTrademarks=ozok;OriginalFilename=TX264.exe;ProductName=tx264;ProductVersion=1.0.0.0;Comments=tx264</VerInfo_Keys>
+        <VerInfo_Build>2736</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=ozok;FileDescription=TX264 - x264 GUI;FileVersion=0.8.7.2736;InternalName=tx264;LegalCopyright=2012 ozok;LegalTrademarks=ozok;OriginalFilename=TX264.exe;ProductName=tx264;ProductVersion=1.0.0.0;Comments=tx264</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -97,11 +98,12 @@
         <DCC_DebugInformation>false</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
         <VerInfo_AutoGenVersion>false</VerInfo_AutoGenVersion>
-        <VerInfo_MinorVer>7</VerInfo_MinorVer>
-        <VerInfo_Release>1</VerInfo_Release>
-        <VerInfo_Build>1085</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=ozok;FileDescription=TX264 - x264 GUI;FileVersion=0.7.1.1085;InternalName=TX264;LegalCopyright=GPL;LegalTrademarks=GPL;OriginalFilename=TX264.exe;ProductName=TX264;ProductVersion=1.0.0.0;Comments=TX264 - x264 GUI</VerInfo_Keys>
+        <VerInfo_MinorVer>8</VerInfo_MinorVer>
+        <VerInfo_Release>7</VerInfo_Release>
+        <VerInfo_Build>2062</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=ozok;FileDescription=TX264 - x264 GUI;FileVersion=0.8.7.2062;InternalName=TX264;LegalCopyright=GPL;LegalTrademarks=GPL;OriginalFilename=TX264.exe;ProductName=TX264;ProductVersion=1.0.0.0;Comments=TX264 - x264 GUI</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <ItemGroup>
@@ -162,7 +164,7 @@
                     <VersionInfo Name="MajorVer">0</VersionInfo>
                     <VersionInfo Name="MinorVer">1</VersionInfo>
                     <VersionInfo Name="Release">0</VersionInfo>
-                    <VersionInfo Name="Build">1225</VersionInfo>
+                    <VersionInfo Name="Build">1430</VersionInfo>
                     <VersionInfo Name="Debug">False</VersionInfo>
                     <VersionInfo Name="PreRelease">False</VersionInfo>
                     <VersionInfo Name="Special">False</VersionInfo>
@@ -174,7 +176,7 @@
                 <VersionInfoKeys>
                     <VersionInfoKeys Name="CompanyName"/>
                     <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">0.1.0.1225</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">0.1.0.1430</VersionInfoKeys>
                     <VersionInfoKeys Name="InternalName"/>
                     <VersionInfoKeys Name="LegalCopyright"/>
                     <VersionInfoKeys Name="LegalTrademarks"/>

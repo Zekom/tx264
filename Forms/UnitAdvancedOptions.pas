@@ -141,13 +141,6 @@ type
     Label23: TLabel;
     sSkinProvider1: TsSkinProvider;
     ResetBtn: TsBitBtn;
-    sBitBtn1: TsBitBtn;
-    sBitBtn2: TsBitBtn;
-    sBitBtn3: TsBitBtn;
-    sBitBtn4: TsBitBtn;
-    sBitBtn5: TsBitBtn;
-    sBitBtn6: TsBitBtn;
-    sBitBtn7: TsBitBtn;
     procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FrameLoopBtnClick(Sender: TObject);
@@ -159,13 +152,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure VarianceAQBtnClick(Sender: TObject);
     procedure ResetBtnClick(Sender: TObject);
-    procedure sBitBtn1Click(Sender: TObject);
-    procedure sBitBtn2Click(Sender: TObject);
-    procedure sBitBtn3Click(Sender: TObject);
-    procedure sBitBtn4Click(Sender: TObject);
-    procedure sBitBtn5Click(Sender: TObject);
-    procedure sBitBtn6Click(Sender: TObject);
-    procedure sBitBtn7Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -207,15 +193,7 @@ begin
 end;
 
 procedure TAdvancedOptionsForm.FormCreate(Sender: TObject);
-var
-  i: integer;
 begin
-
-  for I := 0 to PageControl.PageCount - 1 do
-  begin
-    PageControl.Pages[i].TabVisible := False;
-  end;
-  PageControl.ActivePageIndex := 0;
 
   LoadOptions();
 
@@ -490,104 +468,6 @@ begin
     end;
 
   end;
-
-end;
-
-procedure TAdvancedOptionsForm.sBitBtn1Click(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 0;
-  sBitBtn1.Down := False;
-  sBitBtn2.Down := True;
-  sBitBtn3.Down := True;
-  sBitBtn4.Down := True;
-  sBitBtn5.Down := True;
-  sBitBtn6.Down := True;
-  sBitBtn7.Down := True;
-
-end;
-
-procedure TAdvancedOptionsForm.sBitBtn2Click(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 1;
-  sBitBtn1.Down := True;
-  sBitBtn2.Down := False;
-  sBitBtn3.Down := True;
-  sBitBtn4.Down := True;
-  sBitBtn5.Down := True;
-  sBitBtn6.Down := True;
-  sBitBtn7.Down := True;
-
-end;
-
-procedure TAdvancedOptionsForm.sBitBtn3Click(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 2;
-  sBitBtn1.Down := True;
-  sBitBtn2.Down := True;
-  sBitBtn3.Down := False;
-  sBitBtn4.Down := True;
-  sBitBtn5.Down := True;
-  sBitBtn6.Down := True;
-  sBitBtn7.Down := True;
-
-end;
-
-procedure TAdvancedOptionsForm.sBitBtn4Click(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 3;
-  sBitBtn1.Down := True;
-  sBitBtn2.Down := True;
-  sBitBtn3.Down := True;
-  sBitBtn4.Down := False;
-  sBitBtn5.Down := True;
-  sBitBtn6.Down := True;
-  sBitBtn7.Down := True;
-
-end;
-
-procedure TAdvancedOptionsForm.sBitBtn5Click(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 4;
-  sBitBtn1.Down := True;
-  sBitBtn2.Down := True;
-  sBitBtn3.Down := True;
-  sBitBtn4.Down := True;
-  sBitBtn5.Down := False;
-  sBitBtn6.Down := True;
-  sBitBtn7.Down := True;
-
-end;
-
-procedure TAdvancedOptionsForm.sBitBtn6Click(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 5;
-  sBitBtn1.Down := True;
-  sBitBtn2.Down := True;
-  sBitBtn3.Down := True;
-  sBitBtn4.Down := True;
-  sBitBtn5.Down := True;
-  sBitBtn6.Down := False;
-  sBitBtn7.Down := True;
-
-end;
-
-procedure TAdvancedOptionsForm.sBitBtn7Click(Sender: TObject);
-begin
-
-  PageControl.ActivePageIndex := 6;
-  sBitBtn1.Down := True;
-  sBitBtn2.Down := True;
-  sBitBtn3.Down := True;
-  sBitBtn4.Down := True;
-  sBitBtn5.Down := True;
-  sBitBtn6.Down := True;
-  sBitBtn7.Down := False;
 
 end;
 

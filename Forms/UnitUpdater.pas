@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, sListBox, sCheckListBox,
   Vcl.Buttons, sBitBtn, JvUrlListGrabber, JvUrlGrabbers, JvComponentBase,
-  JvThread, sLabel, sGauge, ShellAPI, Vcl.ComCtrls;
+  JvThread, sLabel, sGauge, ShellAPI, Vcl.ComCtrls, UbuntuProgress;
 
 type
   TUpdaterForm = class(TForm)
@@ -46,7 +46,7 @@ var
   UpdaterForm: TUpdaterForm;
 
 const
-  Build = 2536;
+  Build = 2595;
 
 implementation
 
