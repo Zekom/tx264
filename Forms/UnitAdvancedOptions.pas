@@ -138,7 +138,6 @@ type
     Label34: TLabel;
     Label35: TLabel;
     Label36: TLabel;
-    Label23: TLabel;
     sSkinProvider1: TsSkinProvider;
     ResetBtn: TsBitBtn;
     procedure CloseBtnClick(Sender: TObject);

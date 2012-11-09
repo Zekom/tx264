@@ -522,8 +522,14 @@ type
     // shuts down, logs off or reboots
     function ShutDown(RebootParam: Longword): Boolean;
 
+    // catches listview column resize event
     procedure WMNotify(var Message: TWMNotify); message WM_NOTIFY;
+
+    // adjust progress bar so it fits to listview column no 2
     procedure AdjustProgressBar(item: TListItem; r: TRect);
+
+    // remove progress bars
+    procedure RemoveProgressBars();
   public
     { Public declarations }
     AppFolder: string;
@@ -532,7 +538,7 @@ type
   end;
 
 const
-  BuildInt = 2595;
+  BuildInt = 2738;
 
 var
   MainForm: TMainForm;
@@ -4171,12 +4177,13 @@ begin
     ProgressList.Visible := False;
     BeginUpdate;
     try
+      // delete progress bars
+      RemoveProgressBars;
 
+      // delete items
       for I := Count - 1 downto 0 do
       begin
         Application.ProcessMessages;
-
-        TProgressBar(Item[i].Data).Free;
         Delete(i);
       end;
 
@@ -6720,6 +6727,7 @@ begin
       (CurrentProgress div CommandLines.Count);
   end;
 
+  if FileIndex <= ProcessTypeList.Count then
   if ProcessTypeList[FileIndex] = '1' then
   begin
     // calculate encoding speed for x264
@@ -6779,7 +6787,8 @@ begin
   // win7 state icon
   StateIcon := TIcon.Create;
   try
-    EncodingImages.GetIcon((IconCounter mod EncodingImages.Items.Count), StateIcon);
+    EncodingImages.GetIcon((IconCounter mod (EncodingImages.Items.Count - 1)),
+      StateIcon);
     SetOverlayIcon(Handle, StateIcon.Handle, PwideChar('Encoding'));
   finally
     StateIcon.Free;
@@ -6829,6 +6838,29 @@ begin
     FileList.Repaint;
   finally
     FileList.Items.EndUpdate;
+  end;
+
+end;
+
+procedure TMainForm.RemoveProgressBars;
+var
+  i: integer;
+begin
+
+  if ProgressList.Items.Count > 0 then
+  begin
+
+    for I := ProgressList.Items.Count - 1 downto 0 do
+    begin
+      Application.ProcessMessages;
+
+      if ProgressList.Items[i].Data <> nil then
+      begin
+        TProgressBar(ProgressList.Items[i].Data).Free;
+      end;
+
+    end;
+
   end;
 
 end;
@@ -8147,6 +8179,7 @@ end;
 procedure TMainForm.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
 var
   I: Integer;
+  StateIcon: TIcon;
 const
   PauseCoeff = 10;
 begin
@@ -8360,6 +8393,8 @@ begin
   if StoppedByUser then
   begin
     EnableUI;
+    // delete progress bars
+    RemoveProgressBars;
 
     Self.Caption := 'TX264';
 
@@ -8512,6 +8547,8 @@ begin
         StoppedByUser := True;
 
         EnableUI;
+        // delete progress bars
+        RemoveProgressBars;
 
         Self.Caption := 'TX264';
 
@@ -8617,6 +8654,13 @@ begin
           begin
 
             PositionTimer.Enabled := False;
+
+            StateIcon := TIcon.Create;
+            EncodingImages.GetIcon(((EncodingImages.Items.Count - 1)),
+              StateIcon);
+            SetOverlayIcon(Handle, StateIcon.Handle, PwideChar('Paused'));
+            SetProgressState(Handle, tbpsPaused);
+
             try
 
               for I := 1 to (Round(PauseEdit.Value) * PauseCoeff) do
@@ -8639,6 +8683,10 @@ begin
               end;
 
             finally
+              EncodingImages.GetIcon(0, StateIcon);
+              SetOverlayIcon(Handle, StateIcon.Handle, PwideChar('Encoding'));
+              SetProgressState(Handle, tbpsNormal);
+              StateIcon.Free;
               PositionTimer.Enabled := True;
             end;
 
@@ -8650,6 +8698,8 @@ begin
         if StoppedByUser then
         begin
           EnableUI;
+          // delete progress bars
+          RemoveProgressBars;
 
           Self.Caption := 'TX264';
 
@@ -8706,6 +8756,8 @@ begin
     else
     begin
       EnableUI;
+      // delete progress bars
+      RemoveProgressBars;
 
       Self.Caption := 'TX264';
 

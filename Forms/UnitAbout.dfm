@@ -3,7 +3,7 @@ object AboutForm: TAboutForm
   Top = 0
   BorderStyle = bsDialog
   Caption = 'About'
-  ClientHeight = 581
+  ClientHeight = 580
   ClientWidth = 416
   Color = clBtnFace
   DoubleBuffered = True
@@ -18,7 +18,7 @@ object AboutForm: TAboutForm
   OnShow = FormShow
   DesignSize = (
     416
-    581)
+    580)
   PixelsPerInch = 96
   TextHeight = 13
   object Image1: TImage
@@ -387,17 +387,15 @@ object AboutForm: TAboutForm
     Left = 0
     Top = 129
     Width = 416
-    Height = 18
+    Height = 15
     Align = alTop
     Alignment = taCenter
     AutoSize = False
     Caption = 'TX264 uses tools listed below:'
-    ExplicitTop = 145
-    ExplicitWidth = 486
   end
   object CloseBtn: TsBitBtn
     Left = 308
-    Top = 548
+    Top = 547
     Width = 100
     Height = 25
     Anchors = [akRight, akBottom]
@@ -440,10 +438,11 @@ object AboutForm: TAboutForm
     TabOrder = 0
     OnClick = CloseBtnClick
     SkinData.SkinSection = 'BUTTON'
+    ExplicitTop = 548
   end
   object HomepageBtn: TsBitBtn
     Left = 8
-    Top = 548
+    Top = 547
     Width = 100
     Height = 25
     Anchors = [akLeft, akBottom]
@@ -486,12 +485,13 @@ object AboutForm: TAboutForm
     TabOrder = 1
     OnClick = HomepageBtnClick
     SkinData.SkinSection = 'BUTTON'
+    ExplicitTop = 548
   end
   object Memo1: TMemo
     Left = 8
-    Top = 153
+    Top = 150
     Width = 400
-    Height = 201
+    Height = 203
     Alignment = taCenter
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelInner = bvNone
@@ -514,10 +514,11 @@ object AboutForm: TAboutForm
       'fhgaacenc.exe')
     ReadOnly = True
     TabOrder = 2
+    ExplicitHeight = 204
   end
   object sButton1: TsButton
     Left = 114
-    Top = 548
+    Top = 547
     Width = 90
     Height = 25
     Anchors = [akLeft, akBottom]
@@ -525,10 +526,11 @@ object AboutForm: TAboutForm
     TabOrder = 3
     OnClick = sButton1Click
     SkinData.SkinSection = 'BUTTON'
+    ExplicitTop = 548
   end
   object sButton2: TsButton
     Left = 210
-    Top = 548
+    Top = 547
     Width = 90
     Height = 25
     Anchors = [akLeft, akBottom]
@@ -536,10 +538,11 @@ object AboutForm: TAboutForm
     TabOrder = 4
     OnClick = sButton2Click
     SkinData.SkinSection = 'BUTTON'
+    ExplicitTop = 548
   end
   object Memo2: TMemo
     Left = 8
-    Top = 360
+    Top = 359
     Width = 400
     Height = 182
     Anchors = [akLeft, akRight, akBottom]
@@ -563,6 +566,7 @@ object AboutForm: TAboutForm
         '110'#8722'1301, USA.')
     ReadOnly = True
     TabOrder = 5
+    ExplicitTop = 360
   end
   object sSkinProvider1: TsSkinProvider
     AddedTitle.Font.Charset = DEFAULT_CHARSET
