@@ -4,8 +4,8 @@ object InfoForm: TInfoForm
   BorderStyle = bsDialog
   Caption = 'File Info'
   ClientHeight = 615
-  ClientWidth = 665
-  Color = clBtnFace
+  ClientWidth = 599
+  Color = clInactiveCaption
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,13 +17,14 @@ object InfoForm: TInfoForm
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   DesignSize = (
-    665
+    599
     615)
   PixelsPerInch = 96
   TextHeight = 13
   object CloseBtn: TsBitBtn
-    Left = 557
+    Left = 491
     Top = 582
     Width = 100
     Height = 25
@@ -116,8 +117,9 @@ object InfoForm: TInfoForm
   object InfoList: TListView
     Left = 8
     Top = 8
-    Width = 649
+    Width = 583
     Height = 568
+    Anchors = [akLeft, akTop, akRight, akBottom]
     Columns = <
       item
         Caption = 'Field'
@@ -125,7 +127,7 @@ object InfoForm: TInfoForm
       end
       item
         Caption = 'Value'
-        Width = 400
+        Width = 330
       end>
     ReadOnly = True
     RowSelect = True
@@ -139,16 +141,5 @@ object InfoForm: TInfoForm
     Filter = 'Text Files|*.txt'
     Left = 448
     Top = 552
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 376
-    Top = 560
   end
 end

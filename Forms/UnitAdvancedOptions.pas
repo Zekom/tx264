@@ -19,14 +19,7 @@ type
     TabSheet4: TTabSheet;
     TabSheet5: TTabSheet;
     TabSheet6: TTabSheet;
-    Panel1: TsPanel;
-    Panel2: TsPanel;
-    Panel3: TsPanel;
-    Panel4: TsPanel;
-    Panel5: TsPanel;
-    Panel6: TsPanel;
     TabSheet7: TTabSheet;
-    Panel7: TsPanel;
     FastFirstPassBtn: TsCheckBox;
     MBTreeRCBtn: TsCheckBox;
     Label1: TLabel;
@@ -138,7 +131,6 @@ type
     Label34: TLabel;
     Label35: TLabel;
     Label36: TLabel;
-    sSkinProvider1: TsSkinProvider;
     ResetBtn: TsBitBtn;
     procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -151,6 +143,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure VarianceAQBtnClick(Sender: TObject);
     procedure ResetBtnClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FrameCABACBtnClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -195,6 +189,27 @@ procedure TAdvancedOptionsForm.FormCreate(Sender: TObject);
 begin
 
   LoadOptions();
+
+end;
+
+procedure TAdvancedOptionsForm.FormShow(Sender: TObject);
+begin
+  Self.Color := clInactiveCaption;
+end;
+
+procedure TAdvancedOptionsForm.FrameCABACBtnClick(Sender: TObject);
+begin
+
+  if FrameCABACBtn.Checked then
+  begin
+    AnalysisTrellisBtn.Enabled := True;
+    AnalysisTrellisBtn.OnClick(Self);
+  end
+  else
+  begin
+    AnalysisTrellisBtn.Enabled := False;
+    AnalysisTrellisList.Enabled := False;
+  end;
 
 end;
 
@@ -251,6 +266,8 @@ begin
 
       FrameCABACBtn.Checked := ReadBool('Frame', 'Cabac', True);
       FrameLoopBtn.Checked := ReadBool('Frame', 'loop', True);
+      FrameLoopThrEdit.Text := ReadString('Frame', 'loop1', '0');
+      FrameLoopStrEdit.Text := ReadString('Frame', 'loop2', '0');
       FrameOpenGOPBtn.Checked := ReadBool('Frame', 'gop', True);
       FrameGopList.ItemIndex := ReadInteger('Frame', 'gop2', 0);
       FrameInterlacedBtn.Checked := ReadBool('Frame', 'interlaced', True);
@@ -301,6 +318,7 @@ begin
       FrameInterlacedBtn.OnClick(Self);
       AnalysisTrellisBtn.OnClick(Self);
       VarianceAQBtn.OnClick(Self);
+      FrameCABACBtn.OnClick(Self);
     end;
 
   end;
@@ -383,6 +401,7 @@ begin
       FrameInterlacedBtn.OnClick(Self);
       AnalysisTrellisBtn.OnClick(Self);
       VarianceAQBtn.OnClick(Self);
+      FrameCABACBtn.OnClick(Self);
     end;
   end;
 
@@ -419,6 +438,8 @@ begin
 
       WriteBool('Frame', 'Cabac', FrameCABACBtn.Checked);
       WriteBool('Frame', 'loop', FrameLoopBtn.Checked);
+      WriteString('Frame', 'loop1', FrameLoopThrEdit.Text);
+      WriteString('Frame', 'loop2', FrameLoopStrEdit.Text);
       WriteBool('Frame', 'gop', FrameOpenGOPBtn.Checked);
       WriteInteger('Frame', 'gop2', FrameGopList.ItemIndex);
       WriteBool('Frame', 'interlaced', FrameInterlacedBtn.Checked);

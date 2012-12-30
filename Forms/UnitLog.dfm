@@ -4,8 +4,8 @@ object LogForm: TLogForm
   BorderIcons = [biSystemMenu, biMaximize]
   Caption = 'Logs/Outputs'
   ClientHeight = 575
-  ClientWidth = 825
-  Color = clBtnFace
+  ClientWidth = 584
+  Color = clInactiveCaption
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,8 +16,9 @@ object LogForm: TLogForm
   OldCreateOrder = False
   Position = poMainFormCenter
   OnKeyDown = FormKeyDown
+  OnShow = FormShow
   DesignSize = (
-    825
+    584
     575)
   PixelsPerInch = 96
   TextHeight = 13
@@ -68,7 +69,7 @@ object LogForm: TLogForm
     SkinData.SkinSection = 'BUTTON'
   end
   object CloseBtn: TsBitBtn
-    Left = 717
+    Left = 476
     Top = 542
     Width = 100
     Height = 25
@@ -116,7 +117,7 @@ object LogForm: TLogForm
   object PageControl1: TPageControl
     Left = 8
     Top = 8
-    Width = 809
+    Width = 568
     Height = 528
     ActivePage = TabSheet1
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -130,16 +131,16 @@ object LogForm: TLogForm
       object OutputList: TMemo
         Left = 0
         Top = 0
-        Width = 801
+        Width = 560
         Height = 500
         Align = alClient
         BorderStyle = bsNone
+        Color = clWhite
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = []
-        ParentColor = True
         ParentFont = False
         ReadOnly = True
         ScrollBars = ssBoth
@@ -158,16 +159,16 @@ object LogForm: TLogForm
       object FullOutputList: TMemo
         Left = 0
         Top = 0
-        Width = 801
+        Width = 560
         Height = 500
         Align = alClient
         BorderStyle = bsNone
+        Color = clWhite
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = []
-        ParentColor = True
         ParentFont = False
         ParentShowHint = False
         ReadOnly = True
@@ -229,18 +230,7 @@ object LogForm: TLogForm
     FileName = 'TX264.txt'
     Filter = 'Text files|*.txt'
     Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
-    Left = 624
-    Top = 448
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 488
-    Top = 376
+    Left = 96
+    Top = 416
   end
 end

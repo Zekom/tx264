@@ -17,7 +17,6 @@ type
     Label5: TLabel;
     CloseBtn: TsBitBtn;
     HomepageBtn: TsBitBtn;
-    sSkinProvider1: TsSkinProvider;
     Memo1: TMemo;
     sButton1: TsButton;
     sButton2: TsButton;
@@ -38,7 +37,7 @@ var
   AboutForm: TAboutForm;
 
 const
-  Build = '2738';
+  Build = '3013';
 
 implementation
 
@@ -63,7 +62,8 @@ end;
 procedure TAboutForm.FormShow(Sender: TObject);
 begin
 
-  Label1.Caption := 'TX264 0.8.7 Beta Build: ' + Build;
+  Label1.Caption := 'TX264 0.9.3 Build: ' + Build;
+  Self.Color := clInactiveCaption;
 
 end;
 

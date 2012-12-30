@@ -4,7 +4,7 @@ object UpdaterForm: TUpdaterForm
   BorderStyle = bsDialog
   Caption = 'Updater'
   ClientHeight = 314
-  ClientWidth = 599
+  ClientWidth = 553
   Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -18,16 +18,16 @@ object UpdaterForm: TUpdaterForm
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   DesignSize = (
-    599
+    553
     314)
   PixelsPerInch = 96
   TextHeight = 13
   object sLabel1: TsLabel
     Left = 8
     Top = 8
-    Width = 60
+    Width = 61
     Height = 13
-    Caption = 'What'#39's new:'
+    Caption = 'Change Log:'
     ParentFont = False
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
@@ -36,7 +36,7 @@ object UpdaterForm: TUpdaterForm
     Font.Style = []
   end
   object UpdateBtn: TsBitBtn
-    Left = 491
+    Left = 445
     Top = 281
     Width = 100
     Height = 25
@@ -83,7 +83,7 @@ object UpdaterForm: TUpdaterForm
     SkinData.SkinSection = 'BUTTON'
   end
   object CancelBtn: TsBitBtn
-    Left = 385
+    Left = 339
     Top = 281
     Width = 100
     Height = 25
@@ -132,7 +132,7 @@ object UpdaterForm: TUpdaterForm
   object ChangeList: TsListBox
     Left = 8
     Top = 27
-    Width = 583
+    Width = 537
     Height = 248
     Style = lbOwnerDrawFixed
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -159,19 +159,11 @@ object UpdaterForm: TUpdaterForm
   object ProgressBar: TProgressBar
     Left = 8
     Top = 281
-    Width = 371
+    Width = 325
     Height = 25
+    Anchors = [akLeft, akRight, akBottom]
     TabOrder = 3
     Visible = False
-  end
-  object UpdateThread: TJvThread
-    Exclusive = True
-    MaxCount = 0
-    RunOnCreate = True
-    FreeOnTerminate = True
-    OnExecute = UpdateThreadExecute
-    Left = 192
-    Top = 88
   end
   object Downloader: TJvHttpUrlGrabber
     FileName = 'output.txt'
@@ -190,8 +182,8 @@ object UpdaterForm: TUpdaterForm
     ProxyAddresses = 'proxyserver'
     ProxyIgnoreList = '<local>'
     OnDoneFile = WNDownloaderDoneFile
-    Left = 472
-    Top = 80
+    Left = 88
+    Top = 64
   end
   object UpdateDownloader: TJvHttpUrlGrabber
     FileName = 'output.txt'
@@ -202,6 +194,15 @@ object UpdaterForm: TUpdaterForm
     OnDoneFile = UpdateDownloaderDoneFile
     OnProgress = UpdateDownloaderProgress
     Left = 368
+    Top = 104
+  end
+  object UpdateThread: TJvThread
+    Exclusive = True
+    MaxCount = 0
+    RunOnCreate = True
+    FreeOnTerminate = True
+    OnExecute = UpdateThreadExecute
+    Left = 192
     Top = 88
   end
 end

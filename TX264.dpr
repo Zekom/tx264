@@ -18,7 +18,8 @@ uses
   UnitAdvancedOptions in 'Forms\UnitAdvancedOptions.pas' {AdvancedOptionsForm} ,
   UnitUpdater in 'Forms\UnitUpdater.pas' {UpdaterForm} ,
   UnitSox in 'Forms\UnitSox.pas' {SoXForm} ,
-  UnitProgress in 'Forms\UnitProgress.pas' {ProgressForm};
+  UnitProgress in 'Forms\UnitProgress.pas' {ProgressForm} ,
+  JvCpuUsage in 'Units\JvCpuUsage.pas';
 
 {$R *.res}
 

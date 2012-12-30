@@ -5,7 +5,7 @@ object AboutForm: TAboutForm
   Caption = 'About'
   ClientHeight = 580
   ClientWidth = 416
-  Color = clBtnFace
+  Color = clInactiveCaption
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -438,7 +438,6 @@ object AboutForm: TAboutForm
     TabOrder = 0
     OnClick = CloseBtnClick
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 548
   end
   object HomepageBtn: TsBitBtn
     Left = 8
@@ -485,7 +484,6 @@ object AboutForm: TAboutForm
     TabOrder = 1
     OnClick = HomepageBtnClick
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 548
   end
   object Memo1: TMemo
     Left = 8
@@ -514,7 +512,6 @@ object AboutForm: TAboutForm
       'fhgaacenc.exe')
     ReadOnly = True
     TabOrder = 2
-    ExplicitHeight = 204
   end
   object sButton1: TsButton
     Left = 114
@@ -526,7 +523,6 @@ object AboutForm: TAboutForm
     TabOrder = 3
     OnClick = sButton1Click
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 548
   end
   object sButton2: TsButton
     Left = 210
@@ -538,7 +534,6 @@ object AboutForm: TAboutForm
     TabOrder = 4
     OnClick = sButton2Click
     SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 548
   end
   object Memo2: TMemo
     Left = 8
@@ -566,17 +561,5 @@ object AboutForm: TAboutForm
         '110'#8722'1301, USA.')
     ReadOnly = True
     TabOrder = 5
-    ExplicitTop = 360
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 296
-    Top = 88
   end
 end

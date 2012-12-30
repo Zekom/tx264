@@ -3,9 +3,9 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Advanced Options'
-  ClientHeight = 536
-  ClientWidth = 645
-  Color = clBtnFace
+  ClientHeight = 509
+  ClientWidth = 430
+  Color = clInactiveCaption
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,930 +16,777 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
   Position = poMainFormCenter
   OnClose = FormClose
   OnCreate = FormCreate
+  OnShow = FormShow
   DesignSize = (
-    645
-    536)
+    430
+    509)
   PixelsPerInch = 96
   TextHeight = 13
   object PageControl: TPageControl
     Left = 8
     Top = 8
-    Width = 629
-    Height = 489
+    Width = 414
+    Height = 462
     ActivePage = TabSheet7
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
     object TabSheet7: TTabSheet
       Caption = 'Rate control'
       ImageIndex = 6
-      object Panel7: TsPanel
-        Left = 0
-        Top = 0
-        Width = 621
-        Height = 461
-        Align = alClient
-        BevelOuter = bvNone
-        ParentBackground = False
+      object Label1: TLabel
+        Left = 12
+        Top = 61
+        Width = 147
+        Height = 13
+        Caption = 'Frame type lookahead frames:'
+      end
+      object FastFirstPassBtn: TsCheckBox
+        Left = 12
+        Top = 12
+        Width = 102
+        Height = 20
+        Caption = 'No fast first pass'
         TabOrder = 0
-        SkinData.SkinSection = 'PANEL'
-        object Label1: TLabel
-          Left = 12
-          Top = 61
-          Width = 147
+        SkinData.SkinSection = 'CHECKBOX'
+        ImgChecked = 0
+        ImgUnchecked = 0
+      end
+      object FrameLookEdit: TJvSpinEdit
+        Left = 165
+        Top = 58
+        Width = 50
+        Height = 21
+        CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+        Alignment = taCenter
+        ButtonKind = bkClassic
+        MaxValue = 250.000000000000000000
+        Value = 40.000000000000000000
+        TabOrder = 1
+      end
+      object MBTreeRCBtn: TsCheckBox
+        Left = 12
+        Top = 35
+        Width = 109
+        Height = 20
+        Caption = 'Macroblock-tree rc'
+        Checked = True
+        State = cbChecked
+        TabOrder = 2
+        SkinData.SkinSection = 'CHECKBOX'
+        ImgChecked = 0
+        ImgUnchecked = 0
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = 'Motion'
+      DesignSize = (
+        406
+        434)
+      object GroupBox1: TGroupBox
+        Left = 8
+        Top = 8
+        Width = 386
+        Height = 81
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Motion Estimation'
+        TabOrder = 0
+        object Label2: TLabel
+          Left = 16
+          Top = 27
+          Width = 40
           Height = 13
-          Caption = 'Frame type lookahead frames:'
+          Caption = 'Method:'
         end
-        object FastFirstPassBtn: TsCheckBox
-          Left = 12
-          Top = 12
-          Width = 102
-          Height = 20
-          Caption = 'No fast first pass'
+        object Label3: TLabel
+          Left = 16
+          Top = 51
+          Width = 99
+          Height = 13
+          Caption = 'Subpixel refinement:'
+        end
+        object MEMethodList: TsComboBox
+          Left = 121
+          Top = 24
+          Width = 200
+          Height = 21
+          Alignment = taLeftJustify
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'COMBOBOX'
+          Style = csDropDownList
+          Color = clWhite
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemIndex = 1
+          ParentFont = False
           TabOrder = 0
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
+          Text = 'Hexagonal search'
+          Items.Strings = (
+            'Diamon search'
+            'Hexagonal search'
+            'Uneven multi-hexagonal search'
+            'Exhaustive search'
+            'Hadamard exhaustive search')
         end
-        object MBTreeRCBtn: TsCheckBox
-          Left = 12
-          Top = 35
-          Width = 109
-          Height = 20
-          Caption = 'Macroblock-tree rc'
-          Checked = True
-          State = cbChecked
-          TabOrder = 1
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
-        end
-        object FrameLookEdit: TJvSpinEdit
-          Left = 165
-          Top = 58
+        object MESubpixelEdit: TJvSpinEdit
+          Left = 121
+          Top = 48
           Width = 50
           Height = 21
           CheckOptions = [coCheckOnExit, coCropBeyondLimit]
           Alignment = taCenter
           ButtonKind = bkClassic
-          MaxValue = 250.000000000000000000
-          Value = 40.000000000000000000
-          TabOrder = 2
+          MaxValue = 11.000000000000000000
+          Value = 7.000000000000000000
+          TabOrder = 1
         end
       end
-    end
-    object TabSheet1: TTabSheet
-      Caption = 'Motion'
-      object Panel1: TsPanel
-        Left = 0
-        Top = 0
-        Width = 621
-        Height = 461
-        Align = alClient
-        BevelOuter = bvNone
-        ParentBackground = False
-        TabOrder = 0
-        SkinData.SkinSection = 'PANEL'
-        object GroupBox1: TGroupBox
-          Left = 8
-          Top = 8
-          Width = 601
-          Height = 81
-          Caption = 'Motion Estimation'
+      object GroupBox2: TGroupBox
+        Left = 8
+        Top = 95
+        Width = 386
+        Height = 58
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Motion vector'
+        TabOrder = 1
+        object Label4: TLabel
+          Left = 16
+          Top = 28
+          Width = 94
+          Height = 13
+          Caption = 'Max. search range:'
+        end
+        object MEMaxsearhcRangeEdit: TJvSpinEdit
+          Left = 121
+          Top = 24
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          CheckMinValue = True
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          Value = 16.000000000000000000
           TabOrder = 0
-          object Label2: TLabel
-            Left = 16
-            Top = 27
-            Width = 40
-            Height = 13
-            Caption = 'Method:'
-          end
-          object Label3: TLabel
-            Left = 16
-            Top = 51
-            Width = 99
-            Height = 13
-            Caption = 'Subpixel refinement:'
-          end
-          object MEMethodList: TsComboBox
-            Left = 121
-            Top = 24
-            Width = 200
-            Height = 21
-            Alignment = taLeftJustify
-            BoundLabel.Indent = 0
-            BoundLabel.Font.Charset = DEFAULT_CHARSET
-            BoundLabel.Font.Color = clWindowText
-            BoundLabel.Font.Height = -11
-            BoundLabel.Font.Name = 'Tahoma'
-            BoundLabel.Font.Style = []
-            BoundLabel.Layout = sclLeft
-            BoundLabel.MaxWidth = 0
-            BoundLabel.UseSkinColor = True
-            SkinData.SkinSection = 'COMBOBOX'
-            Style = csDropDownList
-            Color = clWhite
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ItemIndex = 1
-            ParentFont = False
-            TabOrder = 0
-            Text = 'Hexagonal search'
-            Items.Strings = (
-              'Diamon search'
-              'Hexagonal search'
-              'Uneven multi-hexagonal search'
-              'Exhaustive search'
-              'Hadamard exhaustive search')
-          end
-          object MESubpixelEdit: TJvSpinEdit
-            Left = 121
-            Top = 48
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            MaxValue = 10.000000000000000000
-            MinValue = 1.000000000000000000
-            Value = 7.000000000000000000
-            TabOrder = 1
-          end
         end
-        object GroupBox2: TGroupBox
-          Left = 8
-          Top = 95
-          Width = 601
-          Height = 58
-          Caption = 'Motion vector'
-          TabOrder = 1
-          object Label4: TLabel
-            Left = 16
-            Top = 28
-            Width = 94
-            Height = 13
-            Caption = 'Max. search range:'
-          end
-          object MEMaxsearhcRangeEdit: TJvSpinEdit
-            Left = 121
-            Top = 24
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            CheckMinValue = True
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            Value = 16.000000000000000000
-            TabOrder = 0
-          end
+      end
+      object GroupBox3: TGroupBox
+        Left = 8
+        Top = 159
+        Width = 386
+        Height = 130
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Prediction'
+        TabOrder = 2
+        object Label5: TLabel
+          Left = 16
+          Top = 28
+          Width = 111
+          Height = 13
+          Caption = 'Direct prediction mode:'
         end
-        object GroupBox3: TGroupBox
-          Left = 8
-          Top = 159
-          Width = 601
-          Height = 130
-          Caption = 'Prediction'
-          TabOrder = 2
-          object Label5: TLabel
-            Left = 16
-            Top = 28
-            Width = 111
-            Height = 13
-            Caption = 'Direct prediction mode:'
-          end
-          object Label6: TLabel
-            Left = 16
-            Top = 55
-            Width = 153
-            Height = 13
-            Caption = 'Weight prediction for P-Frames:'
-          end
-          object MEPredictModeList: TsComboBox
-            Left = 183
-            Top = 24
-            Width = 100
-            Height = 21
-            Alignment = taLeftJustify
-            BoundLabel.Indent = 0
-            BoundLabel.Font.Charset = DEFAULT_CHARSET
-            BoundLabel.Font.Color = clWindowText
-            BoundLabel.Font.Height = -11
-            BoundLabel.Font.Name = 'Tahoma'
-            BoundLabel.Font.Style = []
-            BoundLabel.Layout = sclLeft
-            BoundLabel.MaxWidth = 0
-            BoundLabel.UseSkinColor = True
-            SkinData.SkinSection = 'COMBOBOX'
-            Style = csDropDownList
-            Color = clWhite
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ItemIndex = 1
-            ParentFont = False
-            TabOrder = 0
-            Text = 'Spatial'
-            Items.Strings = (
-              'None'
-              'Spatial'
-              'Temporal'
-              'Auto')
-          end
-          object MeWeightPList: TsComboBox
-            Left = 183
-            Top = 51
-            Width = 178
-            Height = 21
-            Alignment = taLeftJustify
-            BoundLabel.Indent = 0
-            BoundLabel.Font.Charset = DEFAULT_CHARSET
-            BoundLabel.Font.Color = clWindowText
-            BoundLabel.Font.Height = -11
-            BoundLabel.Font.Name = 'Tahoma'
-            BoundLabel.Font.Style = []
-            BoundLabel.Layout = sclLeft
-            BoundLabel.MaxWidth = 0
-            BoundLabel.UseSkinColor = True
-            SkinData.SkinSection = 'COMBOBOX'
-            Style = csDropDownList
-            Color = clWhite
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ItemIndex = 1
-            ParentFont = False
-            TabOrder = 1
-            Text = 'Weight references'
-            Items.Strings = (
-              'Disabled'
-              'Weight references'
-              'Weight references + duplicates')
-          end
-        end
-        object MEConstrainedBtn: TsCheckBox
-          Left = 24
-          Top = 260
+        object Label6: TLabel
+          Left = 16
+          Top = 55
           Width = 153
-          Height = 20
-          Caption = 'Constrained intra prediction'
-          TabOrder = 3
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
+          Height = 13
+          Caption = 'Weight prediction for P-Frames:'
         end
-        object MeWeightBBtn: TsCheckBox
-          Left = 24
-          Top = 237
-          Width = 169
-          Height = 20
-          Caption = 'Weight prediction for B-Frames'
-          Checked = True
-          State = cbChecked
-          TabOrder = 4
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
+        object MEPredictModeList: TsComboBox
+          Left = 183
+          Top = 24
+          Width = 100
+          Height = 21
+          Alignment = taLeftJustify
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'COMBOBOX'
+          Style = csDropDownList
+          Color = clWhite
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemIndex = 1
+          ParentFont = False
+          TabOrder = 0
+          Text = 'Spatial'
+          Items.Strings = (
+            'None'
+            'Spatial'
+            'Temporal'
+            'Auto')
         end
+        object MeWeightPList: TsComboBox
+          Left = 183
+          Top = 51
+          Width = 178
+          Height = 21
+          Alignment = taLeftJustify
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'COMBOBOX'
+          Style = csDropDownList
+          Color = clWhite
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemIndex = 1
+          ParentFont = False
+          TabOrder = 1
+          Text = 'Weight references'
+          Items.Strings = (
+            'Disabled'
+            'Weight references'
+            'Weight references + duplicates')
+        end
+      end
+      object MEConstrainedBtn: TsCheckBox
+        Left = 24
+        Top = 260
+        Width = 153
+        Height = 20
+        Caption = 'Constrained intra prediction'
+        TabOrder = 3
+        SkinData.SkinSection = 'CHECKBOX'
+        ImgChecked = 0
+        ImgUnchecked = 0
+      end
+      object MeWeightBBtn: TsCheckBox
+        Left = 24
+        Top = 237
+        Width = 169
+        Height = 20
+        Caption = 'Weight prediction for B-Frames'
+        Checked = True
+        State = cbChecked
+        TabOrder = 4
+        SkinData.SkinSection = 'CHECKBOX'
+        ImgChecked = 0
+        ImgUnchecked = 0
       end
     end
     object TabSheet2: TTabSheet
       Caption = 'Partition'
       ImageIndex = 1
-      object Panel2: TsPanel
-        Left = 0
-        Top = 0
-        Width = 621
-        Height = 461
-        Align = alClient
-        BevelOuter = bvNone
-        ParentBackground = False
+      object Prediction1Btn: TsCheckBox
+        Left = 16
+        Top = 24
+        Width = 140
+        Height = 20
+        Caption = '8x8 dct spatial transform'
+        Checked = True
+        State = cbChecked
         TabOrder = 0
-        SkinData.SkinSection = 'PANEL'
-        object Prediction1Btn: TsCheckBox
-          Left = 16
-          Top = 24
-          Width = 140
-          Height = 20
-          Caption = '8x8 dct spatial transform'
-          Checked = True
-          State = cbChecked
-          TabOrder = 0
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
-        end
-        object Prediction2Btn: TsCheckBox
-          Left = 16
-          Top = 47
-          Width = 264
-          Height = 20
-          Caption = '8x8, 8x16 and 8x16 p-frame intra-predicted blocks'
-          Checked = True
-          State = cbChecked
-          TabOrder = 1
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
-        end
-        object Prediction3Btn: TsCheckBox
-          Left = 16
-          Top = 70
-          Width = 264
-          Height = 20
-          Caption = '8x8, 8x16 and 8x16 b-frame intra-predicted blocks'
-          Checked = True
-          State = cbChecked
-          TabOrder = 2
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
-        end
-        object Prediction4Btn: TsCheckBox
-          Left = 16
-          Top = 93
-          Width = 252
-          Height = 20
-          Caption = '4x4, 4x8 and 8x8 p-frame intra-predicted blocks'
-          TabOrder = 3
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
-        end
-        object Prediction5Btn: TsCheckBox
-          Left = 16
-          Top = 116
-          Width = 144
-          Height = 20
-          Caption = '8x8 intra-predicted blocks'
-          Checked = True
-          State = cbChecked
-          TabOrder = 4
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
-        end
-        object Prediction6Btn: TsCheckBox
-          Left = 16
-          Top = 139
-          Width = 144
-          Height = 20
-          Caption = '4x4 intra-predicted blocks'
-          Checked = True
-          State = cbChecked
-          TabOrder = 5
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
-        end
+        SkinData.SkinSection = 'CHECKBOX'
+        ImgChecked = 0
+        ImgUnchecked = 0
+      end
+      object Prediction2Btn: TsCheckBox
+        Left = 16
+        Top = 47
+        Width = 264
+        Height = 20
+        Caption = '8x8, 8x16 and 8x16 p-frame intra-predicted blocks'
+        Checked = True
+        State = cbChecked
+        TabOrder = 1
+        SkinData.SkinSection = 'CHECKBOX'
+        ImgChecked = 0
+        ImgUnchecked = 0
+      end
+      object Prediction3Btn: TsCheckBox
+        Left = 16
+        Top = 70
+        Width = 264
+        Height = 20
+        Caption = '8x8, 8x16 and 8x16 b-frame intra-predicted blocks'
+        Checked = True
+        State = cbChecked
+        TabOrder = 2
+        SkinData.SkinSection = 'CHECKBOX'
+        ImgChecked = 0
+        ImgUnchecked = 0
+      end
+      object Prediction4Btn: TsCheckBox
+        Left = 16
+        Top = 93
+        Width = 252
+        Height = 20
+        Caption = '4x4, 4x8 and 8x8 p-frame intra-predicted blocks'
+        TabOrder = 3
+        SkinData.SkinSection = 'CHECKBOX'
+        ImgChecked = 0
+        ImgUnchecked = 0
+      end
+      object Prediction5Btn: TsCheckBox
+        Left = 16
+        Top = 116
+        Width = 144
+        Height = 20
+        Caption = '8x8 intra-predicted blocks'
+        Checked = True
+        State = cbChecked
+        TabOrder = 4
+        SkinData.SkinSection = 'CHECKBOX'
+        ImgChecked = 0
+        ImgUnchecked = 0
+      end
+      object Prediction6Btn: TsCheckBox
+        Left = 16
+        Top = 139
+        Width = 144
+        Height = 20
+        Caption = '4x4 intra-predicted blocks'
+        Checked = True
+        State = cbChecked
+        TabOrder = 5
+        SkinData.SkinSection = 'CHECKBOX'
+        ImgChecked = 0
+        ImgUnchecked = 0
       end
     end
     object TabSheet3: TTabSheet
       Caption = 'Frame'
       ImageIndex = 2
-      object Panel3: TsPanel
-        Left = 0
-        Top = 0
-        Width = 621
-        Height = 461
-        Align = alClient
-        BevelOuter = bvNone
-        ParentBackground = False
+      DesignSize = (
+        406
+        434)
+      object GroupBox5: TGroupBox
+        Left = 8
+        Top = 8
+        Width = 386
+        Height = 161
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Frame encoding'
         TabOrder = 0
-        SkinData.SkinSection = 'PANEL'
-        object GroupBox5: TGroupBox
-          Left = 8
-          Top = 8
-          Width = 601
-          Height = 161
-          Caption = 'Frame encoding'
+        object Label7: TLabel
+          Left = 16
+          Top = 129
+          Width = 110
+          Height = 13
+          Caption = 'Max reference frames:'
+        end
+        object FrameInterlacedList: TsComboBox
+          Left = 136
+          Top = 99
+          Width = 145
+          Height = 21
+          Alignment = taLeftJustify
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'COMBOBOX'
+          Style = csDropDownList
+          Color = clWhite
+          Enabled = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemIndex = 0
+          ParentFont = False
           TabOrder = 0
-          object Label7: TLabel
-            Left = 16
-            Top = 129
-            Width = 110
-            Height = 13
-            Caption = 'Max reference frames:'
-          end
-          object FrameInterlacedList: TsComboBox
-            Left = 136
-            Top = 99
-            Width = 145
-            Height = 21
-            Alignment = taLeftJustify
-            BoundLabel.Indent = 0
-            BoundLabel.Font.Charset = DEFAULT_CHARSET
-            BoundLabel.Font.Color = clWindowText
-            BoundLabel.Font.Height = -11
-            BoundLabel.Font.Name = 'Tahoma'
-            BoundLabel.Font.Style = []
-            BoundLabel.Layout = sclLeft
-            BoundLabel.MaxWidth = 0
-            BoundLabel.UseSkinColor = True
-            SkinData.SkinSection = 'COMBOBOX'
-            Style = csDropDownList
-            Color = clWhite
-            Enabled = False
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ItemIndex = 0
-            ParentFont = False
-            TabOrder = 0
-            Text = 'Bottom field first'
-            Items.Strings = (
-              'Bottom field first'
-              'Top field first'
-              'Fake interlaced')
-          end
-          object FrameGopList: TsComboBox
-            Left = 136
-            Top = 72
-            Width = 98
-            Height = 21
-            Alignment = taLeftJustify
-            BoundLabel.Indent = 0
-            BoundLabel.Font.Charset = DEFAULT_CHARSET
-            BoundLabel.Font.Color = clWindowText
-            BoundLabel.Font.Height = -11
-            BoundLabel.Font.Name = 'Tahoma'
-            BoundLabel.Font.Style = []
-            BoundLabel.Layout = sclLeft
-            BoundLabel.MaxWidth = 0
-            BoundLabel.UseSkinColor = True
-            SkinData.SkinSection = 'COMBOBOX'
-            Style = csDropDownList
-            Color = clWhite
-            Enabled = False
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ItemIndex = 0
-            ParentFont = False
-            TabOrder = 1
-            Text = 'Normal Mode'
-            Items.Strings = (
-              'Normal Mode'
-              'Blu-ray Mode')
-          end
-          object FrameMaxRefEdit: TJvSpinEdit
-            Left = 136
-            Top = 126
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            ButtonKind = bkClassic
-            MaxValue = 16.000000000000000000
-            MinValue = 1.000000000000000000
-            Value = 3.000000000000000000
-            TabOrder = 2
-          end
-          object FrameLoopThrEdit: TJvSpinEdit
-            Left = 248
-            Top = 45
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            ButtonKind = bkClassic
-            MaxValue = 6.000000000000000000
-            MinValue = -6.000000000000000000
-            TabOrder = 3
-          end
-          object FrameLoopStrEdit: TJvSpinEdit
-            Left = 192
-            Top = 45
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            ButtonKind = bkClassic
-            MaxValue = 6.000000000000000000
-            MinValue = -6.000000000000000000
-            TabOrder = 4
-          end
+          Text = 'Bottom field first'
+          Items.Strings = (
+            'Bottom field first'
+            'Top field first'
+            'Fake interlaced')
         end
-        object GroupBox6: TGroupBox
-          Left = 8
-          Top = 175
-          Width = 601
-          Height = 138
-          Caption = 'B-Frames'
+        object FrameGopList: TsComboBox
+          Left = 136
+          Top = 72
+          Width = 98
+          Height = 21
+          Alignment = taLeftJustify
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'COMBOBOX'
+          Style = csDropDownList
+          Color = clWhite
+          Enabled = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemIndex = 0
+          ParentFont = False
           TabOrder = 1
-          object Label8: TLabel
-            Left = 16
-            Top = 28
-            Width = 135
-            Height = 13
-            Caption = 'Max. consequtive B-frames:'
-          end
-          object Label9: TLabel
-            Left = 16
-            Top = 55
-            Width = 64
-            Height = 13
-            Caption = 'B-frame bias:'
-          end
-          object Label10: TLabel
-            Left = 16
-            Top = 82
-            Width = 129
-            Height = 13
-            Caption = 'Adaptive b-frame decision:'
-          end
-          object Label11: TLabel
-            Left = 16
-            Top = 109
-            Width = 111
-            Height = 13
-            Caption = 'B-frames as reference:'
-          end
-          object FrameAdaptiveBList: TsComboBox
-            Left = 157
-            Top = 78
-            Width = 100
-            Height = 21
-            Alignment = taLeftJustify
-            BoundLabel.Indent = 0
-            BoundLabel.Font.Charset = DEFAULT_CHARSET
-            BoundLabel.Font.Color = clWindowText
-            BoundLabel.Font.Height = -11
-            BoundLabel.Font.Name = 'Tahoma'
-            BoundLabel.Font.Style = []
-            BoundLabel.Layout = sclLeft
-            BoundLabel.MaxWidth = 0
-            BoundLabel.UseSkinColor = True
-            SkinData.SkinSection = 'COMBOBOX'
-            Style = csDropDownList
-            Color = clWhite
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ItemIndex = 1
-            ParentFont = False
-            TabOrder = 0
-            Text = 'Fast'
-            Items.Strings = (
-              'Disabled'
-              'Fast'
-              'Optimal')
-          end
-          object FrameRefList: TsComboBox
-            Left = 157
-            Top = 105
-            Width = 196
-            Height = 21
-            Alignment = taLeftJustify
-            BoundLabel.Indent = 0
-            BoundLabel.Font.Charset = DEFAULT_CHARSET
-            BoundLabel.Font.Color = clWindowText
-            BoundLabel.Font.Height = -11
-            BoundLabel.Font.Name = 'Tahoma'
-            BoundLabel.Font.Style = []
-            BoundLabel.Layout = sclLeft
-            BoundLabel.MaxWidth = 0
-            BoundLabel.UseSkinColor = True
-            SkinData.SkinSection = 'COMBOBOX'
-            Style = csDropDownList
-            Color = clWhite
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ItemIndex = 1
-            ParentFont = False
-            TabOrder = 1
-            Text = 'Strictly Hierarchical Pyramid'
-            Items.Strings = (
-              'Disabled'
-              'Strictly Hierarchical Pyramid'
-              'Non-strict (not blu-ray compatible)')
-          end
-          object FrameBBiasEdit: TJvSpinEdit
-            Left = 157
-            Top = 51
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            MaxValue = 100.000000000000000000
-            MinValue = -100.000000000000000000
-            TabOrder = 2
-          end
-          object FrameMaxConBEdit: TJvSpinEdit
-            Left = 157
-            Top = 24
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            MaxValue = 16.000000000000000000
-            Value = 3.000000000000000000
-            TabOrder = 3
-          end
+          Text = 'Normal Mode'
+          Items.Strings = (
+            'Normal Mode'
+            'Blu-ray Mode')
         end
-        object GroupBox7: TGroupBox
-          Left = 8
-          Top = 319
-          Width = 601
-          Height = 106
-          Caption = 'I-Frames'
+        object FrameMaxRefEdit: TJvSpinEdit
+          Left = 136
+          Top = 126
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          ButtonKind = bkClassic
+          MaxValue = 16.000000000000000000
+          MinValue = 1.000000000000000000
+          Value = 3.000000000000000000
           TabOrder = 2
-          Visible = False
-          object Label12: TLabel
-            Left = 16
-            Top = 28
-            Width = 97
-            Height = 13
-            Caption = 'GOP size (min/max):'
-          end
-          object Label13: TLabel
-            Left = 16
-            Top = 55
-            Width = 51
-            Height = 13
-            Caption = 'Threshold:'
-          end
-          object FrameIIntraBtn: TsCheckBox
-            Left = 16
-            Top = 78
-            Width = 120
-            Height = 20
-            Caption = 'Periodic intra refresh'
-            TabOrder = 0
-            SkinData.SkinSection = 'CHECKBOX'
-            ImgChecked = 0
-            ImgUnchecked = 0
-          end
-          object FrameIGOPMinEdit: TJvSpinEdit
-            Left = 136
-            Top = 24
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            MaxValue = 100.000000000000000000
-            TabOrder = 1
-          end
-          object FrameIThresholdEdit: TJvSpinEdit
-            Left = 136
-            Top = 51
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            CheckMinValue = True
-            CheckMaxValue = True
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            TabOrder = 2
-          end
-          object FrameIGOPMaxEdit: TJvSpinEdit
-            Left = 192
-            Top = 24
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            CheckMinValue = True
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            Value = 250.000000000000000000
-            TabOrder = 3
-          end
+        end
+        object FrameLoopThrEdit: TJvSpinEdit
+          Left = 248
+          Top = 45
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          ButtonKind = bkClassic
+          MaxValue = 6.000000000000000000
+          MinValue = -6.000000000000000000
+          TabOrder = 3
+        end
+        object FrameLoopStrEdit: TJvSpinEdit
+          Left = 192
+          Top = 45
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          ButtonKind = bkClassic
+          MaxValue = 6.000000000000000000
+          MinValue = -6.000000000000000000
+          TabOrder = 4
         end
         object FrameCABACBtn: TsCheckBox
-          Left = 18
-          Top = 32
+          Left = 16
+          Top = 24
           Width = 54
           Height = 20
           Caption = 'CABAC'
           Checked = True
           State = cbChecked
-          TabOrder = 3
+          TabOrder = 5
+          OnClick = FrameCABACBtnClick
           SkinData.SkinSection = 'CHECKBOX'
           ImgChecked = 0
           ImgUnchecked = 0
         end
         object FrameInterlacedBtn: TsCheckBox
-          Left = 18
-          Top = 112
+          Left = 16
+          Top = 100
           Width = 73
           Height = 20
           Caption = 'Interlaced:'
-          TabOrder = 4
+          TabOrder = 6
           OnClick = FrameInterlacedBtnClick
           SkinData.SkinSection = 'CHECKBOX'
           ImgChecked = 0
           ImgUnchecked = 0
         end
         object FrameLoopBtn: TsCheckBox
-          Left = 18
-          Top = 55
+          Left = 16
+          Top = 46
           Width = 172
           Height = 20
           Caption = 'Loop filter: Strength/Threshold:'
           Checked = True
           State = cbChecked
-          TabOrder = 5
+          TabOrder = 7
           OnClick = FrameLoopBtnClick
           SkinData.SkinSection = 'CHECKBOX'
           ImgChecked = 0
           ImgUnchecked = 0
         end
         object FrameOpenGOPBtn: TsCheckBox
-          Left = 18
-          Top = 82
+          Left = 16
+          Top = 73
           Width = 74
           Height = 20
           Caption = 'Open GOP:'
-          TabOrder = 6
+          TabOrder = 8
           OnClick = FrameOpenGOPBtnClick
           SkinData.SkinSection = 'CHECKBOX'
           ImgChecked = 0
           ImgUnchecked = 0
         end
       end
+      object GroupBox6: TGroupBox
+        Left = 8
+        Top = 175
+        Width = 386
+        Height = 138
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'B-Frames'
+        TabOrder = 1
+        object Label8: TLabel
+          Left = 16
+          Top = 28
+          Width = 135
+          Height = 13
+          Caption = 'Max. consequtive B-frames:'
+        end
+        object Label9: TLabel
+          Left = 16
+          Top = 55
+          Width = 64
+          Height = 13
+          Caption = 'B-frame bias:'
+        end
+        object Label10: TLabel
+          Left = 16
+          Top = 82
+          Width = 129
+          Height = 13
+          Caption = 'Adaptive b-frame decision:'
+        end
+        object Label11: TLabel
+          Left = 16
+          Top = 109
+          Width = 111
+          Height = 13
+          Caption = 'B-frames as reference:'
+        end
+        object FrameAdaptiveBList: TsComboBox
+          Left = 157
+          Top = 78
+          Width = 100
+          Height = 21
+          Alignment = taLeftJustify
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'COMBOBOX'
+          Style = csDropDownList
+          Color = clWhite
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemIndex = 1
+          ParentFont = False
+          TabOrder = 0
+          Text = 'Fast'
+          Items.Strings = (
+            'Disabled'
+            'Fast'
+            'Optimal')
+        end
+        object FrameRefList: TsComboBox
+          Left = 157
+          Top = 105
+          Width = 196
+          Height = 21
+          Alignment = taLeftJustify
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'COMBOBOX'
+          Style = csDropDownList
+          Color = clWhite
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemIndex = 1
+          ParentFont = False
+          TabOrder = 1
+          Text = 'Strictly Hierarchical Pyramid'
+          Items.Strings = (
+            'Disabled'
+            'Strictly Hierarchical Pyramid'
+            'Non-strict (not blu-ray compatible)')
+        end
+        object FrameBBiasEdit: TJvSpinEdit
+          Left = 157
+          Top = 51
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          MaxValue = 100.000000000000000000
+          MinValue = -100.000000000000000000
+          TabOrder = 2
+        end
+        object FrameMaxConBEdit: TJvSpinEdit
+          Left = 157
+          Top = 24
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          MaxValue = 16.000000000000000000
+          Value = 3.000000000000000000
+          TabOrder = 3
+        end
+      end
+      object GroupBox7: TGroupBox
+        Left = 8
+        Top = 319
+        Width = 386
+        Height = 106
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'I-Frames'
+        TabOrder = 2
+        Visible = False
+        object Label12: TLabel
+          Left = 16
+          Top = 28
+          Width = 97
+          Height = 13
+          Caption = 'GOP size (min/max):'
+        end
+        object Label13: TLabel
+          Left = 16
+          Top = 55
+          Width = 51
+          Height = 13
+          Caption = 'Threshold:'
+        end
+        object FrameIIntraBtn: TsCheckBox
+          Left = 16
+          Top = 78
+          Width = 120
+          Height = 20
+          Caption = 'Periodic intra refresh'
+          TabOrder = 0
+          SkinData.SkinSection = 'CHECKBOX'
+          ImgChecked = 0
+          ImgUnchecked = 0
+        end
+        object FrameIGOPMinEdit: TJvSpinEdit
+          Left = 136
+          Top = 24
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          MaxValue = 100.000000000000000000
+          TabOrder = 1
+        end
+        object FrameIThresholdEdit: TJvSpinEdit
+          Left = 136
+          Top = 51
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          CheckMinValue = True
+          CheckMaxValue = True
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          TabOrder = 2
+        end
+        object FrameIGOPMaxEdit: TJvSpinEdit
+          Left = 192
+          Top = 24
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          CheckMinValue = True
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          Value = 250.000000000000000000
+          TabOrder = 3
+        end
+      end
     end
     object TabSheet4: TTabSheet
       Caption = 'Analysis'
       ImageIndex = 3
-      object Panel4: TsPanel
-        Left = 0
-        Top = 0
-        Width = 621
-        Height = 461
-        Align = alClient
-        BevelOuter = bvNone
-        ParentBackground = False
+      DesignSize = (
+        406
+        434)
+      object Label19: TLabel
+        Left = 24
+        Top = 338
+        Width = 98
+        Height = 13
+        Caption = 'Quantisation matrix:'
+      end
+      object GroupBox8: TGroupBox
+        Left = 8
+        Top = 8
+        Width = 386
+        Height = 233
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Analysis'
         TabOrder = 0
-        SkinData.SkinSection = 'PANEL'
-        object Label19: TLabel
-          Left = 24
-          Top = 338
-          Width = 98
+        object Label14: TLabel
+          Left = 16
+          Top = 147
+          Width = 196
           Height = 13
-          Caption = 'Quantisation matrix:'
+          Caption = 'Psychovisual rate distortion optimisation:'
         end
-        object GroupBox8: TGroupBox
-          Left = 8
-          Top = 8
-          Width = 601
-          Height = 233
-          Caption = 'Analysis'
-          TabOrder = 0
-          object Label14: TLabel
-            Left = 16
-            Top = 147
-            Width = 196
-            Height = 13
-            Caption = 'Psychovisual rate distortion optimisation:'
-          end
-          object Label15: TLabel
-            Left = 16
-            Top = 174
-            Width = 93
-            Height = 13
-            Caption = 'Psychovisual trellis:'
-          end
-          object Label16: TLabel
-            Left = 16
-            Top = 202
-            Width = 78
-            Height = 13
-            Caption = 'Noise reduction:'
-          end
-          object AnalysisTrellisList: TsComboBox
-            Left = 135
-            Top = 68
-            Width = 242
-            Height = 21
-            Alignment = taLeftJustify
-            BoundLabel.Indent = 0
-            BoundLabel.Font.Charset = DEFAULT_CHARSET
-            BoundLabel.Font.Color = clWindowText
-            BoundLabel.Font.Height = -11
-            BoundLabel.Font.Name = 'Tahoma'
-            BoundLabel.Font.Style = []
-            BoundLabel.Layout = sclLeft
-            BoundLabel.MaxWidth = 0
-            BoundLabel.UseSkinColor = True
-            SkinData.SkinSection = 'COMBOBOX'
-            Style = csDropDownList
-            Color = clWhite
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ItemIndex = 0
-            ParentFont = False
-            TabOrder = 0
-            Text = 'Only on the final encode of a macroblock '
-            Items.Strings = (
-              'Only on the final encode of a macroblock '
-              'On all mode decisions')
-          end
-          object AnalysisNoiseEdit: TJvSpinEdit
-            Left = 119
-            Top = 198
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            CheckMinValue = True
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            TabOrder = 1
-          end
-          object AnalysisPTrellistEdit: TJvSpinEdit
-            Left = 119
-            Top = 171
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            Increment = 0.100000000000000000
-            MaxValue = 20.000000000000000000
-            ValueType = vtFloat
-            TabOrder = 2
-          end
-          object AnalysisPRateEdit: TJvSpinEdit
-            Left = 218
-            Top = 144
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            Increment = 0.100000000000000000
-            MaxValue = 10.000000000000000000
-            ValueType = vtFloat
-            Value = 1.000000000000000000
-            TabOrder = 3
-          end
+        object Label15: TLabel
+          Left = 16
+          Top = 174
+          Width = 93
+          Height = 13
+          Caption = 'Psychovisual trellis:'
         end
-        object GroupBox9: TGroupBox
-          Left = 8
-          Top = 247
-          Width = 601
-          Height = 82
-          Caption = 'Luma quantisation deadzone'
-          TabOrder = 1
-          object Label17: TLabel
-            Left = 16
-            Top = 55
-            Width = 165
-            Height = 13
-            Caption = 'Inter luma quantisation deadzone:'
-          end
-          object Label18: TLabel
-            Left = 16
-            Top = 28
-            Width = 165
-            Height = 13
-            Caption = 'Intra luma quantisation deadzone:'
-          end
-          object AnalysisLuma2Edit: TJvSpinEdit
-            Left = 192
-            Top = 51
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            MaxValue = 32.000000000000000000
-            Value = 21.000000000000000000
-            TabOrder = 0
-          end
-          object AnalysisLuma1Edit: TJvSpinEdit
-            Left = 192
-            Top = 24
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            MaxValue = 32.000000000000000000
-            Value = 11.000000000000000000
-            TabOrder = 1
-          end
+        object Label16: TLabel
+          Left = 16
+          Top = 202
+          Width = 78
+          Height = 13
+          Caption = 'Noise reduction:'
         end
-        object AnalysisMatrixList: TsComboBox
-          Left = 128
-          Top = 335
-          Width = 75
+        object AnalysisTrellisList: TsComboBox
+          Left = 135
+          Top = 68
+          Width = 242
           Height = 21
           Alignment = taLeftJustify
           BoundLabel.Indent = 0
@@ -961,31 +808,56 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           Font.Style = []
           ItemIndex = 0
           ParentFont = False
-          TabOrder = 2
-          Text = 'Flat matrix'
+          TabOrder = 0
+          Text = 'Only on the final encode of a macroblock '
           Items.Strings = (
-            'Flat matrix'
-            'JVT matrix')
+            'Only on the final encode of a macroblock '
+            'On all mode decisions')
+        end
+        object AnalysisNoiseEdit: TJvSpinEdit
+          Left = 119
+          Top = 198
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          CheckMinValue = True
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          TabOrder = 1
+        end
+        object AnalysisPTrellistEdit: TJvSpinEdit
+          Left = 119
+          Top = 171
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          Increment = 0.100000000000000000
+          MaxValue = 20.000000000000000000
+          ValueType = vtFloat
+          TabOrder = 2
+        end
+        object AnalysisPRateEdit: TJvSpinEdit
+          Left = 218
+          Top = 144
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          Increment = 0.100000000000000000
+          MaxValue = 10.000000000000000000
+          ValueType = vtFloat
+          Value = 1.000000000000000000
+          TabOrder = 3
         end
         object AnalysisChromaBtn: TsCheckBox
-          Left = 24
-          Top = 55
+          Left = 16
+          Top = 47
           Width = 144
           Height = 20
           Caption = 'Chroma motion estimation'
-          Checked = True
-          State = cbChecked
-          TabOrder = 3
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
-        end
-        object AnalysisDCTBtn: TsCheckBox
-          Left = 24
-          Top = 124
-          Width = 155
-          Height = 20
-          Caption = 'DCT decimaiton on P-frames'
           Checked = True
           State = cbChecked
           TabOrder = 4
@@ -993,12 +865,12 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           ImgChecked = 0
           ImgUnchecked = 0
         end
-        object AnalysisFastSkipBtn: TsCheckBox
-          Left = 24
-          Top = 101
-          Width = 171
+        object AnalysisDCTBtn: TsCheckBox
+          Left = 16
+          Top = 116
+          Width = 155
           Height = 20
-          Caption = 'Fast skip detection on P-frames'
+          Caption = 'DCT decimaiton on P-frames'
           Checked = True
           State = cbChecked
           TabOrder = 5
@@ -1006,12 +878,12 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           ImgChecked = 0
           ImgUnchecked = 0
         end
-        object AnalysisMixedRefBtn: TsCheckBox
-          Left = 24
-          Top = 32
-          Width = 103
+        object AnalysisFastSkipBtn: TsCheckBox
+          Left = 16
+          Top = 93
+          Width = 171
           Height = 20
-          Caption = 'Mixed references'
+          Caption = 'Fast skip detection on P-frames'
           Checked = True
           State = cbChecked
           TabOrder = 6
@@ -1019,453 +891,533 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           ImgChecked = 0
           ImgUnchecked = 0
         end
+        object AnalysisMixedRefBtn: TsCheckBox
+          Left = 16
+          Top = 24
+          Width = 103
+          Height = 20
+          Caption = 'Mixed references'
+          Checked = True
+          State = cbChecked
+          TabOrder = 7
+          SkinData.SkinSection = 'CHECKBOX'
+          ImgChecked = 0
+          ImgUnchecked = 0
+        end
         object AnalysisTrellisBtn: TsCheckBox
-          Left = 24
-          Top = 78
+          Left = 16
+          Top = 70
           Width = 113
           Height = 20
           Caption = 'Trellis quantization:'
           Checked = True
           State = cbChecked
-          TabOrder = 7
+          TabOrder = 8
           OnClick = AnalysisTrellisBtnClick
           SkinData.SkinSection = 'CHECKBOX'
           ImgChecked = 0
           ImgUnchecked = 0
         end
       end
+      object GroupBox9: TGroupBox
+        Left = 8
+        Top = 247
+        Width = 386
+        Height = 82
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Luma quantisation deadzone'
+        TabOrder = 1
+        object Label17: TLabel
+          Left = 16
+          Top = 55
+          Width = 165
+          Height = 13
+          Caption = 'Inter luma quantisation deadzone:'
+        end
+        object Label18: TLabel
+          Left = 16
+          Top = 28
+          Width = 165
+          Height = 13
+          Caption = 'Intra luma quantisation deadzone:'
+        end
+        object AnalysisLuma2Edit: TJvSpinEdit
+          Left = 192
+          Top = 51
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          MaxValue = 32.000000000000000000
+          Value = 21.000000000000000000
+          TabOrder = 0
+        end
+        object AnalysisLuma1Edit: TJvSpinEdit
+          Left = 192
+          Top = 24
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          MaxValue = 32.000000000000000000
+          Value = 11.000000000000000000
+          TabOrder = 1
+        end
+      end
+      object AnalysisMatrixList: TsComboBox
+        Left = 128
+        Top = 335
+        Width = 75
+        Height = 21
+        Alignment = taLeftJustify
+        BoundLabel.Indent = 0
+        BoundLabel.Font.Charset = DEFAULT_CHARSET
+        BoundLabel.Font.Color = clWindowText
+        BoundLabel.Font.Height = -11
+        BoundLabel.Font.Name = 'Tahoma'
+        BoundLabel.Font.Style = []
+        BoundLabel.Layout = sclLeft
+        BoundLabel.MaxWidth = 0
+        BoundLabel.UseSkinColor = True
+        SkinData.SkinSection = 'COMBOBOX'
+        Style = csDropDownList
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ItemIndex = 0
+        ParentFont = False
+        TabOrder = 2
+        Text = 'Flat matrix'
+        Items.Strings = (
+          'Flat matrix'
+          'JVT matrix')
+      end
     end
     object TabSheet5: TTabSheet
       Caption = 'Quantiser'
       ImageIndex = 4
-      object Panel5: TsPanel
-        Left = 0
-        Top = 0
-        Width = 621
-        Height = 461
-        Align = alClient
-        BevelOuter = bvNone
-        ParentBackground = False
+      DesignSize = (
+        406
+        434)
+      object GroupBox10: TGroupBox
+        Left = 8
+        Top = 8
+        Width = 386
+        Height = 193
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Quantiser'
         TabOrder = 0
-        SkinData.SkinSection = 'PANEL'
-        object GroupBox10: TGroupBox
-          Left = 8
-          Top = 8
-          Width = 601
-          Height = 193
-          Caption = 'Quantiser'
+        object Label20: TLabel
+          Left = 16
+          Top = 27
+          Width = 72
+          Height = 13
+          Caption = 'Min. quantiser:'
+        end
+        object Label21: TLabel
+          Left = 16
+          Top = 54
+          Width = 72
+          Height = 13
+          Caption = 'Max quantiser:'
+        end
+        object Label22: TLabel
+          Left = 16
+          Top = 81
+          Width = 100
+          Height = 13
+          Caption = 'Max. quantiser step:'
+        end
+        object Label24: TLabel
+          Left = 16
+          Top = 108
+          Width = 143
+          Height = 13
+          Caption = 'I and P-frame quantiser ratio:'
+        end
+        object Label25: TLabel
+          Left = 16
+          Top = 135
+          Width = 145
+          Height = 13
+          Caption = 'P and B-frame quantiser ratio:'
+        end
+        object Label26: TLabel
+          Left = 16
+          Top = 162
+          Width = 159
+          Height = 13
+          Caption = 'Chroma to luma quantiser offset:'
+        end
+        object MinQuantEdit: TJvSpinEdit
+          Left = 192
+          Top = 24
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          MaxValue = 51.000000000000000000
           TabOrder = 0
-          object Label20: TLabel
-            Left = 16
-            Top = 27
-            Width = 72
-            Height = 13
-            Caption = 'Min. quantiser:'
-          end
-          object Label21: TLabel
-            Left = 16
-            Top = 54
-            Width = 72
-            Height = 13
-            Caption = 'Max quantiser:'
-          end
-          object Label22: TLabel
-            Left = 16
-            Top = 81
-            Width = 100
-            Height = 13
-            Caption = 'Max. quantiser step:'
-          end
-          object Label24: TLabel
-            Left = 16
-            Top = 108
-            Width = 143
-            Height = 13
-            Caption = 'I and P-frame quantiser ratio:'
-          end
-          object Label25: TLabel
-            Left = 16
-            Top = 135
-            Width = 145
-            Height = 13
-            Caption = 'P and B-frame quantiser ratio:'
-          end
-          object Label26: TLabel
-            Left = 16
-            Top = 162
-            Width = 159
-            Height = 13
-            Caption = 'Chroma to luma quantiser offset:'
-          end
-          object MinQuantEdit: TJvSpinEdit
-            Left = 192
-            Top = 24
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            MaxValue = 51.000000000000000000
-            TabOrder = 0
-          end
-          object MaxQuantEdit: TJvSpinEdit
-            Left = 192
-            Top = 51
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            MaxValue = 51.000000000000000000
-            Value = 51.000000000000000000
-            TabOrder = 1
-          end
-          object QauntStepEdit: TJvSpinEdit
-            Left = 192
-            Top = 78
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            MaxValue = 10.000000000000000000
-            Value = 4.000000000000000000
-            TabOrder = 2
-          end
-          object IPQuantEdit: TJvSpinEdit
-            Left = 192
-            Top = 105
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            Increment = 0.100000000000000000
-            MaxValue = 10.000000000000000000
-            MinValue = 1.000000000000000000
-            ValueType = vtFloat
-            Value = 1.400000000000000000
-            TabOrder = 3
-          end
-          object PBQuantEdit: TJvSpinEdit
-            Left = 192
-            Top = 132
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            Increment = 0.100000000000000000
-            MaxValue = 10.000000000000000000
-            MinValue = 1.000000000000000000
-            ValueType = vtFloat
-            Value = 1.300000000000000000
-            TabOrder = 4
-          end
-          object CLQuantEdit: TJvSpinEdit
-            Left = 192
-            Top = 159
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            MaxValue = 12.000000000000000000
-            MinValue = -12.000000000000000000
-            TabOrder = 5
-          end
         end
-        object GroupBox11: TGroupBox
-          Left = 8
-          Top = 207
-          Width = 601
-          Height = 114
-          Caption = 'Quantiser curve compression'
+        object MaxQuantEdit: TJvSpinEdit
+          Left = 192
+          Top = 51
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          MaxValue = 51.000000000000000000
+          Value = 51.000000000000000000
           TabOrder = 1
-          object Label27: TLabel
-            Left = 16
-            Top = 24
-            Width = 165
-            Height = 13
-            Caption = 'Quantiser curve compression (%):'
-          end
-          object Label28: TLabel
-            Left = 16
-            Top = 56
-            Width = 129
-            Height = 13
-            Caption = 'Reduce fluctuation before:'
-          end
-          object Label29: TLabel
-            Left = 16
-            Top = 88
-            Width = 121
-            Height = 13
-            Caption = 'Reduce fluctuation after:'
-          end
-          object QuantCurve1Edit: TJvSpinEdit
-            Left = 192
-            Top = 24
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            MaxValue = 100.000000000000000000
-            Value = 60.000000000000000000
-            TabOrder = 0
-          end
-          object QuantCurve2Edit: TJvSpinEdit
-            Left = 192
-            Top = 51
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            CheckMinValue = True
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            ValueType = vtFloat
-            Value = 20.000000000000000000
-            TabOrder = 1
-          end
-          object QuantCurve3Edit: TJvSpinEdit
-            Left = 192
-            Top = 78
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            Increment = 0.100000000000000000
-            MaxValue = 1.000000000000000000
-            ValueType = vtFloat
-            Value = 0.500000000000000000
-            TabOrder = 2
-          end
         end
-        object GroupBox12: TGroupBox
-          Left = 8
-          Top = 327
-          Width = 601
-          Height = 90
-          Caption = 'Adaptive quantisation'
+        object QauntStepEdit: TJvSpinEdit
+          Left = 192
+          Top = 78
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          MaxValue = 10.000000000000000000
+          Value = 4.000000000000000000
           TabOrder = 2
-          object Label30: TLabel
-            Left = 16
-            Top = 56
-            Width = 46
-            Height = 13
-            Caption = 'Strength:'
-          end
-          object VarianceAQList: TsComboBox
-            Left = 192
-            Top = 24
-            Width = 145
-            Height = 21
-            Alignment = taLeftJustify
-            BoundLabel.Indent = 0
-            BoundLabel.Font.Charset = DEFAULT_CHARSET
-            BoundLabel.Font.Color = clWindowText
-            BoundLabel.Font.Height = -11
-            BoundLabel.Font.Name = 'Tahoma'
-            BoundLabel.Font.Style = []
-            BoundLabel.Layout = sclLeft
-            BoundLabel.MaxWidth = 0
-            BoundLabel.UseSkinColor = True
-            SkinData.SkinSection = 'COMBOBOX'
-            Style = csDropDownList
-            Color = clWhite
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ItemIndex = 0
-            ParentFont = False
-            TabOrder = 0
-            Text = 'Normal'
-            Items.Strings = (
-              'Normal'
-              'Auto')
-          end
-          object AdaptiveEdit: TJvSpinEdit
-            Left = 192
-            Top = 51
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            ButtonKind = bkClassic
-            Increment = 0.100000000000000000
-            MaxValue = 1.500000000000000000
-            MinValue = 0.500000000000000000
-            ValueType = vtFloat
-            Value = 0.500000000000000000
-            TabOrder = 1
-          end
         end
-        object VarianceAQBtn: TsCheckBox
-          Left = 24
-          Top = 352
-          Width = 83
-          Height = 20
-          Caption = 'Variance AQ:'
-          Checked = True
-          State = cbChecked
+        object IPQuantEdit: TJvSpinEdit
+          Left = 192
+          Top = 105
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          Increment = 0.100000000000000000
+          MaxValue = 10.000000000000000000
+          MinValue = 1.000000000000000000
+          ValueType = vtFloat
+          Value = 1.400000000000000000
           TabOrder = 3
-          OnClick = VarianceAQBtnClick
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
         end
+        object PBQuantEdit: TJvSpinEdit
+          Left = 192
+          Top = 132
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          Increment = 0.100000000000000000
+          MaxValue = 10.000000000000000000
+          MinValue = 1.000000000000000000
+          ValueType = vtFloat
+          Value = 1.300000000000000000
+          TabOrder = 4
+        end
+        object CLQuantEdit: TJvSpinEdit
+          Left = 192
+          Top = 159
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          MaxValue = 12.000000000000000000
+          MinValue = -12.000000000000000000
+          TabOrder = 5
+        end
+      end
+      object GroupBox11: TGroupBox
+        Left = 8
+        Top = 207
+        Width = 386
+        Height = 114
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Quantiser curve compression'
+        TabOrder = 1
+        object Label27: TLabel
+          Left = 16
+          Top = 24
+          Width = 165
+          Height = 13
+          Caption = 'Quantiser curve compression (%):'
+        end
+        object Label28: TLabel
+          Left = 16
+          Top = 56
+          Width = 129
+          Height = 13
+          Caption = 'Reduce fluctuation before:'
+        end
+        object Label29: TLabel
+          Left = 16
+          Top = 88
+          Width = 121
+          Height = 13
+          Caption = 'Reduce fluctuation after:'
+        end
+        object QuantCurve1Edit: TJvSpinEdit
+          Left = 192
+          Top = 24
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          MaxValue = 100.000000000000000000
+          Value = 60.000000000000000000
+          TabOrder = 0
+        end
+        object QuantCurve2Edit: TJvSpinEdit
+          Left = 192
+          Top = 51
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          CheckMinValue = True
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          ValueType = vtFloat
+          Value = 20.000000000000000000
+          TabOrder = 1
+        end
+        object QuantCurve3Edit: TJvSpinEdit
+          Left = 192
+          Top = 78
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          Increment = 0.100000000000000000
+          MaxValue = 1.000000000000000000
+          ValueType = vtFloat
+          Value = 0.500000000000000000
+          TabOrder = 2
+        end
+      end
+      object GroupBox12: TGroupBox
+        Left = 8
+        Top = 327
+        Width = 386
+        Height = 90
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Adaptive quantisation'
+        TabOrder = 2
+        object Label30: TLabel
+          Left = 16
+          Top = 56
+          Width = 46
+          Height = 13
+          Caption = 'Strength:'
+        end
+        object VarianceAQList: TsComboBox
+          Left = 192
+          Top = 24
+          Width = 145
+          Height = 21
+          Alignment = taLeftJustify
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'COMBOBOX'
+          Style = csDropDownList
+          Color = clWhite
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemIndex = 0
+          ParentFont = False
+          TabOrder = 0
+          Text = 'Normal'
+          Items.Strings = (
+            'Normal'
+            'Auto')
+        end
+        object AdaptiveEdit: TJvSpinEdit
+          Left = 192
+          Top = 51
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          ButtonKind = bkClassic
+          Increment = 0.100000000000000000
+          MaxValue = 1.500000000000000000
+          MinValue = 0.500000000000000000
+          ValueType = vtFloat
+          Value = 0.500000000000000000
+          TabOrder = 1
+        end
+      end
+      object VarianceAQBtn: TsCheckBox
+        Left = 24
+        Top = 352
+        Width = 83
+        Height = 20
+        Caption = 'Variance AQ:'
+        Checked = True
+        State = cbChecked
+        TabOrder = 3
+        OnClick = VarianceAQBtnClick
+        SkinData.SkinSection = 'CHECKBOX'
+        ImgChecked = 0
+        ImgUnchecked = 0
       end
     end
     object TabSheet6: TTabSheet
       Caption = 'Advanced'
       ImageIndex = 5
-      object Panel6: TsPanel
-        Left = 0
-        Top = 0
-        Width = 621
-        Height = 461
-        Align = alClient
-        BevelOuter = bvNone
-        ParentBackground = False
+      DesignSize = (
+        406
+        434)
+      object GroupBox13: TGroupBox
+        Left = 8
+        Top = 8
+        Width = 386
+        Height = 113
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Video buffer verifier'
         TabOrder = 0
-        SkinData.SkinSection = 'PANEL'
-        object GroupBox13: TGroupBox
-          Left = 8
-          Top = 8
-          Width = 601
-          Height = 113
-          Caption = 'Video buffer verifier'
-          TabOrder = 0
-          object Label31: TLabel
-            Left = 16
-            Top = 27
-            Width = 121
-            Height = 13
-            Caption = 'Max. VBV bitrate (kbit/s):'
-          end
-          object Label32: TLabel
-            Left = 16
-            Top = 54
-            Width = 104
-            Height = 13
-            Caption = 'VBV buffer size (kbit):'
-          end
-          object Label33: TLabel
-            Left = 16
-            Top = 81
-            Width = 160
-            Height = 13
-            Caption = 'Initial VBV buffer occupancy (%):'
-          end
-          object VBFMaxBitrateEdit: TJvSpinEdit
-            Left = 192
-            Top = 24
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            CheckMinValue = True
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            TabOrder = 0
-          end
-          object VBFBufferSizeEdit: TJvSpinEdit
-            Left = 192
-            Top = 51
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            CheckMinValue = True
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            TabOrder = 1
-          end
-          object VBFInitialEdit: TJvSpinEdit
-            Left = 192
-            Top = 78
-            Width = 50
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            MaxValue = 100.000000000000000000
-            Value = 90.000000000000000000
-            TabOrder = 2
-          end
+        object Label31: TLabel
+          Left = 16
+          Top = 27
+          Width = 121
+          Height = 13
+          Caption = 'Max. VBV bitrate (kbit/s):'
         end
-        object GroupBox14: TGroupBox
-          Left = 8
-          Top = 127
-          Width = 601
-          Height = 114
-          Caption = 'Slicing'
+        object Label32: TLabel
+          Left = 16
+          Top = 54
+          Width = 104
+          Height = 13
+          Caption = 'VBV buffer size (kbit):'
+        end
+        object Label33: TLabel
+          Left = 16
+          Top = 81
+          Width = 160
+          Height = 13
+          Caption = 'Initial VBV buffer occupancy (%):'
+        end
+        object VBFMaxBitrateEdit: TJvSpinEdit
+          Left = 192
+          Top = 24
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          CheckMinValue = True
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          TabOrder = 0
+        end
+        object VBFBufferSizeEdit: TJvSpinEdit
+          Left = 192
+          Top = 51
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          CheckMinValue = True
+          Alignment = taCenter
+          ButtonKind = bkClassic
           TabOrder = 1
-          object Label34: TLabel
-            Left = 16
-            Top = 28
-            Width = 129
-            Height = 13
-            Caption = 'Max. size per slice (bytes):'
-          end
-          object Label35: TLabel
-            Left = 16
-            Top = 82
-            Width = 80
-            Height = 13
-            Caption = 'Slices per frame:'
-          end
-          object Label36: TLabel
-            Left = 16
-            Top = 55
-            Width = 126
-            Height = 13
-            Caption = 'Max. macroblock per slice:'
-          end
-          object Slice1Edit: TJvSpinEdit
-            Left = 192
-            Top = 24
-            Width = 121
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            CheckMinValue = True
-            CheckMaxValue = True
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            TabOrder = 0
-          end
-          object Slice2Edit: TJvSpinEdit
-            Left = 192
-            Top = 51
-            Width = 121
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            CheckMinValue = True
-            CheckMaxValue = True
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            TabOrder = 1
-          end
-          object Slice3Edit: TJvSpinEdit
-            Left = 192
-            Top = 78
-            Width = 121
-            Height = 21
-            CheckOptions = [coCheckOnExit, coCropBeyondLimit]
-            CheckMinValue = True
-            CheckMaxValue = True
-            Alignment = taCenter
-            ButtonKind = bkClassic
-            TabOrder = 2
-          end
+        end
+        object VBFInitialEdit: TJvSpinEdit
+          Left = 192
+          Top = 78
+          Width = 50
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          MaxValue = 100.000000000000000000
+          Value = 90.000000000000000000
+          TabOrder = 2
+        end
+      end
+      object GroupBox14: TGroupBox
+        Left = 8
+        Top = 127
+        Width = 386
+        Height = 114
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Slicing'
+        TabOrder = 1
+        object Label34: TLabel
+          Left = 16
+          Top = 28
+          Width = 129
+          Height = 13
+          Caption = 'Max. size per slice (bytes):'
+        end
+        object Label35: TLabel
+          Left = 16
+          Top = 82
+          Width = 80
+          Height = 13
+          Caption = 'Slices per frame:'
+        end
+        object Label36: TLabel
+          Left = 16
+          Top = 55
+          Width = 126
+          Height = 13
+          Caption = 'Max. macroblock per slice:'
+        end
+        object Slice1Edit: TJvSpinEdit
+          Left = 192
+          Top = 24
+          Width = 121
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          CheckMinValue = True
+          CheckMaxValue = True
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          TabOrder = 0
+        end
+        object Slice2Edit: TJvSpinEdit
+          Left = 192
+          Top = 51
+          Width = 121
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          CheckMinValue = True
+          CheckMaxValue = True
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          TabOrder = 1
+        end
+        object Slice3Edit: TJvSpinEdit
+          Left = 192
+          Top = 78
+          Width = 121
+          Height = 21
+          CheckOptions = [coCheckOnExit, coCropBeyondLimit]
+          CheckMinValue = True
+          CheckMaxValue = True
+          Alignment = taCenter
+          ButtonKind = bkClassic
+          TabOrder = 2
         end
       end
     end
   end
   object CloseBtn: TsBitBtn
-    Left = 537
-    Top = 503
+    Left = 322
+    Top = 476
     Width = 100
     Height = 25
     Anchors = [akRight, akBottom]
@@ -1511,7 +1463,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
   end
   object ResetBtn: TsBitBtn
     Left = 8
-    Top = 503
+    Top = 476
     Width = 100
     Height = 25
     Anchors = [akLeft, akBottom]
@@ -1554,16 +1506,5 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     TabOrder = 2
     OnClick = ResetBtnClick
     SkinData.SkinSection = 'BUTTON'
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 472
-    Top = 88
   end
 end

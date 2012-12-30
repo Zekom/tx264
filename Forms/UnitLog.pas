@@ -17,7 +17,6 @@ type
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
-    sSkinProvider1: TsSkinProvider;
     FullOutputList: TMemo;
     OutputList: TMemo;
     procedure ClearBtnClick(Sender: TObject);
@@ -31,6 +30,7 @@ type
     procedure FullOutputListDrawItem(Control: TWinControl; Index: Integer;
       Rect: TRect; State: TOwnerDrawState);
     procedure OutputListChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -84,6 +84,11 @@ begin
     CloseBtn.OnClick(Self);
   end;
 
+end;
+
+procedure TLogForm.FormShow(Sender: TObject);
+begin
+  Self.Color := clInactiveCaption;
 end;
 
 procedure TLogForm.FullOutputListChange(Sender: TObject);

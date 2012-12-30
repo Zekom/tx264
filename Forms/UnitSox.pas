@@ -24,7 +24,7 @@ type
     sLabel2: TsLabel;
     DecayEdit: TJvSpinEdit;
     AttackEdit: TJvSpinEdit;
-    sSkinProvider1: TsSkinProvider;
+    ResetBtn: TsBitBtn;
     procedure CloseBtnClick(Sender: TObject);
     procedure VolumeBtnClick(Sender: TObject);
     procedure EnableBtnClick(Sender: TObject);
@@ -34,6 +34,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure DRCBtnClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ResetBtnClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -97,6 +99,11 @@ begin
 
 end;
 
+procedure TSoXForm.FormShow(Sender: TObject);
+begin
+  Self.Color := clInactiveCaption;
+end;
+
 procedure TSoXForm.LoadSettings;
 var
   SettingsFile: TIniFile;
@@ -125,6 +132,27 @@ begin
     SettingsFile.Free;
 
     EnableBtn.OnClick(Self);
+  end;
+
+end;
+
+procedure TSoXForm.ResetBtnClick(Sender: TObject);
+begin
+
+  if ID_YES = Application.MessageBox('Reset values to default?', 'Reset',
+    MB_ICONQUESTION or MB_YESNO) then
+  begin
+    EnableBtn.Checked := False;
+    NormBtn.Checked := False;
+    VolumeBtn.Checked := False;
+    ThreadBtn.Checked := False;
+    DRCBtn.Checked := False;
+    ChannelList.ItemIndex := 0;
+    SampleList.ItemIndex := 0;
+
+    EnableBtnClick(Self);
+    VolumeBtnClick(Self);
+    DRCBtnClick(Self);
   end;
 
 end;

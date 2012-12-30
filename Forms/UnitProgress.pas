@@ -12,10 +12,10 @@ type
   TProgressForm = class(TForm)
     ProgressLabel: TLabel;
     AbortBtn: TsBitBtn;
-    sSkinProvider1: TsSkinProvider;
     ProgressBar: TProgressBar;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure AbortBtnClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -37,6 +37,11 @@ begin
   ProgressBar.Position := 0;
   ProgressLabel.Caption := 'Adding files...';
 
+end;
+
+procedure TProgressForm.FormShow(Sender: TObject);
+begin
+  Self.Color := clInactiveCaption;
 end;
 
 procedure TProgressForm.AbortBtnClick(Sender: TObject);

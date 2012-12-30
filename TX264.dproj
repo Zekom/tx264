@@ -83,12 +83,11 @@
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
-        <VerInfo_Release>8</VerInfo_Release>
+        <VerInfo_Release>3</VerInfo_Release>
         <VerInfo_AutoGenVersion>false</VerInfo_AutoGenVersion>
-        <VerInfo_MinorVer>8</VerInfo_MinorVer>
-        <VerInfo_Build>2738</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=ozok;FileDescription=TX264 - x264 GUI;FileVersion=0.8.8.2738;InternalName=tx264;LegalCopyright=2012 ozok;LegalTrademarks=ozok;OriginalFilename=TX264.exe;ProductName=tx264;ProductVersion=1.0.0.0;Comments=tx264</VerInfo_Keys>
+        <VerInfo_MinorVer>9</VerInfo_MinorVer>
+        <VerInfo_Build>3013</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=ozok;FileDescription=TX264 - x264 GUI;FileVersion=0.9.3.3013;InternalName=tx264;LegalCopyright=2012 ozok;LegalTrademarks=ozok;OriginalFilename=TX264.exe;ProductName=tx264;ProductVersion=1.0.0.0;Comments=tx264</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -140,6 +139,7 @@
             <Form>ProgressForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Units\JvCpuUsage.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -164,7 +164,7 @@
                     <VersionInfo Name="MajorVer">0</VersionInfo>
                     <VersionInfo Name="MinorVer">1</VersionInfo>
                     <VersionInfo Name="Release">0</VersionInfo>
-                    <VersionInfo Name="Build">1436</VersionInfo>
+                    <VersionInfo Name="Build">1598</VersionInfo>
                     <VersionInfo Name="Debug">False</VersionInfo>
                     <VersionInfo Name="PreRelease">False</VersionInfo>
                     <VersionInfo Name="Special">False</VersionInfo>
@@ -176,7 +176,7 @@
                 <VersionInfoKeys>
                     <VersionInfoKeys Name="CompanyName"/>
                     <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">0.1.0.1436</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">0.1.0.1598</VersionInfoKeys>
                     <VersionInfoKeys Name="InternalName"/>
                     <VersionInfoKeys Name="LegalCopyright"/>
                     <VersionInfoKeys Name="LegalTrademarks"/>

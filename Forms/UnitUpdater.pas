@@ -13,13 +13,13 @@ type
   TUpdaterForm = class(TForm)
     UpdateBtn: TsBitBtn;
     CancelBtn: TsBitBtn;
-    UpdateThread: TJvThread;
     Downloader: TJvHttpUrlGrabber;
     ChangeList: TsListBox;
     WNDownloader: TJvHttpUrlGrabber;
     sLabel1: TsLabel;
     UpdateDownloader: TJvHttpUrlGrabber;
     ProgressBar: TProgressBar;
+    UpdateThread: TJvThread;
     procedure UpdateThreadExecute(Sender: TObject; Params: Pointer);
     procedure DownloaderDoneFile(Sender: TObject; FileName: string;
       FileSize: Integer; Url: string);
@@ -46,7 +46,7 @@ var
   UpdaterForm: TUpdaterForm;
 
 const
-  Build = 2738;
+  Build = 3013;
 
 implementation
 
@@ -199,6 +199,8 @@ end;
 procedure TUpdaterForm.FormShow(Sender: TObject);
 begin
 
+  Self.Color := clInactiveCaption;
+
   Self.Caption := 'Updater [Checking update please wait...]';
   ChangeList.Items.Clear;
   CancelBtn.Enabled := false;
@@ -206,7 +208,7 @@ begin
   ProgressBar.Visible := false;
   ProgressBar.Position := 0;
 
-  UpdateThread.Execute(nil)
+  UpdateThread.Execute(nil);
 
 end;
 
@@ -247,7 +249,9 @@ begin
         MB_ICONINFORMATION);
 
       ShellExecute(0, 'open', PWideChar(FileName), nil, nil, SW_SHOWNORMAL);
-      Self.Close;
+      // //Self.Close;
+      // MainForm.Enabled := True;
+      // MainForm.Close;
       Application.Terminate;
     end;
 

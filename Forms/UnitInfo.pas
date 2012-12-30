@@ -11,7 +11,6 @@ type
     CloseBtn: TsBitBtn;
     SaveDialog1: TSaveDialog;
     SaveBtn: TsBitBtn;
-    sSkinProvider1: TsSkinProvider;
     InfoList: TListView;
     procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -21,6 +20,7 @@ type
     procedure InfoListAdvancedCustomDrawItem(Sender: TCustomListView;
       Item: TListItem; State: TCustomDrawState; Stage: TCustomDrawStage;
       var DefaultDraw: Boolean);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -62,6 +62,11 @@ begin
 
   FreeAndNil(InfoTMP);
 
+end;
+
+procedure TInfoForm.FormShow(Sender: TObject);
+begin
+Self.Color := clInactiveCaption;
 end;
 
 procedure TInfoForm.InfoListAdvancedCustomDrawItem(Sender: TCustomListView;
