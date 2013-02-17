@@ -104,9 +104,9 @@ object MainForm: TMainForm
       ExplicitTop = 553
     end
     object StopBtn: TsBitBtn
-      Left = 431
+      Left = 395
       Top = 534
-      Width = 150
+      Width = 186
       Height = 30
       Hint = 'Stop encoding'
       Anchors = [akRight, akBottom]
@@ -346,6 +346,7 @@ object MainForm: TMainForm
       ParentFont = False
       TabOrder = 4
       Text = 'Do nothing'
+      OnChange = PostEncodeListChange
       Items.Strings = (
         'Do nothing'
         'Close TX264'
@@ -463,9 +464,9 @@ object MainForm: TMainForm
       TabOrder = 6
     end
     object CPUBar: TProgressBar
-      Left = 217
+      Left = 211
       Top = 541
-      Width = 208
+      Width = 178
       Height = 13
       Anchors = [akLeft, akRight, akBottom]
       TabOrder = 7
@@ -474,7 +475,7 @@ object MainForm: TMainForm
   object AboutBtn: TsBitBtn
     Left = 8
     Top = 534
-    Width = 100
+    Width = 75
     Height = 30
     Hint = 'About TX264'
     Anchors = [akLeft, akBottom]
@@ -519,13 +520,13 @@ object MainForm: TMainForm
     SkinData.SkinSection = 'BUTTON'
   end
   object LogsBtn: TsBitBtn
-    Left = 114
+    Left = 89
     Top = 534
-    Width = 100
+    Width = 75
     Height = 30
     Hint = 'Log and outputs of backends'
     Anchors = [akLeft, akBottom]
-    Caption = 'Logs/Outputs'
+    Caption = 'Logs'
     Glyph.Data = {
       36040000424D3604000000000000360000002800000010000000100000000100
       2000000000000004000000000000000000000000000000000000FFFFFF008A8F
@@ -570,7 +571,7 @@ object MainForm: TMainForm
     Top = 312
     Width = 573
     Height = 220
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Anchors = [akLeft, akRight, akBottom]
     Images = PageImages
     MultiLine = True
@@ -748,7 +749,7 @@ object MainForm: TMainForm
       end
       object CopyChapertBtn: TsCheckBox
         Left = 12
-        Top = 141
+        Top = 146
         Width = 180
         Height = 20
         Caption = 'Copy menu from source mkv/mp4'
@@ -985,7 +986,7 @@ object MainForm: TMainForm
       end
       object SubtitleBtn: TsCheckBox
         Left = 12
-        Top = 116
+        Top = 120
         Width = 131
         Height = 20
         Caption = 'Mux subtitles to output'
@@ -1039,7 +1040,7 @@ object MainForm: TMainForm
       end
       object Use10bitBtn: TsCheckBox
         Left = 440
-        Top = 139
+        Top = 143
         Width = 96
         Height = 20
         Caption = 'Use 10-bit x264'
@@ -1859,11 +1860,11 @@ object MainForm: TMainForm
           'No audio')
       end
       object AudioPages: TPageControl
-        Left = 4
+        Left = 3
         Top = 61
         Width = 558
-        Height = 122
-        ActivePage = TabSheet12
+        Height = 124
+        ActivePage = FAAC
         Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 5
         OnChange = AudioPagesChange
@@ -2443,7 +2444,7 @@ object MainForm: TMainForm
             Left = 0
             Top = 0
             Width = 550
-            Height = 94
+            Height = 96
             Align = alClient
             Alignment = taCenter
             Caption = 'No options'
@@ -2752,7 +2753,7 @@ object MainForm: TMainForm
         Left = 3
         Top = 36
         Width = 559
-        Height = 146
+        Height = 123
         ActivePage = TabSheet20
         Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 0
@@ -3034,7 +3035,7 @@ object MainForm: TMainForm
         Left = 269
         Top = 103
         Width = 135
-        Height = 25
+        Height = 26
         Caption = 'Download NeroAACEnc'
         TabOrder = 6
         OnClick = sBitBtn1Click
@@ -3185,12 +3186,43 @@ object MainForm: TMainForm
         ImgChecked = 0
         ImgUnchecked = 0
       end
+      object PostEncode2List: TsComboBox
+        Left = 419
+        Top = 70
+        Width = 129
+        Height = 21
+        Alignment = taLeftJustify
+        BoundLabel.Active = True
+        BoundLabel.Caption = 'Post-Encode:'
+        BoundLabel.Indent = 0
+        BoundLabel.Font.Charset = DEFAULT_CHARSET
+        BoundLabel.Font.Color = clWindowText
+        BoundLabel.Font.Height = -11
+        BoundLabel.Font.Name = 'Tahoma'
+        BoundLabel.Font.Style = []
+        BoundLabel.Layout = sclLeft
+        BoundLabel.MaxWidth = 0
+        BoundLabel.UseSkinColor = True
+        SkinData.SkinSection = 'COMBOBOX'
+        Style = csDropDownList
+        ItemIndex = 0
+        TabOrder = 16
+        Text = 'Do nothing'
+        OnChange = PostEncode2ListChange
+        Items.Strings = (
+          'Do nothing'
+          'Close TX264'
+          'Open output folder'
+          'Shutdown PC'
+          'Log Off'
+          'Restart')
+      end
     end
   end
   object StartBtn: TsBitBtn
-    Left = 431
+    Left = 395
     Top = 534
-    Width = 150
+    Width = 186
     Height = 30
     Hint = 'Start encoding'
     Anchors = [akRight, akBottom]
@@ -4151,7 +4183,7 @@ object MainForm: TMainForm
   end
   object SameAsSourceBtn: TsCheckBox
     Left = 477
-    Top = 257
+    Top = 259
     Width = 95
     Height = 20
     Hint = 'Set source directory to output directory'
@@ -4304,6 +4336,63 @@ object MainForm: TMainForm
     OnClick = UpBtnClick
     SkinData.SkinSection = 'BUTTON'
   end
+  object MailBtn: TsBitBtn
+    Left = 170
+    Top = 534
+    Width = 100
+    Height = 30
+    Anchors = [akLeft, akBottom]
+    Caption = 'Mail to author'
+    Glyph.Data = {
+      36040000424D3604000000000000360000002800000010000000100000000100
+      2000000000000004000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000858A888F858A88FF858A88FF858A88FF858A88FF858A88FF858A88FF858A
+      88FF858A88FF858A88FF858A88FF858A88FF858A888F00000000000000000000
+      0000858A88FFF0F0F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFF0F0F0FF858A88FF00000000000000000000
+      0000858A88FFFFFFFFFFC4C7C9FFF8FBFBFFF1F5F7FFF6F9FAFFF2F6F8FFF5F8
+      FAFFF2F5F7FFE3E8EBFFCACECFFFFFFFFFFF858A88FF00000000000000000000
+      0000858A88FFFFFFFFFFF7FAFBFFAEB1B2FFF8FBFBFFF8FBFBFFF8FBFBFFF4F8
+      F9FFF4F8F9FFB7BBBCFFE2E7E9FFFFFFFFFF858A88FF00000000000000000000
+      0000858A88FFFFFFFFFFF8FBFBFFEDEFF0FF9DA2A5FFF8FBFBFFF8FBFBFFF8FB
+      FBFF878D90FFF3F7F9FFECF0F2FFFFFFFFFF858A88FF00000000000000000000
+      0000858A88FFFFFFFFFFF8FBFBFFDFE2E2FF919192FFB3B4B6FFB3B4B6FFB7BB
+      BCFFA0A0A1FFF2F3F3FFF3F5F7FFFFFFFFFF858A88FF00000000000000000000
+      0000858A88FFFFFFFFFFE2E5E6FFA7A9AAFFEBEBEBFFEBEBEBFFE1E1E1FFD8D8
+      D8FFCFCFCFFFA1A5A6FFF2F3F3FFFFFFFFFF858A88FF00000000000000000000
+      0000858A88FFF7F7F7FFACAEAFFFF5F5F5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFEBEBEBFFCED9D9FFB5CFD2FFEBF6F7FF858A88FF00000000000000000000
+      0000858A88FFE3E4E4FFB3B8B9FF8E9495FFD9DADBFFEBECECFFF5F5F5FFFFFF
+      FFFFC1FBFFFF61DFE5FF43DFE8FF5FF0F7FF62A8AAFF03F3FF01000000000000
+      0000858A8830858A88FFFFFFFFFFD0D6D9FFA1A7A8FFB9BDBEFFCACDCEFFB3D2
+      D4FF61DFE5FF3BEFF8FF73F8FFFF55EEF5FF20EEF8CD0CF3FF2D000000000000
+      000000000000858A8830858A88FFFFFFFFFFD0D6D9FFC1C7C9FFBABFC1FF83BC
+      C1FF3EDBE3FF73F8FFFFD3FAFCFF9FF9FEF52CF5FFE510F4FF66000000000000
+      00000000000000000000858A8830858A88FFFFFFFFFFFFFFFFFFFFFFFFFFCEFC
+      FFFF67F7FFFF55EEF5FF9FF9FEF580F9FFEF1FF4FFDF0FF3FF67000000000000
+      0000000000000000000000000000858A8830858A88FF858A88FF858A88FF818C
+      8BFF52B6BAFF20EEF8CD2CF5FFE51FF4FFDF15F4FF9A08F3FF2C000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000003F3FF180CF3FF5810F4FF770FF3FF6D08F3FF3A00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000}
+    TabOrder = 19
+    OnClick = MailBtnClick
+    SkinData.SkinSection = 'BUTTON'
+  end
+  object DonationBtn: TsBitBtn
+    Left = 276
+    Top = 534
+    Width = 100
+    Height = 30
+    Anchors = [akLeft, akBottom]
+    Caption = 'Make a donation'
+    TabOrder = 20
+    OnClick = DonationBtnClick
+    SkinData.SkinSection = 'BUTTON'
+  end
   object XPManifest1: TXPManifest
     Left = 384
     Top = 168
@@ -4333,8 +4422,8 @@ object MainForm: TMainForm
     Top = 208
   end
   object OpenFolderDialog: TJvBrowseForFolderDialog
-    Left = 240
-    Top = 120
+    Left = 216
+    Top = 152
   end
   object Process: TJvCreateProcess
     StartupInfo.DefaultPosition = False
@@ -4358,10 +4447,10 @@ object MainForm: TMainForm
   end
   object PositionTimer: TTimer
     Enabled = False
-    Interval = 200
+    Interval = 500
     OnTimer = PositionTimerTimer
-    Left = 376
-    Top = 96
+    Left = 344
+    Top = 104
   end
   object SystemInfo: TJvComputerInfoEx
     Left = 480
@@ -4370,7 +4459,7 @@ object MainForm: TMainForm
   object DragDrop: TJvDragDrop
     DropTarget = Owner
     OnDrop = DragDropDrop
-    Left = 312
+    Left = 280
     Top = 120
   end
   object UpdateThread: TJvThread
@@ -4379,7 +4468,7 @@ object MainForm: TMainForm
     RunOnCreate = True
     FreeOnTerminate = True
     OnExecute = UpdateThreadExecute
-    Left = 472
+    Left = 432
     Top = 144
   end
   object UpdateChecker: TJvHttpUrlGrabber
@@ -4461,7 +4550,7 @@ object MainForm: TMainForm
     end
   end
   object ListMenu: TPopupMenu
-    Left = 168
+    Left = 144
     Top = 64
     object AddFiles3: TMenuItem
       Caption = 'Add Files'
@@ -4672,8 +4761,8 @@ object MainForm: TMainForm
           11E04A3DD82E01A9FB5D077195E07BFF20CDF71182FC02B0E56BD313C7CF6C66
           FC5F13BDC1FFB06FE0D287CC1329A5B40000000049454E44AE426082}
       end>
-    Left = 136
-    Top = 128
+    Left = 120
+    Top = 120
     Bitmap = {}
   end
   object FileSearch: TJvSearchFiles
@@ -4868,7 +4957,7 @@ object MainForm: TMainForm
           6F6FFF562A957EACD7EB7F4B377F22E2026340701A6320D5F9D655B5F52FFA3D
           DFC7E0A4ED6B0000000049454E44AE426082}
       end>
-    Left = 240
+    Left = 216
     Top = 72
     Bitmap = {}
   end
@@ -4893,8 +4982,8 @@ object MainForm: TMainForm
     ConsoleOptions = [coRedirect]
     OnTerminate = PreviewProcessTerminate
     OnRead = PreviewProcessRead
-    Left = 208
-    Top = 152
+    Left = 144
+    Top = 160
   end
   object StatusImages: TsAlphaImageList
     Height = 22
@@ -5004,13 +5093,13 @@ object MainForm: TMainForm
           7A0094D2FD9A43B945301DF0E45F10C44C100AC3A2AD0000000049454E44AE42
           6082}
       end>
-    Left = 288
-    Top = 80
+    Left = 304
+    Top = 64
     Bitmap = {}
   end
   object XPManifest2: TXPManifest
-    Left = 424
-    Top = 72
+    Left = 408
+    Top = 80
   end
   object TrayIcon: TJvTrayIcon
     Icon.Data = {
@@ -8197,7 +8286,7 @@ object MainForm: TMainForm
     IconIndex = 0
     Visibility = [tvVisibleTaskBar, tvVisibleTaskList]
     OnClick = TrayIconClick
-    OnMouseMove = TrayIconMouseMove
+    OnDblClick = TrayIconDblClick
     OnBalloonHide = TrayIconBalloonHide
     OnBalloonClick = TrayIconBalloonClick
     Left = 496

@@ -46,7 +46,7 @@ var
   UpdaterForm: TUpdaterForm;
 
 const
-  Build = 3013;
+  Build = 3057;
 
 implementation
 

@@ -4,7 +4,7 @@
         <MainSource>TX264.dpr</MainSource>
         <ProjectVersion>14.3</ProjectVersion>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
@@ -83,11 +83,12 @@
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <VerInfo_Release>3</VerInfo_Release>
+        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
+        <VerInfo_Release>4</VerInfo_Release>
         <VerInfo_AutoGenVersion>false</VerInfo_AutoGenVersion>
         <VerInfo_MinorVer>9</VerInfo_MinorVer>
-        <VerInfo_Build>3013</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=ozok;FileDescription=TX264 - x264 GUI;FileVersion=0.9.3.3013;InternalName=tx264;LegalCopyright=2012 ozok;LegalTrademarks=ozok;OriginalFilename=TX264.exe;ProductName=tx264;ProductVersion=1.0.0.0;Comments=tx264</VerInfo_Keys>
+        <VerInfo_Build>3057</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=ozok;FileDescription=TX264 - x264 GUI;FileVersion=0.9.4.3057;InternalName=tx264;LegalCopyright=2012 ozok;LegalTrademarks=ozok;OriginalFilename=TX264.exe;ProductName=tx264;ProductVersion=1.0.0.0;Comments=tx264</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -97,12 +98,12 @@
         <DCC_DebugInformation>false</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
+        <DCC_Define>madExcept;$(DCC_Define)</DCC_Define>
         <VerInfo_AutoGenVersion>false</VerInfo_AutoGenVersion>
-        <VerInfo_MinorVer>8</VerInfo_MinorVer>
-        <VerInfo_Release>7</VerInfo_Release>
-        <VerInfo_Build>2062</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=ozok;FileDescription=TX264 - x264 GUI;FileVersion=0.8.7.2062;InternalName=TX264;LegalCopyright=GPL;LegalTrademarks=GPL;OriginalFilename=TX264.exe;ProductName=TX264;ProductVersion=1.0.0.0;Comments=TX264 - x264 GUI</VerInfo_Keys>
+        <VerInfo_MinorVer>9</VerInfo_MinorVer>
+        <VerInfo_Release>4</VerInfo_Release>
+        <VerInfo_Build>3057</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=ozok;FileDescription=TX264 - x264 GUI;FileVersion=0.9.4.3057;InternalName=TX264;LegalCopyright=GPL;LegalTrademarks=GPL;OriginalFilename=TX264.exe;ProductName=TX264;ProductVersion=1.0.0.0;Comments=TX264 - x264 GUI</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <ItemGroup>
@@ -140,6 +141,7 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Units\JvCpuUsage.pas"/>
+        <DCCReference Include="Units\UnitFileInfo.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -164,7 +166,7 @@
                     <VersionInfo Name="MajorVer">0</VersionInfo>
                     <VersionInfo Name="MinorVer">1</VersionInfo>
                     <VersionInfo Name="Release">0</VersionInfo>
-                    <VersionInfo Name="Build">1598</VersionInfo>
+                    <VersionInfo Name="Build">1642</VersionInfo>
                     <VersionInfo Name="Debug">False</VersionInfo>
                     <VersionInfo Name="PreRelease">False</VersionInfo>
                     <VersionInfo Name="Special">False</VersionInfo>
@@ -176,7 +178,7 @@
                 <VersionInfoKeys>
                     <VersionInfoKeys Name="CompanyName"/>
                     <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">0.1.0.1598</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">0.1.0.1642</VersionInfoKeys>
                     <VersionInfoKeys Name="InternalName"/>
                     <VersionInfoKeys Name="LegalCopyright"/>
                     <VersionInfoKeys Name="LegalTrademarks"/>
@@ -189,6 +191,15 @@
                     <Source Name="MainSource">TX264.dpr</Source>
                 </Source>
                 <Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dclcxLibraryRS17.bpl">File C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dclcxLibraryRS17.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dclcxSchedulerRS17.bpl">File C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dclcxSchedulerRS17.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dxSkinscxPCPainterRS17.bpl">File C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dxSkinscxPCPainterRS17.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dxSkinscxSchedulerPainterRS17.bpl">File C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dxSkinscxSchedulerPainterRS17.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dxSkinsdxDLPainterRS17.bpl">File C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dxSkinsdxDLPainterRS17.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dxSkinsdxBarPainterRS17.bpl">File C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dxSkinsdxBarPainterRS17.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dxSkinsdxNavBarPainterRS17.bpl">File C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dxSkinsdxNavBarPainterRS17.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dxSkinsdxRibbonPainterRS17.bpl">File C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dxSkinsdxRibbonPainterRS17.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dcldxPSdxLCLnkRS17.bpl">File C:\Users\Public\Documents\RAD Studio\10.0\Bpl\dcldxPSdxLCLnkRS17.bpl not found</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcboffice2k170.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcbofficexp170.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k170.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>

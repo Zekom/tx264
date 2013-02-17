@@ -24,9 +24,9 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure CloseBtnClick(Sender: TObject);
     procedure HomepageBtnClick(Sender: TObject);
-    procedure FormShow(Sender: TObject);
     procedure sButton2Click(Sender: TObject);
     procedure sButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -37,7 +37,7 @@ var
   AboutForm: TAboutForm;
 
 const
-  Build = '3013';
+  Build = '3057';
 
 implementation
 
@@ -59,19 +59,17 @@ begin
 
 end;
 
-procedure TAboutForm.FormShow(Sender: TObject);
+procedure TAboutForm.FormCreate(Sender: TObject);
 begin
-
-  Label1.Caption := 'TX264 0.9.3 Build: ' + Build;
+  Label1.Caption := 'TX264 0.9.4 Build: ' + Build;
   Self.Color := clInactiveCaption;
-
 end;
 
 procedure TAboutForm.HomepageBtnClick(Sender: TObject);
 begin
 
   ShellExecute(Application.Handle, 'open',
-    'https://sourceforge.net/projects/tx264/', nil, nil, SW_SHOWNORMAL);
+    'http://tx264.sourceforge.net/', nil, nil, SW_SHOWNORMAL);
 
 end;
 

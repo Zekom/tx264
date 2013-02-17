@@ -19,14 +19,15 @@ uses
   UnitUpdater in 'Forms\UnitUpdater.pas' {UpdaterForm} ,
   UnitSox in 'Forms\UnitSox.pas' {SoXForm} ,
   UnitProgress in 'Forms\UnitProgress.pas' {ProgressForm} ,
-  JvCpuUsage in 'Units\JvCpuUsage.pas';
+  JvCpuUsage in 'Units\JvCpuUsage.pas',
+  UnitFileInfo in 'Units\UnitFileInfo.pas';
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  // ReportMemoryLeaksOnShutdown := True;
+  ReportMemoryLeaksOnShutdown := True;
   Application.Title := 'TX264';
   Application.CreateForm(TMainForm, MainForm);
   Application.CreateForm(TLogForm, LogForm);

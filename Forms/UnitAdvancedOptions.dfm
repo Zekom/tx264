@@ -33,6 +33,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     object TabSheet7: TTabSheet
       Caption = 'Rate control'
       ImageIndex = 6
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Label1: TLabel
         Left = 12
         Top = 61
@@ -79,6 +83,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     end
     object TabSheet1: TTabSheet
       Caption = 'Motion'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         406
         434)
@@ -295,6 +303,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     object TabSheet2: TTabSheet
       Caption = 'Partition'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Prediction1Btn: TsCheckBox
         Left = 16
         Top = 24
@@ -375,6 +387,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     object TabSheet3: TTabSheet
       Caption = 'Frame'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         406
         434)
@@ -744,6 +760,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     object TabSheet4: TTabSheet
       Caption = 'Analysis'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         406
         434)
@@ -1001,6 +1021,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     object TabSheet5: TTabSheet
       Caption = 'Quantiser'
       ImageIndex = 4
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         406
         434)
@@ -1280,6 +1304,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     object TabSheet6: TTabSheet
       Caption = 'Advanced'
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         406
         434)
